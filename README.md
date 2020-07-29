@@ -19,7 +19,12 @@ git push - to push the change to repo
 Follow the page to setup the java web application with gradle
 
 https://guides.gradle.org/building-java-web-applications/
-## Local Deployment
+## Local Build & Deployment
+```
+./gradlew build - to build the app
+./gradlew eclipse - to resolve the dependencies and download the referenced libraries to use in eclipse.
+Let me know if someone is using other IDE, will configure the task for that if needed.
+```
 Gretty plugin in Gradle project is used to deploy the app, already configured in build.gradle for abirami-traders app.
 
 IDE has the option to to build and deploy there itself. For peeps using command prompt, make sure the project has proper build.gradle with gretty configured.
