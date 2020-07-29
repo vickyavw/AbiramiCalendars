@@ -9,6 +9,7 @@ Download link - https://git-scm.com/downloads
 
 #### Steps to configure
 Set your username in Git - https://docs.github.com/en/github/using-git/setting-your-username-in-git (Use the configure only for single repository section)
+
 Set your commit email address in Git - https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/setting-your-commit-email-address
 ## Some basic Git commands
 ```
