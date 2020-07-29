@@ -7,7 +7,9 @@ Steps to configure - https://gradle.org/install/
 ## Git Setup
 Download link - https://git-scm.com/downloads
 
-Steps to configure - https://docs.github.com/en/github/using-git/setting-your-username-in-git (Use the configure only for single repository section)
+#### Steps to configure
+Set your username in Git - https://docs.github.com/en/github/using-git/setting-your-username-in-git (Use the configure only for single repository section)
+Set your commit email address in Git - https://docs.github.com/en/github/setting-up-and-managing-your-github-user-account/setting-your-commit-email-address
 ## Some basic Git commands
 ```
 git status - to show the list of edited files
@@ -39,7 +41,7 @@ Please configure the port in IDE to debug. Assuming you use Eclipse as IDE: In E
 master - backup for the best working app. Never to be merged with daily changes.
 1.0 - current default branch where everyone should raise the pull request(PR).
 Both the branches are restricted branch. So everyone must create their own branch and make changes in their app and raise a PR for 1.0 branch.
-### Commands for the same
+#### Commands for the same
 ```
 Create a new branch:
 git checkout -b feature_branch_name
