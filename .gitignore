@@ -1,0 +1,17 @@
+### Build files  ###
+.gradle
+dist
+MANIFEST.MF
+
+### Eclipse ppl, please move to a better IDE like intellij
+bin
+out
+.metadata
+.settings
+.loadpath
+.recommenders
+.project
+.classpath
+
+### Mac Finder matadata file###
+.DS_Store
