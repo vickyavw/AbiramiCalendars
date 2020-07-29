@@ -36,9 +36,19 @@ dependencies {
 	testCompile group: 'org.mockito', name: 'mockito-core', version: '3.4.0'
 }
 
+gretty {
+  afterEvaluate {
+    appRunDebug {
+      debugPort = 5005
+      debugSuspend = true
+    }
+  }
+}
+
 test {
     finalizedBy jacocoTestReport // report is always generated after tests run
 }
+
 jacocoTestReport {
     dependsOn test // tests are required to run before generating the report
 }
