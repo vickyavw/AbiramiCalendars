@@ -65,8 +65,8 @@ public class Item implements Serializable {
 	}
 	
 	@Override
-    public String toString() {
-        return ReflectionToStringBuilder.toString(this);
-    }
+    	public String toString() {
+        	return ReflectionToStringBuilder.toString(this);
+    	}
 	
 }
