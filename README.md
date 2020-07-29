@@ -23,7 +23,7 @@ https://guides.gradle.org/building-java-web-applications/
 ```
 ./gradlew build - to build the app
 ./gradlew eclipse - to resolve the dependencies and download the referenced libraries to use in eclipse.
-Let me know if someone is using other IDE, will configure the task for that if needed.
+Let me(@vickyavw) know if someone is using other IDE, will configure the task for that if needed.
 ```
 Gretty plugin in Gradle project is used to deploy the app, already configured in build.gradle for abirami-traders app.
 
