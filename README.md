@@ -1,9 +1,6 @@
-## Gradle Setup
-Version to use - 4.5.1
+## Java JDK & JRE
+Version - 1.8
 
-Download link - https://services.gradle.org/distributions/gradle-4.5.1-bin.zip
-
-Steps to configure - https://gradle.org/install/
 ## Git Setup
 Download link - https://git-scm.com/downloads
 
@@ -18,6 +15,12 @@ git add - to add the files to commit
 git commit - to make a commt
 git push - to push the change to repo
 ```
+## Gradle Setup
+Version to use - 4.5.1
+
+Download link - https://services.gradle.org/distributions/gradle-4.5.1-bin.zip
+
+Steps to configure - https://gradle.org/install/
 ## To create a sample app
 Follow the page to setup the java web application with gradle
 
