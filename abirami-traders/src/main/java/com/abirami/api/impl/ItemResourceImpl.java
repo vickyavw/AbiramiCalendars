@@ -18,7 +18,7 @@ import com.abirami.model.Item;
  *
  */
 
-@Path("items")
+@Path("item")
 @Consumes({"application/json"})
 @Produces({"application/json"})
 public class ItemResourceImpl implements ItemResource {
@@ -45,7 +45,25 @@ public class ItemResourceImpl implements ItemResource {
 	@Override
 	public Response getItem(Long itemId) {
 		// TODO Read from db
-		return null;
+		List<Item> items = new ArrayList<Item>();
+		Item item1 = new Item();
+		item1.setItemId(1L);
+		item1.setDisplayName("Calendar 1");
+		item1.setDescription("Monthly 12 sheeter calendar 1");
+		
+		Item item2 = new Item();
+		item2.setItemId(2L);
+		item2.setDisplayName("Calendar 2");
+		item2.setDescription("Monthly 6 sheeter calendar 2");
+		
+		items.add(item1);
+		items.add(item2);
+		
+		Item retrieved = items.stream()
+			.filter(o -> o.getItemId().equals(itemId))
+			.findFirst()
+			.orElse(null);
+		return Response.status(HttpStatus.SC_ACCEPTED).entity(retrieved).build();
 	}
 
 	@Override

@@ -14,8 +14,6 @@ import com.abirami.model.Item;
  * @author vicky
  *
  */
-
-
 public interface ItemResource {
 	@GET
 	@Path("/")
