@@ -1,14 +1,18 @@
 package com.abirami.model;
 
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
-
 import java.io.Serializable;
 import java.math.BigDecimal;
+
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * @author vicky
  *
  */
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Item implements Serializable {
 
 	private static final long serialVersionUID = 2086133073035476282L;

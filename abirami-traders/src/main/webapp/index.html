@@ -1,14 +1,18 @@
 <html>
 <head>
-  <title>Web Demo</title>
+    <title>REST Webservice example</title>
 </head>
 <body>
-<p>Say <a href="hello">Hello</a></p> 
-
-<form method="post" action="hello">  
-  <h2>Name:</h2>
-  <input type="text" id="say-hello-text-input" name="name" />
-  <input type="submit" id="say-hello-button" value="Say Hello" />
-</form>
+<h2>REST Webservice example</h2>
+<a href="api/items">All Items</a>
+<br/>
+<br/>
+<input name="itemId" type="text" maxlength="512" id="itemId"/>
+<a id="submit" onclick="getItem()" href="">Get Item</a>
+<script>
+function getItem(){
+	document.getElementById('submit').href = "api/items/"+document.getElementById('itemId').value;
+}
+</script>
 </body>
 </html>
