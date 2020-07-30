@@ -40,7 +40,9 @@ dependencies {
 	compile group: 'com.fasterxml.jackson.jaxrs', name: 'jackson-jaxrs-json-provider', version: '2.11.1'
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.10.5'
 	
-	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.21'    
+	//compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.21'
+	//runtime 'com.h2database:h2:1.4.197'
+	    
 
     testImplementation 'junit:junit:4.12'
 	testCompile group: 'org.mockito', name: 'mockito-core', version: '3.4.0'
@@ -49,7 +51,7 @@ dependencies {
 gretty {
   servletContainer = 'jetty9.4'
   contextPath = '/'
-  httpPort = 9000
+  httpPort = 8080
   //debugPort = 5005
   //debugSuspend = true
 }
