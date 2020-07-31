@@ -6,7 +6,7 @@
 [![GitHub commits after master](https://img.shields.io/github/commits-since/vickyavw/abirami-traders/master)](https://github.com/vickyavw/abirami-traders/compare/master...1.0)
 [![Github last commit](https://img.shields.io/github/last-commit/vickyavw/abirami-traders/1.0)](https://github.com/vickyavw/abirami-traders/commits/1.0)
 [![GitHub stars](https://img.shields.io/github/stars/vickyavw/abirami-traders?style=social)](https://github.com/vickyavw/abirami-traders/stargazers)
-[![GitHub forks](https://img.shields.io/github/forks/vickyavw/abirami-traders?style=social)](https://github.com/vickyavw/abirami-traders/fork)
+[![GitHub forks](https://img.shields.io/github/forks/vickyavw/abirami-traders?style=social)](https://github.com/vickyavw/abirami-traders/network/members)
 [![Twitter Follow](https://img.shields.io/twitter/follow/vickyavw?style=social)](https://twitter.com/vickyavw)
 
 ## Prerequisites
