@@ -21,6 +21,7 @@ public class Item implements Serializable {
 	private String displayName;
 	private String description;
 	private byte[] image;
+	private String base64Image;
 	private BigDecimal price;
 	private Integer availabilityCount;
 	private Integer timeToPrint;
@@ -48,6 +49,12 @@ public class Item implements Serializable {
 	}
 	public void setImage(byte[] image) {
 		this.image = image;
+	}
+	public String getBase64Image() {
+		return base64Image;
+	}
+	public void setBase64Image(String base64Image) {
+		this.base64Image = base64Image;
 	}
 	public BigDecimal getPrice() {
 		return price;

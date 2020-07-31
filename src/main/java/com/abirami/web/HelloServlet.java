@@ -1,11 +1,9 @@
-package com.abirami.demo;
+package com.abirami.web;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
-import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -15,9 +13,11 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status.Family;
+import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -36,7 +36,7 @@ public class HelloServlet extends HttpServlet {
 		
 		String itemId = req.getParameter("itemId");
 		String apiUrl = "http://localhost:8080/api/items";
-		if(StringUtils.isNoneEmpty(itemId))
+		if(StringUtils.isNotEmpty(itemId))
 			apiUrl = apiUrl+"/"+itemId;
 		Client client = ClientBuilder.newClient();
 		WebTarget resource = client.target(apiUrl);
@@ -48,30 +48,30 @@ public class HelloServlet extends HttpServlet {
 
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
 		    System.out.println("Success! " + response.getStatus());
-		    if(StringUtils.isNoneEmpty(itemId)) {
+		    List<Item> items = new ArrayList<Item>();
+		    if(StringUtils.isNotEmpty(itemId)) {
 		    	Item item = response.readEntity(Item.class);
 		    	if(null != item){
-		    		byte[] img = item.getImage();
-		    		if(img == null) {
-		    			res.getWriter().print("Image not available");
+		    		if(null != item.getImage()) {
+		    			item.setBase64Image(DatatypeConverter.printBase64Binary(item.getImage()));
 		    		}
-		    		else {
-		    			ByteArrayInputStream bis = new ByteArrayInputStream(img);
-		       			BufferedImage bImage = ImageIO.read(bis);
-		        		ImageIO.write(bImage, "PNG", res.getOutputStream());
-		        	}
-		        }
-		        else {
-		    		res.getWriter().print("Invalid itemId");
+		    		items.add(item);
 		    	}
 		    }
 		    else {
-		    	res.getWriter().print(response.readEntity(List.class));
+		    	items = response.readEntity(new GenericType<List<Item>>() {});
+		    	for(Item item : items) {
+		    		if(null != item.getImage()) {
+		    			item.setBase64Image(DatatypeConverter.printBase64Binary(item.getImage()));
+		    		}
+		    	}
 		    }
+		    req.setAttribute("items", items);
 		} else {
 		    System.out.println("ERROR! " + response.getStatus());    
 		    System.out.println(response.getEntity());
 		}
+		req.getRequestDispatcher("items.jsp").forward(req, res);
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
