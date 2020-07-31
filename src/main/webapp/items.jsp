@@ -3,7 +3,7 @@
 
 <html>
     <head>
-        <title>Hello Page</title>
+        <title>Abirami Traders</title>
     </head>
     <body>
    		<c:forEach items="${items}" var="item">  
