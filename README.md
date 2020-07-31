@@ -3,8 +3,8 @@
 <!--- These are examples. See https://shields.io for others or to customize this set of shields. You might want to include dependencies, project status and licence info here --->
 [![GitHub repo size](https://img.shields.io/github/repo-size/vickyavw/abirami-traders)](https://img.shields.io/github/repo-size/vickyavw/abirami-traders)
 [![GitHub contributors](https://img.shields.io/github/contributors/vickyavw/abirami-traders)](https://github.com/vickyavw/abirami-traders/graphs/contributors)
-[![GitHug commits after master](https://img.shields.io/github/commits-since/vickyavw/abirami-traders/master)]()
-[![Githug last commit](https://img.shields.io/github/last-commit/vickyavw/abirami-traders/1.0)]()
+[![GitHub commits after master](https://img.shields.io/github/commits-since/vickyavw/abirami-traders/master)]()
+[![Github last commit](https://img.shields.io/github/last-commit/vickyavw/abirami-traders/1.0)]()
 [![GitHub stars](https://img.shields.io/github/stars/vickyavw/abirami-traders?style=social)]()
 [![GitHub forks](https://img.shields.io/github/forks/vickyavw/abirami-traders?style=social)]()
 [![Twitter Follow](https://img.shields.io/twitter/follow/vickyavw?style=social)](https://twitter.com/vickyavw)
