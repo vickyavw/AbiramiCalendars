@@ -1,22 +1,22 @@
-# Abirami Calendars
+# Abirami Traders
 
 <!--- These are examples. See https://shields.io for others or to customize this set of shields. You might want to include dependencies, project status and licence info here --->
-![GitHub repo size](https://img.shields.io/github/repo-size/vickyavw/AbiramiCalendars)
-![GitHub contributors](https://img.shields.io/github/contributors/vickyavw/AbiramiCalendars)
-![GitHug commits after master](https://img.shields.io/github/commits-since/vickyavw/AbiramiCalendars/master)
-![Githug last commit](https://img.shields.io/github/last-commit/vickyavw/AbiramiCalendars/1.0)
-![GitHub stars](https://img.shields.io/github/stars/vickyavw/AbiramiCalendars?style=social)
-![GitHub forks](https://img.shields.io/github/forks/vickyavw/AbiramiCalendars?style=social)
+![GitHub repo size](https://img.shields.io/github/repo-size/vickyavw/abirami-traders)
+![GitHub contributors](https://img.shields.io/github/contributors/vickyavw/abirami-traders)
+![GitHug commits after master](https://img.shields.io/github/commits-since/vickyavw/abirami-traders/master)
+![Githug last commit](https://img.shields.io/github/last-commit/vickyavw/abirami-traders/1.0)
+![GitHub stars](https://img.shields.io/github/stars/vickyavw/abirami-traders?style=social)
+![GitHub forks](https://img.shields.io/github/forks/vickyavw/abirami-traders?style=social)
 ![Twitter Follow](https://img.shields.io/twitter/follow/vickyavw?style=social)
 
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
 * You have installed and configured the required softwares - git, java8, gradle-4.5.1. 
-* You have read all our wiki guides - https://github.com/vickyavw/AbiramiCalendars/wiki
+* You have read all our wiki guides - https://github.com/vickyavw/abirami-traders/wiki
 
-## Contributing to AbiramiCalendars
-To contribute to AbiramiCalendars, follow these steps:
+## Contributing to abirami-traders
+To contribute to abirami-traders, follow these steps:
 
 1. Fork this repository or clone: `git clone`
 2. Create a branch: `git checkout -b <branch_name>`.
