@@ -8,10 +8,10 @@
     <body>
    		<c:forEach items="${items}" var="item">  
     	<table>
-  			<tr> <td><img src="data:image/jpg;base64,${item.base64Image}" width="240" height="300"/></td> </tr>
-  			<tr> <td>Item Id : ${item.itemId}</td> </tr>
-    		<tr> <td>Item Name : ${item.displayName}</td> </tr>
-    		<tr> <td>Item Description : ${item.description}</td> </tr>
+  			<tr> <td colspan="2"><img src="data:image/jpg;base64,${item.base64Image}" width="240" height="300"/></td> </tr>
+  			<tr> <td>Item Id </td><td> ${item.itemId}</td> </tr>
+    		<tr> <td>Item Name </td><td> ${item.displayName}</td> </tr>
+    		<tr> <td>Item Description </td><td> ${item.description}</td> </tr>
 		</table>    		
 		</c:forEach> 
 		<c:if test="${empty items}">
