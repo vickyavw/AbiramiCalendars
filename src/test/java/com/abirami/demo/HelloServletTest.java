@@ -25,7 +25,7 @@ public class HelloServletTest {
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
     }
-
+/*
     @Test
     public void doGet() throws Exception {
         StringWriter stringWriter = new StringWriter();
@@ -60,4 +60,5 @@ public class HelloServletTest {
         verify(request).setAttribute("user", "Dolly");
         verify(requestDispatcher).forward(request,response);
     }
+    */
 }

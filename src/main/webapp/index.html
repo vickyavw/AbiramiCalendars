@@ -1,0 +1,17 @@
+<html>
+	<head>
+	    <title>REST Webservice APIs</title>
+	</head>
+	<body>
+		<h2>REST Webservice APIs</h2>
+		<a href="user">All Items</a>
+		<br/><br/>
+		<input name="itemId" type="text" maxlength="512" id="itemId"/>
+		<a id="submit" onclick="getItem()" href="">Get Item Details</a>
+		<script>
+			function getItem(){
+				document.getElementById('submit').href = "user?itemId="+document.getElementById('itemId').value;
+			}
+		</script>
+	</body>
+</html>
