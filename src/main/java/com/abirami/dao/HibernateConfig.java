@@ -6,7 +6,6 @@ import org.hibernate.cfg.Configuration;
 
 import com.abirami.model.Item;
 
-@org.springframework.context.annotation.Configuration
 public class HibernateConfig {
 
     private static SessionFactory sessionFactory ;
@@ -16,8 +15,8 @@ public class HibernateConfig {
         configuration.addAnnotatedClass (Item.class);
         configuration.setProperty("hibernate.connection.driver_class","com.mysql.jdbc.Driver");
         configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/abirami_traders");                                
-        configuration.setProperty("hibernate.connection.username", "root");     
-        configuration.setProperty("hibernate.connection.password", "vicky@123");
+        configuration.setProperty("hibernate.connection.username", "springuser");     
+        configuration.setProperty("hibernate.connection.password", "admin@123");
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
         configuration.setProperty("hibernate.hbm2ddl.auto", "update");
         configuration.setProperty("hibernate.show_sql", "true");

@@ -9,4 +9,6 @@ public interface ItemDao {
 	List<Item> getItems();
 	
 	Item getItem(int itemId);
+	
+	int addItem(Item item);
 }

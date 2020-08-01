@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
@@ -74,13 +75,31 @@ public class HelloServlet extends HttpServlet {
 		req.getRequestDispatcher("items.jsp").forward(req, res);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String name = request.getParameter("name");
-        if (name == null) {
-        	name = "World";
-        }
-        request.setAttribute("user", name);
-        request.getRequestDispatcher("response.jsp").forward(request, response);
+	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		String name = req.getParameter("itemName");
+		String desc = req.getParameter("itemDesc");
+		String apiUrl = "http://localhost:8080/api/items";
+		Client client = ClientBuilder.newClient();
+		WebTarget resource = client.target(apiUrl);
+		
+		Builder request = resource.request();
+		request.accept(MediaType.APPLICATION_JSON);
+		
+		Item item = new Item();
+		item.setDisplayName(name);
+		item.setDescription(desc);
+		
+		Response response = request.post(Entity.entity(item,MediaType.APPLICATION_JSON),Response.class);
+		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
+		    System.out.println("Success! " + response.getStatus());
+		    item = response.readEntity(Item.class);
+		    List<Item> items = new ArrayList<Item>();
+	    	if(null != item){
+	    		items.add(item);
+	    	}
+	    	req.setAttribute("items", items);
+		}
+		req.getRequestDispatcher("items.jsp").forward(req, res);
 	}
 
 }

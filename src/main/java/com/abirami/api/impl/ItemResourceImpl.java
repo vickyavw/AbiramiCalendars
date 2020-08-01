@@ -1,5 +1,9 @@
 package com.abirami.api.impl;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +13,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.HttpStatus;
-import org.springframework.stereotype.Component;
 
 import com.abirami.api.ItemResource;
 import com.abirami.dao.ItemDao;
@@ -24,7 +27,6 @@ import com.abirami.model.Item;
 @Path("items")
 @Consumes({"application/json"})
 @Produces({"application/json"})
-@Component
 public class ItemResourceImpl implements ItemResource {
 
 	@Override
@@ -43,8 +45,11 @@ public class ItemResourceImpl implements ItemResource {
 
 	@Override
 	public Response addItem(Item item) {
-		// TODO update db
-		return null;
+		
+		ItemDao itemDao = new ItemDaoImpl();
+		int id = itemDao.addItem(item);
+		item.setItemId(id);
+		return Response.status(HttpStatus.SC_OK).entity(item).build();
 	}
 
 	@Override

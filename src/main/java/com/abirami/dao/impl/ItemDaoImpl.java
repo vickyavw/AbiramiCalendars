@@ -3,14 +3,11 @@ package com.abirami.dao.impl;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.query.Query;
-import org.springframework.stereotype.Repository;
 
 import com.abirami.dao.HibernateConfig;
 import com.abirami.dao.ItemDao;
 import com.abirami.model.Item;
 
-@Repository("itemDao")
 public class ItemDaoImpl implements ItemDao {
 
 	@Override
@@ -33,6 +30,16 @@ public class ItemDaoImpl implements ItemDao {
 		session.getTransaction().commit();
 		session.close();
 		return item;
+	}
+
+	@Override
+	public int addItem(Item item) {
+		Session session = HibernateConfig.getSessionFactory().openSession();
+		session.beginTransaction();
+		int itemId = (int) session.save(item);
+		session.getTransaction().commit();
+		session.close();
+		return itemId;
 	}
 
 }

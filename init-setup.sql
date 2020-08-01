@@ -1,6 +1,6 @@
 create database abirami_traders;
 create user 'springuser'@'%' identified by 'admin@123';
-grant all on db_example.* to 'springuser'@'%'; 
+grant all on abirami_traders.* to 'springuser'@'%';
 
 
 create table item(item_id INT not null auto_increment, display_name varchar(100) not null, description varchar(100), image

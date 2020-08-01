@@ -1,4 +1,4 @@
-package com.abirami.demo;
+package com.abirami.web;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.verify;
@@ -15,6 +15,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import com.abirami.web.HelloServlet;
 
 public class HelloServletTest {
     @Mock private HttpServletRequest request;
