@@ -24,6 +24,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.abirami.model.ApiError;
 import com.abirami.model.Item;
 import com.google.common.io.BaseEncoding;
 import com.google.common.io.ByteStreams;
@@ -43,8 +44,12 @@ public class HelloServlet extends HttpServlet {
 		
 		String itemId = req.getParameter("itemId");
 		String apiUrl = "http://localhost:8080/api/items";
-		if(StringUtils.isNotEmpty(itemId))
+		if(null != itemId) {
+			if(StringUtils.isEmpty(itemId)) {
+				itemId = "0";
+			}
 			apiUrl = apiUrl+"/"+itemId;
+		}
 		Client client = ClientBuilder.newClient();
 		WebTarget resource = client.target(apiUrl);
 		
@@ -71,8 +76,11 @@ public class HelloServlet extends HttpServlet {
 		    }
 		    req.setAttribute("items", items);
 		} else {
+			ApiError error = response.readEntity(ApiError.class);
 		    System.out.println("ERROR! " + response.getStatus());    
-		    System.out.println(response.getEntity());
+		    System.out.println(response.getStatus() + " : " +response.getStatusInfo().getReasonPhrase());
+		    req.setAttribute("errorCode", error.getErrorCode());
+		    req.setAttribute("errorDesc", error.getErrorDescription());
 		}
 		req.getRequestDispatcher("items.jsp").forward(req, res);
 	}

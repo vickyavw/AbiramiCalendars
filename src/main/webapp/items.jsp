@@ -14,7 +14,10 @@
     		<tr> <td>Item Description </td><td> ${item.description}</td> </tr>
 		</table>    		
 		</c:forEach> 
-		<c:if test="${empty items}">
+		<c:if test="${not empty errorCode}">
+			<h2>${errorCode} : ${errorDesc}</h2>
+		</c:if>
+		<c:if test="${empty errorCode}">
 			<h2>Invalid Item Id</h2>
 		</c:if>
     </body>
