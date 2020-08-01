@@ -1,10 +1,12 @@
 package com.abirami.web;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -23,8 +25,12 @@ import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.lang3.StringUtils;
 
 import com.abirami.model.Item;
+import com.google.common.io.BaseEncoding;
+import com.google.common.io.ByteStreams;
 
 @WebServlet(name = "UsersServlet", urlPatterns = {"user"}, loadOnStartup = 1) 
+@MultipartConfig(location="/tmp", fileSizeThreshold=1024*1024, 
+maxFileSize=1024*1024*5, maxRequestSize=1024*1024*5*5)
 public class HelloServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -53,18 +59,14 @@ public class HelloServlet extends HttpServlet {
 		    if(StringUtils.isNotEmpty(itemId)) {
 		    	Item item = response.readEntity(Item.class);
 		    	if(null != item){
-		    		if(null != item.getImage()) {
-		    			item.setBase64Image(DatatypeConverter.printBase64Binary(item.getImage()));
-		    		}
+		    		setBase64Image(item);
 		    		items.add(item);
 		    	}
 		    }
 		    else {
 		    	items = response.readEntity(new GenericType<List<Item>>() {});
 		    	for(Item item : items) {
-		    		if(null != item.getImage()) {
-		    			item.setBase64Image(DatatypeConverter.printBase64Binary(item.getImage()));
-		    		}
+		    		setBase64Image(item);
 		    	}
 		    }
 		    req.setAttribute("items", items);
@@ -88,18 +90,35 @@ public class HelloServlet extends HttpServlet {
 		Item item = new Item();
 		item.setDisplayName(name);
 		item.setDescription(desc);
-		
+		InputStream stream;
+		if(req.getPart("file").getSize()>0){
+			stream = req.getPart("file").getInputStream();
+			item.setImage(ByteStreams.toByteArray(stream));
+		}
 		Response response = request.post(Entity.entity(item,MediaType.APPLICATION_JSON),Response.class);
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
 		    System.out.println("Success! " + response.getStatus());
 		    item = response.readEntity(Item.class);
 		    List<Item> items = new ArrayList<Item>();
 	    	if(null != item){
+	    		if(null != item.getImage()) {
+	    			item.setBase64Image(DatatypeConverter.printBase64Binary(item.getImage()));
+	    		}
 	    		items.add(item);
 	    	}
 	    	req.setAttribute("items", items);
 		}
 		req.getRequestDispatcher("items.jsp").forward(req, res);
+	}
+
+	private void setBase64Image(Item item) throws IOException {
+		if(null != item.getImage() && item.getImage().length>0) {
+			item.setBase64Image(DatatypeConverter.printBase64Binary(item.getImage()));
+		}
+		else {
+			InputStream stream = getServletContext().getResourceAsStream("/images/no-image.jpg"); 
+			item.setBase64Image(BaseEncoding.base64().encode(ByteStreams.toByteArray(stream)));
+		}
 	}
 
 }

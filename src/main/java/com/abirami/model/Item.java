@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -31,7 +32,8 @@ public class Item {
 	@Column
 	private String description;
 	
-	@Column
+	@Lob
+	@Column(name = "image", columnDefinition="BLOB")
 	private byte[] image;
 	
 	@Transient
