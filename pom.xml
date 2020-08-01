@@ -128,6 +128,14 @@
         </dependency>
 
     </dependencies>
+    
+     <!-- MYSQL Dependency -->
+      
+    <dependency>
+         <groupId>mysql</groupId>
+         <artifactId>mysql-connector-java</artifactId>
+         <version>5.1.38</version>
+    </dependency>
 
     <profiles>
         <profile>
