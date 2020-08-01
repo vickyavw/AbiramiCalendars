@@ -2,16 +2,25 @@
 	<head>
 	    <title>Abirami Traders</title>
 	</head>
+	<script>
+			function getItem(){
+				document.getElementById('submit').href = "user?itemId="+document.getElementById('itemId').value;
+			}
+	</script>
 	<body>
+	
 		<h2>REST Webservice APIs</h2>
 		<a href="user">All Items</a>
 		<br/><br/>
 		<input name="itemId" type="text" maxlength="512" id="itemId"/>
 		<a id="submit" onclick="getItem()" href="">Get Item Details</a>
-		<script>
-			function getItem(){
-				document.getElementById('submit').href = "user?itemId="+document.getElementById('itemId').value;
-			}
-		</script>
+		<br/><br/>
+		<h2>Add Item</h2>
+		<form action = "user" enctype="multipart/form-data" method = "POST">
+			Item Name:<input name="itemName" type="text" maxlength="512" id="itemName"/><br/>
+			Item Desc:<input name="itemDesc" type="text" maxlength="512" id="itemDesc"/><br/>
+			Image:<input type="file" name="file" /><br/>
+			<input type="submit" value="Add Item"/>
+		</form>
 	</body>
 </html>
