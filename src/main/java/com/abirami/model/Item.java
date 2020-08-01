@@ -1,35 +1,44 @@
 package com.abirami.model;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
-import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 /**
  * @author vicky
  *
  */
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class Item implements Serializable {
+@Entity
+@Table(name="item")
+public class Item {
 
-	private static final long serialVersionUID = 2086133073035476282L;
-	
-	private Long itemId;
+	@Id
+	@Column(name = "item_id")
+	private Integer itemId;
+	@Column(name = "display_name")
 	private String displayName;
+	@Column
 	private String description;
+	@Column
 	private byte[] image;
 	private String base64Image;
+	@Column
 	private BigDecimal price;
+	@Column(name = "availability_count")
 	private Integer availabilityCount;
+	@Column(name = "time_to_print")
 	private Integer timeToPrint;
 	
-	public Long getItemId() {
+	public Integer getItemId() {
 		return itemId;
 	}
-	public void setItemId(Long itemId) {
+	public void setItemId(Integer itemId) {
 		this.itemId = itemId;
 	}
 	public String getDisplayName() {

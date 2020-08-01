@@ -21,7 +21,7 @@ public interface ItemResource {
 	
 	@GET
 	@Path("/{itemId}")
-	public Response getItem(@PathParam("itemId") Long itemId);
+	public Response getItem(@PathParam("itemId") int itemId);
 	
 	@POST
 	@Path("/")

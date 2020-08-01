@@ -27,6 +27,8 @@ dependencies {
     api 'org.apache.commons:commons-math3:3.6.1'
     providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
     compile group: 'javax.servlet', name: 'jstl', version: '1.2'
+    providedCompile 'org.springframework:spring-beans:5.2.7.RELEASE'
+    providedCompile 'org.springframework:spring-context:5.2.7.RELEASE'
     compile 'org.apache.commons:commons-lang3:3.6'
 	compile group: 'commons-httpclient', name: 'commons-httpclient', version: '3.1'
     
@@ -41,7 +43,9 @@ dependencies {
 	compile group: 'com.fasterxml.jackson.jaxrs', name: 'jackson-jaxrs-json-provider', version: '2.11.1'
 	compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.10.5'
 	
-	//compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.21'
+	compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.10.Final'
+	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.21'
+
 	//runtime 'com.h2database:h2:1.4.197'
 	    
 
