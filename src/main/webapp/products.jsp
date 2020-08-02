@@ -10,7 +10,7 @@
     	<c:choose>
 	    	<c:when test="${not empty products}">
 	    		<table>
-		   		<c:forEach products="${products}" var="product" varStatus="rowCounter">
+		   		<c:forEach items="${products}" var="product" varStatus="rowCounter">
 		  			<c:if test="${rowCounter.count % 5 == 1}">
 		  				<tr>
     				</c:if>
