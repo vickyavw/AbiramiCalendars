@@ -5,19 +5,19 @@ import java.util.List;
 import org.hibernate.Session;
 
 import com.abirami.dao.HibernateConfig;
-import com.abirami.dao.ItemDao;
-import com.abirami.model.Item;
+import com.abirami.dao.ProductDao;
+import com.abirami.model.Product;
 
-public class ItemDaoImpl implements ItemDao {
+public class ProductDaoImpl implements ProductDao {
 	
 	@Override
-	public List<Item> getItems() {
+	public List<Product> getProducts() {
 		Session session = null;
-		List<Item> items = null;
+		List<Product> products = null;
 		try {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
-			items = session.createQuery("from Item", Item.class).list();
+			products = session.createQuery("from Product", Product.class).list();
 			session.getTransaction().commit();
 		}
 		catch(Exception e) {
@@ -26,17 +26,17 @@ public class ItemDaoImpl implements ItemDao {
 		finally {
 			session.close();
 		}
-		return items;
+		return products;
 	}
 
 	@Override
-	public Item getItem(int itemId) {
+	public Product getProduct(int productId) {
 		Session session = null;
-		Item item = null;
+		Product product = null;
 		try {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
-			item = session.get(Item.class,itemId);
+			product = session.get(Product.class,productId);
 			session.getTransaction().commit();
 		}
 		catch(Exception e) {
@@ -45,17 +45,17 @@ public class ItemDaoImpl implements ItemDao {
 		finally {
 			session.close();
 		}
-		return item;
+		return product;
 	}
 
 	@Override
-	public int addItem(Item item) {
+	public int addProduct(Product product) {
 		Session session = null;
-		int itemId = 0;
+		int productId = 0;
 		try {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
-			itemId = (int) session.save(item);
+			productId = (int) session.save(product);
 			session.getTransaction().commit();
 		}
 		catch(Exception e) {
@@ -65,7 +65,7 @@ public class ItemDaoImpl implements ItemDao {
 		finally {
 			session.close();
 		}
-		return itemId;
+		return productId;
 	}
 
 }

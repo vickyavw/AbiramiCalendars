@@ -25,7 +25,7 @@ import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.lang3.StringUtils;
 
 import com.abirami.model.ApiError;
-import com.abirami.model.Item;
+import com.abirami.model.Product;
 import com.google.common.io.BaseEncoding;
 import com.google.common.io.ByteStreams;
 
@@ -42,13 +42,13 @@ public class HelloServlet extends HttpServlet {
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		
-		String itemId = req.getParameter("itemId");
-		String apiUrl = "http://localhost:8080/api/items";
-		if(null != itemId) {
-			if(StringUtils.isEmpty(itemId)) {
-				itemId = "0";
+		String productId = req.getParameter("productId");
+		String apiUrl = "http://localhost:8080/api/products";
+		if(null != productId) {
+			if(StringUtils.isEmpty(productId)) {
+				productId = "0";
 			}
-			apiUrl = apiUrl+"/"+itemId;
+			apiUrl = apiUrl+"/"+productId;
 		}
 		Client client = ClientBuilder.newClient();
 		WebTarget resource = client.target(apiUrl);
@@ -60,20 +60,20 @@ public class HelloServlet extends HttpServlet {
 
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
 		    System.out.println("Success! " + response.getStatus());
-		    List<Item> items = new ArrayList<Item>();
-		    if(StringUtils.isNotEmpty(itemId)) {
-		    	Item item = response.readEntity(Item.class);
-		    	if(null != item){
-		    		setBase64Image(item);
-		    		req.setAttribute("item", item);
+		    List<Product> products = new ArrayList<Product>();
+		    if(StringUtils.isNotEmpty(productId)) {
+		    	Product product = response.readEntity(Product.class);
+		    	if(null != product){
+		    		setBase64Image(product);
+		    		req.setAttribute("product", product);
 		    	}
 		    }
 		    else {
-		    	items = response.readEntity(new GenericType<List<Item>>() {});
-		    	for(Item item : items) {
-		    		setBase64Image(item);
+		    	products = response.readEntity(new GenericType<List<Product>>() {});
+		    	for(Product product : products) {
+		    		setBase64Image(product);
 		    	}
-		    	req.setAttribute("items", items);
+		    	req.setAttribute("products", products);
 		    }
 		} else {
 			ApiError error = response.readEntity(ApiError.class);
@@ -82,50 +82,50 @@ public class HelloServlet extends HttpServlet {
 		    req.setAttribute("errorCode", error.getErrorCode());
 		    req.setAttribute("errorDesc", error.getErrorDescription());
 		}
-		req.getRequestDispatcher("items.jsp").forward(req, res);
+		req.getRequestDispatcher("products.jsp").forward(req, res);
 	}
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		String name = req.getParameter("itemName");
-		String desc = req.getParameter("itemDesc");
-		String apiUrl = "http://localhost:8080/api/items";
+		String name = req.getParameter("productName");
+		String desc = req.getParameter("productDesc");
+		String apiUrl = "http://localhost:8080/api/products";
 		Client client = ClientBuilder.newClient();
 		WebTarget resource = client.target(apiUrl);
 		
 		Builder request = resource.request();
 		request.accept(MediaType.APPLICATION_JSON);
 		
-		Item item = new Item();
-		item.setDisplayName(name);
-		item.setDescription(desc);
+		Product product = new Product();
+		product.setDisplayName(name);
+		product.setDescription(desc);
 		InputStream stream;
 		if(req.getPart("file").getSize()>0){
 			stream = req.getPart("file").getInputStream();
-			item.setImage(ByteStreams.toByteArray(stream));
+			product.setImage(ByteStreams.toByteArray(stream));
 		}
-		Response response = request.post(Entity.entity(item,MediaType.APPLICATION_JSON),Response.class);
+		Response response = request.post(Entity.entity(product,MediaType.APPLICATION_JSON),Response.class);
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
 		    System.out.println("Success! " + response.getStatus());
-		    item = response.readEntity(Item.class);
-		    List<Item> items = new ArrayList<Item>();
-	    	if(null != item){
-	    		if(null != item.getImage()) {
-	    			item.setBase64Image(DatatypeConverter.printBase64Binary(item.getImage()));
+		    product = response.readEntity(Product.class);
+		    List<Product> products = new ArrayList<Product>();
+	    	if(null != product){
+	    		if(null != product.getImage()) {
+	    			product.setBase64Image(DatatypeConverter.printBase64Binary(product.getImage()));
 	    		}
-	    		items.add(item);
+	    		products.add(product);
 	    	}
-	    	req.setAttribute("items", items);
+	    	req.setAttribute("products", products);
 		}
-		req.getRequestDispatcher("items.jsp").forward(req, res);
+		req.getRequestDispatcher("products.jsp").forward(req, res);
 	}
 
-	private void setBase64Image(Item item) throws IOException {
-		if(null != item.getImage() && item.getImage().length>0) {
-			item.setBase64Image(DatatypeConverter.printBase64Binary(item.getImage()));
+	private void setBase64Image(Product product) throws IOException {
+		if(null != product.getImage() && product.getImage().length>0) {
+			product.setBase64Image(DatatypeConverter.printBase64Binary(product.getImage()));
 		}
 		else {
 			InputStream stream = getServletContext().getResourceAsStream("/images/no-image.jpg"); 
-			item.setBase64Image(BaseEncoding.base64().encode(ByteStreams.toByteArray(stream)));
+			product.setBase64Image(BaseEncoding.base64().encode(ByteStreams.toByteArray(stream)));
 		}
 	}
 

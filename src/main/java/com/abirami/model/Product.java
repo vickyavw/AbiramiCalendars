@@ -19,12 +19,12 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
  */
 
 @Entity
-@Table(name="item")
-public class Item {
+@Table(name="product")
+public class Product {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "item_id")
-	private Integer itemId;
+	@Column(name = "product_id")
+	private Integer productId;
 	
 	@Column(name = "display_name")
 	private String displayName;
@@ -48,12 +48,12 @@ public class Item {
 	@Column(name = "time_to_print")
 	private Integer timeToPrint;
 	
-	public Integer getItemId() {
-		return itemId;
+	public Integer getProductId() {
+		return productId;
 	}
 	
-	public void setItemId(Integer itemId) {
-		this.itemId = itemId;
+	public void setProductId(Integer productId) {
+		this.productId = productId;
 	}
 	
 	public String getDisplayName() {

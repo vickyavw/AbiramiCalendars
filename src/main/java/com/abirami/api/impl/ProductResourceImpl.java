@@ -14,29 +14,29 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.HttpStatus;
 
-import com.abirami.api.ItemResource;
-import com.abirami.dao.ItemDao;
-import com.abirami.dao.impl.ItemDaoImpl;
+import com.abirami.api.ProductResource;
+import com.abirami.dao.ProductDao;
+import com.abirami.dao.impl.ProductDaoImpl;
 import com.abirami.model.ApiError;
-import com.abirami.model.Item;
+import com.abirami.model.Product;
 
 /**
  * @author vicky
  *
  */
 
-@Path("items")
+@Path("products")
 @Consumes({"application/json"})
 @Produces({"application/json"})
-public class ItemResourceImpl implements ItemResource {
+public class ProductResourceImpl implements ProductResource {
 
 	@Override
-	public Response getItems() {
-		ItemDao itemDao = new ItemDaoImpl();
-		List<Item> items = new ArrayList<Item>();
+	public Response getProducts() {
+		ProductDao productDao = new ProductDaoImpl();
+		List<Product> products = new ArrayList<Product>();
 		try {
-			items = itemDao.getItems();
-			return Response.status(HttpStatus.SC_OK).entity(items).build();
+			products = productDao.getProducts();
+			return Response.status(HttpStatus.SC_OK).entity(products).build();
 		}
 		catch (Exception e) {
 			ApiError apiError = new ApiError();
@@ -47,16 +47,16 @@ public class ItemResourceImpl implements ItemResource {
 	}
 
 	@Override
-	public Response getItem(int itemId) {
-		if(itemId == 0) {
+	public Response getProduct(int productId) {
+		if(productId == 0) {
 			ApiError apiError = new ApiError();
 			apiError.setErrorCode(1001);
-			apiError.setErrorDescription("Item Id mandatory" );
+			apiError.setErrorDescription("Product Id mandatory" );
 			return Response.status(HttpStatus.SC_BAD_REQUEST).entity(apiError).build();
 		}
-		ItemDao itemDao = new ItemDaoImpl();
+		ProductDao productDao = new ProductDaoImpl();
 		try {
-			return Response.status(HttpStatus.SC_OK).entity(itemDao.getItem(itemId)).build();
+			return Response.status(HttpStatus.SC_OK).entity(productDao.getProduct(productId)).build();
 		}
 		catch (Exception e) {
 			ApiError apiError = new ApiError();
@@ -67,18 +67,18 @@ public class ItemResourceImpl implements ItemResource {
 	}
 
 	@Override
-	public Response addItem(Item item) {
-		if(null == item) {
+	public Response addProduct(Product product) {
+		if(null == product) {
 			ApiError apiError = new ApiError();
 			apiError.setErrorCode(1001);
-			apiError.setErrorDescription("Item mandatory" );
+			apiError.setErrorDescription("Product mandatory" );
 			return Response.status(HttpStatus.SC_BAD_REQUEST).entity(apiError).build();
 		}
-		ItemDao itemDao = new ItemDaoImpl();
+		ProductDao productDao = new ProductDaoImpl();
 		try {
-			int id = itemDao.addItem(item);
-			item.setItemId(id);
-			return Response.status(HttpStatus.SC_OK).entity(item).build();
+			int id = productDao.addProduct(product);
+			product.setProductId(id);
+			return Response.status(HttpStatus.SC_OK).entity(product).build();
 		}
 		catch (Exception e) {
 			ApiError apiError = new ApiError();
@@ -89,13 +89,13 @@ public class ItemResourceImpl implements ItemResource {
 	}
 
 	@Override
-	public Response updateItem(int itemId, Item item) {
+	public Response updateProduct(int productId, Product product) {
 		// TODO update db
 		return null;
 	}
 
 	@Override
-	public Response deleteItem(int itemId) {
+	public Response deleteProduct(int productId) {
 		// TODO update db
 		return null;
 	}
