@@ -65,7 +65,7 @@ public class HelloServlet extends HttpServlet {
 		    	Item item = response.readEntity(Item.class);
 		    	if(null != item){
 		    		setBase64Image(item);
-		    		items.add(item);
+		    		req.setAttribute("item", item);
 		    	}
 		    }
 		    else {
@@ -73,8 +73,8 @@ public class HelloServlet extends HttpServlet {
 		    	for(Item item : items) {
 		    		setBase64Image(item);
 		    	}
+		    	req.setAttribute("items", items);
 		    }
-		    req.setAttribute("items", items);
 		} else {
 			ApiError error = response.readEntity(ApiError.class);
 		    System.out.println("ERROR! " + response.getStatus());    
