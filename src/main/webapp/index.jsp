@@ -77,6 +77,8 @@
 		                            <li><a href="/product">Shop Cart</a></li>
 		                            <li><a href="./checkout.html">Checkout</a></li>
 		                            <li><a href="./blog-details.html">Blog Details</a></li>
+		                            <li><a href="./admin-category.html">Admin Categories</a></li>
+									<li><a href="/admin-product.html">Admin Products</a></li>
 		                        </ul>
 		                    </li>
 		                    <li><a href="./blog.html">Customize</a></li>
@@ -128,7 +130,7 @@
                     <div class="col-lg-6 col-md-6 col-sm-6 p-0">
                         <div class="categories__item set-bg" data-setbg="images/categories/category-2.jpg">
                             <div class="categories__text">
-                                <h4>Menâs fashion</h4>
+                                <h4>Monthly Calendars</h4>
                                 <p>358 items</p>
                                 <a href="#">Shop now</a>
                             </div>
