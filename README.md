@@ -5,6 +5,7 @@
 [![GitHub contributors](https://img.shields.io/github/contributors/vickyavw/abirami-traders)](https://github.com/vickyavw/abirami-traders/graphs/contributors)
 [![GitHub commits after master](https://img.shields.io/github/commits-since/vickyavw/abirami-traders/master)](https://github.com/vickyavw/abirami-traders/compare/master...1.0)
 [![Github last commit](https://img.shields.io/github/last-commit/vickyavw/abirami-traders/1.0)](https://github.com/vickyavw/abirami-traders/commits/1.0)
+![Java CI with Gradle](https://github.com/vickyavw/abirami-traders/workflows/Java%20CI%20with%20Gradle/badge.svg)
 [![GitHub stars](https://img.shields.io/github/stars/vickyavw/abirami-traders?style=social)](https://github.com/vickyavw/abirami-traders/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/vickyavw/abirami-traders?style=social)](https://github.com/vickyavw/abirami-traders/network/members)
 [![Twitter Follow](https://img.shields.io/twitter/follow/vickyavw?style=social)](https://twitter.com/vickyavw)
