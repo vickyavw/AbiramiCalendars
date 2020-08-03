@@ -3,24 +3,24 @@
 	    <title>Abirami Traders</title>
 	</head>
 	<script>
-			function getItem(){
-				document.getElementById('submit').href = "user?itemId="+document.getElementById('itemId').value;
+			function getProduct(){
+				document.getElementById('submit').href = "user?productId="+document.getElementById('productId').value;
 			}
 	</script>
 	<body>
 	
 		<h2>REST Webservice APIs</h2>
-		<a href="user">All Items</a>
+		<a href="user">All Products</a>
 		<br/><br/>
-		<input name="itemId" type="text" maxlength="512" id="itemId"/>
-		<a id="submit" onclick="getItem()" href="">Get Item Details</a>
+		<input name="productId" type="text" maxlength="512" id="productId"/>
+		<a id="submit" onclick="getProduct()" href="">Get Product Details</a>
 		<br/><br/>
-		<h2>Add Item</h2>
+		<h2>Add Product</h2>
 		<form action = "user" enctype="multipart/form-data" method = "POST">
-			Item Name:<input name="itemName" type="text" maxlength="512" id="itemName"/><br/>
-			Item Desc:<input name="itemDesc" type="text" maxlength="512" id="itemDesc"/><br/>
+			Product Name:<input name="productName" type="text" maxlength="512" id="productName"/><br/>
+			Product Desc:<input name="productDesc" type="text" maxlength="512" id="productDesc"/><br/>
 			Image:<input type="file" name="file" /><br/>
-			<input type="submit" value="Add Item"/>
+			<input type="submit" value="Add Product"/>
 		</form>
 	</body>
 </html>
