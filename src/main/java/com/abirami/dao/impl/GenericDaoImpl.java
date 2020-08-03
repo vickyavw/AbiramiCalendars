@@ -4,58 +4,57 @@ import java.util.List;
 
 import org.hibernate.Session;
 
+import com.abirami.dao.GenericDao;
 import com.abirami.dao.HibernateConfig;
-import com.abirami.dao.ProductDao;
-import com.abirami.model.Product;
 
-public class ProductDaoImpl implements ProductDao {
+public class GenericDaoImpl implements GenericDao {
 	
 	@Override
-	public List<Product> getProducts() {
+	public <T> List<T> getAll(final Class<T> clazz) {
 		Session session = null;
-		List<Product> products = null;
+		List<T> genericItems = null;
 		try {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
-			products = session.createQuery("from Product", Product.class).list();
-			session.getTransaction().commit();
+			genericItems = session.createQuery("from " + clazz.getName()).list();
 		}
 		catch(Exception e) {
 			throw e;
 		}
 		finally {
-			session.close();
+			if(null != session)
+				session.close();
 		}
-		return products;
+		return genericItems;
 	}
 
 	@Override
-	public Product getProduct(int productId) {
+	public <T> T get(final Class<T> type, final int id) {
 		Session session = null;
-		Product product = null;
+		T genericItem = null;
 		try {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
-			product = session.get(Product.class,productId);
-			session.getTransaction().commit();
+			genericItem = session.get(type,id);
 		}
 		catch(Exception e) {
 			throw e;
 		}
 		finally {
-			session.close();
+			if(null != session)
+				session.close();
 		}
-		return product;
+		return genericItem;
 	}
 
 	@Override
-	public int addProduct(Product product) {
+	public <T> int save(final T object) {
 		Session session = null;
-		int productId = 0;
+		int genericItemId = 0;
 		try {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
-			productId = (int) session.save(product);
+			genericItemId = (int) session.save(object);
 			session.getTransaction().commit();
 		}
 		catch(Exception e) {
@@ -63,9 +62,10 @@ public class ProductDaoImpl implements ProductDao {
 			throw e;
 		}
 		finally {
-			session.close();
+			if(null != session)
+				session.close();
 		}
-		return productId;
+		return genericItemId;
 	}
 
 }

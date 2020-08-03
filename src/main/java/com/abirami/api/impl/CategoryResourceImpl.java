@@ -10,29 +10,24 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.HttpStatus;
 
-import com.abirami.api.ProductResource;
+import com.abirami.api.CategoryResource;
 import com.abirami.dao.GenericDao;
 import com.abirami.dao.impl.GenericDaoImpl;
 import com.abirami.model.ApiError;
-import com.abirami.model.Product;
+import com.abirami.model.Category;
 
-/**
- * @author vicky
- *
- */
-
-@Path("products")
+@Path("categories")
 @Consumes({"application/json"})
 @Produces({"application/json"})
-public class ProductResourceImpl implements ProductResource {
+public class CategoryResourceImpl implements CategoryResource {
 
 	@Override
-	public Response getProducts() {
-		GenericDao productDao = new GenericDaoImpl();
-		List<Product> products = new ArrayList<Product>();
+	public Response getCategories() {
+		GenericDao categoryDao = new GenericDaoImpl();
+		List<Category> categories = new ArrayList<Category>();
 		try {
-			products = productDao.getAll(Product.class);
-			return Response.status(HttpStatus.SC_OK).entity(products).build();
+			categories = categoryDao.getAll(Category.class);
+			return Response.status(HttpStatus.SC_OK).entity(categories).build();
 		}
 		catch (Exception e) {
 			ApiError apiError = new ApiError();
@@ -43,16 +38,16 @@ public class ProductResourceImpl implements ProductResource {
 	}
 
 	@Override
-	public Response getProduct(int productId) {
-		if(productId == 0) {
+	public Response getCategory(int categoryId) {
+		if(categoryId == 0) {
 			ApiError apiError = new ApiError();
 			apiError.setErrorCode(1001);
-			apiError.setErrorDescription("Product Id mandatory" );
+			apiError.setErrorDescription("Category Id mandatory" );
 			return Response.status(HttpStatus.SC_BAD_REQUEST).entity(apiError).build();
 		}
-		GenericDao productDao = new GenericDaoImpl();
+		GenericDao categoryDao = new GenericDaoImpl();
 		try {
-			return Response.status(HttpStatus.SC_OK).entity(productDao.get(Product.class, productId)).build();
+			return Response.status(HttpStatus.SC_OK).entity(categoryDao.get(Category.class, categoryId)).build();
 		}
 		catch (Exception e) {
 			ApiError apiError = new ApiError();
@@ -63,18 +58,18 @@ public class ProductResourceImpl implements ProductResource {
 	}
 
 	@Override
-	public Response addProduct(Product product) {
-		if(null == product) {
+	public Response addCategory(Category category) {
+		if(null == category) {
 			ApiError apiError = new ApiError();
 			apiError.setErrorCode(1001);
-			apiError.setErrorDescription("Product mandatory" );
+			apiError.setErrorDescription("Category mandatory" );
 			return Response.status(HttpStatus.SC_BAD_REQUEST).entity(apiError).build();
 		}
-		GenericDao productDao = new GenericDaoImpl();
+		GenericDao categoryDao = new GenericDaoImpl();
 		try {
-			int id = productDao.save(product);
-			product.setProductId(id);
-			return Response.status(HttpStatus.SC_OK).entity(product).build();
+			int id = categoryDao.save(category);
+			category.setCategoryId(id);
+			return Response.status(HttpStatus.SC_OK).entity(category).build();
 		}
 		catch (Exception e) {
 			ApiError apiError = new ApiError();
@@ -85,14 +80,14 @@ public class ProductResourceImpl implements ProductResource {
 	}
 
 	@Override
-	public Response updateProduct(int productId, Product product) {
-		// TODO update db
+	public Response updateCategory(int categoryId, Category category) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public Response deleteProduct(int productId) {
-		// TODO update db
+	public Response deleteCategory(int categoryId) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
