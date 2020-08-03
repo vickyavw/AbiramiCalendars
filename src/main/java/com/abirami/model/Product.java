@@ -15,7 +15,9 @@ import javax.persistence.Transient;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /**
  * @author vicky
@@ -24,6 +26,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @Table(name="product")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "productId", scope = Product.class)
 public class Product {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -54,7 +57,11 @@ public class Product {
 	
 	@ManyToOne(optional = false)
 	@JoinColumn(name = "category_id")
+	@JsonBackReference
 	private Category category;
+	
+	@Transient
+	private String categoryName;
 	
 	public Integer getProductId() {
 		return productId;
@@ -126,6 +133,14 @@ public class Product {
 
 	public void setCategory(Category category) {
 		this.category = category;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 
 	@Override

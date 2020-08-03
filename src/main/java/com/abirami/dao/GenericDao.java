@@ -10,5 +10,7 @@ public interface GenericDao {
 	
 	<T> int save(final T object);
 	
+	<T> List<T> getListOfIds(final Class<T> clazz, final List<Integer> ids);
+	
 	//<T> void saveOrUpdate(final T object);
 }

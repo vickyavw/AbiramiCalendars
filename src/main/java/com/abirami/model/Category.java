@@ -2,8 +2,10 @@ package com.abirami.model;
 
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,7 +14,9 @@ import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /**
  * @author vicky
@@ -21,6 +25,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 
 @Entity
 @Table(name="category")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "categoryId", scope = Category.class)
 public class Category {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,8 +38,9 @@ public class Category {
 	@Column
 	private String description;
 	
-//	@OneToMany(mappedBy = "category")
-//	private Set<Product> products;
+	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JsonManagedReference
+	private Set<Product> products;
 	
 	public Integer getCategoryId() {
 		return categoryId;
@@ -60,16 +66,16 @@ public class Category {
 		this.description = description;
 	}
 	
-//	public Set<Product> getProducts() {
-//		return products;
-//	}
-//
-//	public void setProducts(Set<Product> products) {
-//		this.products = products;
-//	}
-	
+	public Set<Product> getProducts() {
+		return products;
+	}
+
+	public void setProducts(Set<Product> products) {
+		this.products = products;
+	}
+
 	@Override
 	public String toString() {
-    	return ReflectionToStringBuilder.toStringExclude(this, "products");
+    	return ReflectionToStringBuilder.toString(this);
 	}
 }

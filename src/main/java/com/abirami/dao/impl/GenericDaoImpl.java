@@ -29,13 +29,13 @@ public class GenericDaoImpl implements GenericDao {
 	}
 
 	@Override
-	public <T> T get(final Class<T> type, final int id) {
+	public <T> T get(final Class<T> clazz, final int id) {
 		Session session = null;
 		T genericItem = null;
 		try {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
-			genericItem = session.get(type,id);
+			genericItem = session.get(clazz,id);
 		}
 		catch(Exception e) {
 			throw e;
@@ -66,6 +66,25 @@ public class GenericDaoImpl implements GenericDao {
 				session.close();
 		}
 		return genericItemId;
+	}
+
+	@Override
+	public <T> List<T> getListOfIds(final Class<T> clazz, final List<Integer> ids) {
+		Session session = null;
+		List<T> genericItem = null;
+		try {
+			session = HibernateConfig.getSessionFactory().openSession();
+			session.beginTransaction();
+			genericItem = session.byMultipleIds(clazz).multiLoad(ids);
+		}
+		catch(Exception e) {
+			throw e;
+		}
+		finally {
+			if(null != session)
+				session.close();
+		}
+		return genericItem;
 	}
 
 }

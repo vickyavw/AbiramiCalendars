@@ -14,6 +14,7 @@ import com.abirami.api.ProductResource;
 import com.abirami.dao.GenericDao;
 import com.abirami.dao.impl.GenericDaoImpl;
 import com.abirami.model.ApiError;
+import com.abirami.model.Category;
 import com.abirami.model.Product;
 
 /**
@@ -52,7 +53,9 @@ public class ProductResourceImpl implements ProductResource {
 		}
 		GenericDao productDao = new GenericDaoImpl();
 		try {
-			return Response.status(HttpStatus.SC_OK).entity(productDao.get(Product.class, productId)).build();
+			Product product = productDao.get(Product.class, productId);
+			product.setCategoryName(product.getCategory().getDisplayName());
+			return Response.status(HttpStatus.SC_OK).entity(product).build();
 		}
 		catch (Exception e) {
 			ApiError apiError = new ApiError();
@@ -64,7 +67,7 @@ public class ProductResourceImpl implements ProductResource {
 
 	@Override
 	public Response addProduct(Product product) {
-		if(null == product) {
+		if(null == product || null == product.getCategoryName()) {
 			ApiError apiError = new ApiError();
 			apiError.setErrorCode(1001);
 			apiError.setErrorDescription("Product mandatory" );
@@ -72,8 +75,12 @@ public class ProductResourceImpl implements ProductResource {
 		}
 		GenericDao productDao = new GenericDaoImpl();
 		try {
+			//get Category by categoryId and set in the product before saving the product.
+			product.setCategory(productDao.get(Category.class, Integer.valueOf(product.getCategoryName())));
 			int id = productDao.save(product);
 			product.setProductId(id);
+			//setting the correct product name in the response
+			product.setCategoryName(product.getCategory().getDisplayName());
 			return Response.status(HttpStatus.SC_OK).entity(product).build();
 		}
 		catch (Exception e) {

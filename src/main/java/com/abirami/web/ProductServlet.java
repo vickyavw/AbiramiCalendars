@@ -109,14 +109,13 @@ public class ProductServlet extends HttpServlet {
 			product.setImage(ByteStreams.toByteArray(stream));
 		}
 		product.setPrice(new BigDecimal("10.50"));
-		Category category = new Category();
 		
 		if(null == categoryId || !StringUtils.isNumeric(categoryId)) {
 			categoryId = "1";
 		}
 		
-		category.setCategoryId(Integer.valueOf(categoryId));
-		product.setCategory(category);
+		//Sending categoryId as name because of JsonIgnore on category object due to cyclic dependency
+		product.setCategoryName(categoryId);
 		
 		Response response = request.post(Entity.entity(product,MediaType.APPLICATION_JSON),Response.class);
 		

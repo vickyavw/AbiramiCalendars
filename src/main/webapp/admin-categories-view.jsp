@@ -14,13 +14,13 @@
 		  				<tr> <td>Category Id </td><td> ${category.categoryId}</td> </tr>
 		    			<tr> <td>Category Name </td><td> ${category.displayName}</td> </tr>
 		    			<tr> <td>Category Description </td><td> ${category.description}</td> </tr>
-		    			<%-- <c:when test="${not empty category.products}">
+		    			<c:if test="${not empty category.products}">
 		    				<tr> <td>List of Products in the category </td><td></td> </tr>
-		    				<c:forEach items="${products}" var="product">
+		    				<c:forEach items="${category.products}" var="product">
 		    					<tr> <td>Product Id </td><td> ${product.productId}</td> </tr>
 		    					<tr> <td>Product Name </td><td> ${product.displayName}</td> </tr>
 		    				</c:forEach>
-		    			</c:when> --%>
+		    			</c:if>
 				</table>  
 		   		<br/><br/>
 				</c:forEach>

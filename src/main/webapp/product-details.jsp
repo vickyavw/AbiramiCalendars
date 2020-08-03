@@ -69,10 +69,9 @@
 		        <div class="col-xl-6 col-lg-7">
 		            <nav class="header__menu">
 		                <ul>
-		                    <li><a href="./index.jsp">Home</a></li>
 		                    <li class="active"><a href="/product">Calendars</a></li>
-		                    <li><a href="#">Men’s</a></li>
-		                    <li><a href="/product">Shop</a></li>
+		                    <li><a href="./admin-category.html">Admin Categories</a></li>
+		                    <li><a href="/admin-product.html">Admin Products</a></li>
 		                    <li><a href="#">Pages</a>
 		                        <ul class="dropdown">
 		                            <li><a href="./product-details.html">Product Details</a></li>
@@ -81,7 +80,6 @@
 		                            <li><a href="./blog-details.html">Blog Details</a></li>
 		                        </ul>
 		                    </li>
-		                    <li><a href="./blog.html">Blog</a></li>
 		                    <li><a href="./contact.html">Contact</a></li>
 		                </ul>
 		            </nav>
@@ -161,7 +159,7 @@
                     <div class="product__details__text">
                         <h3>${product.displayName} <span>${product.description}</span></h3>
                         <div class="product__details__price">Rs. ${product.price} <span>Rs. ${product.price}</span></div>
-                        <p>${product.category.displayName}</p>
+                        <p>${product.categoryName}</p>
                         <div class="product__details__button">
                             <div class="quantity">
                                 <span>Quantity:</span>
