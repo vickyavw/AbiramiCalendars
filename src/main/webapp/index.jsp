@@ -67,11 +67,11 @@
 		        <div class="col-xl-6 col-lg-7">
 		            <nav class="header__menu">
 		                <ul>
-		                    <li class="active"><a href="./index.jsp">Home</a></li>
+		                   <!-- <li class="active"><a href="./index.jsp">Home</a></li> -->
 		                    <li><a href="/product">Calendars</a></li>
-		                    <li><a href="#">Men’s</a></li>
-		                    <li><a href="/product">Shop</a></li>
-		                    <li><a href="#">Pages</a>
+		                    <li><a href="#">Diaries</a></li>
+		                    <li><a href="/product">Boxes</a></li>
+		                    <li><a href="#">Labels</a>
 		                        <ul class="dropdown">
 		                            <li><a href="./product-details.html">Product Details</a></li>
 		                            <li><a href="/product">Shop Cart</a></li>
@@ -79,7 +79,7 @@
 		                            <li><a href="./blog-details.html">Blog Details</a></li>
 		                        </ul>
 		                    </li>
-		                    <li><a href="./blog.html">Blog</a></li>
+		                    <li><a href="./blog.html">Customize</a></li>
 		                    <li><a href="./contact.html">Contact</a></li>
 		                </ul>
 		            </nav>
@@ -117,9 +117,8 @@
                     <div class="categories__item categories__large__item set-bg"
                     data-setbg="images/categories/category-1.jpg">
                     <div class="categories__text">
-                        <h1>Womenâs fashion</h1>
-                        <p>Sitamet, consectetur adipiscing elit, sed do eiusmod tempor incidid-unt labore
-                        edolore magna aliquapendisse ultrices gravida.</p>
+                        <h1>Daily Calendars</h1>
+                        <p>365 days to mark on a calendar.</p>
                         <a href="#">Shop now</a>
                     </div>
                 </div>
