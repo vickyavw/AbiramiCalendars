@@ -13,7 +13,7 @@
 ## Prerequisites
 
 Before you begin, ensure you have met the following requirements:
-* You have installed and configured the required softwares - git, java8, gradle-4.5.1. 
+* You have installed and configured the required softwares - git, java8, gradle-4.5.1, MySQL-8.0.21. 
 * You have read all our wiki guides - https://github.com/vickyavw/abirami-traders/wiki
 
 ## Contributing to abirami-traders
