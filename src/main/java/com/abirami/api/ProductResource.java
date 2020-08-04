@@ -35,4 +35,8 @@ public interface ProductResource {
 	@Path("/{productId}")
 	public Response deleteProduct(@PathParam("productId") int productId);
 	
+	@GET
+	@Path("/category/{categoryId}")
+	public Response getProductsByCategory(@PathParam("categoryId") int categoryId);
+	
 }

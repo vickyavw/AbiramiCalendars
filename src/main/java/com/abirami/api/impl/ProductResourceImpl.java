@@ -103,4 +103,25 @@ public class ProductResourceImpl implements ProductResource {
 		return null;
 	}
 
+	@Override
+	public Response getProductsByCategory(int categoryId) {
+		if(categoryId == 0) {
+			ApiError apiError = new ApiError();
+			apiError.setErrorCode(1001);
+			apiError.setErrorDescription("Category Id mandatory" );
+			return Response.status(HttpStatus.SC_BAD_REQUEST).entity(apiError).build();
+		}
+		GenericDao productDao = new GenericDaoImpl();
+		try {
+			List<Product> products = productDao.getAllByForeignKey(Product.class, "category.categoryId", categoryId);
+			return Response.status(HttpStatus.SC_OK).entity(products).build();
+		}
+		catch (Exception e) {
+			ApiError apiError = new ApiError();
+			apiError.setErrorCode(2001);
+			apiError.setErrorDescription("server error" );
+			return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(apiError).build();
+		}
+	}
+
 }

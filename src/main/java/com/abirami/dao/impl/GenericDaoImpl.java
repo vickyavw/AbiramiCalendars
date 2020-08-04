@@ -3,6 +3,7 @@ package com.abirami.dao.impl;
 import java.util.List;
 
 import org.hibernate.Session;
+import org.hibernate.criterion.Restrictions;
 
 import com.abirami.dao.GenericDao;
 import com.abirami.dao.HibernateConfig;
@@ -85,6 +86,25 @@ public class GenericDaoImpl implements GenericDao {
 				session.close();
 		}
 		return genericItem;
+	}
+
+	@Override
+	public <T> List<T> getAllByForeignKey(Class<T> clazz, String foreignKeyQuery, int id) {
+		Session session = null;
+		List<T> genericItems = null;
+		try {
+			session = HibernateConfig.getSessionFactory().openSession();
+			session.beginTransaction();
+			genericItems = session.createCriteria(clazz).add(Restrictions.eq(foreignKeyQuery, id)).list();
+		}
+		catch(Exception e) {
+			throw e;
+		}
+		finally {
+			if(null != session)
+				session.close();
+		}
+		return genericItems;
 	}
 
 }

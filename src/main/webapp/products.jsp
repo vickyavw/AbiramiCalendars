@@ -47,7 +47,7 @@
             </a></li>
         </ul>
         <div class="offcanvas__logo">
-            <a href="./index.html"><img src="images/logo.png" alt=""></a>
+            <a href="./index.jsp"><img src="images/logo.png" alt=""></a>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__auth">
@@ -119,7 +119,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb__links">
-                        <a href="./index.html"><i class="fa fa-home"></i> Home</a>
+                        <a href="./index.jsp"><i class="fa fa-home"></i> Home</a>
                         <span>Shop</span>
                     </div>
                 </div>
@@ -147,13 +147,10 @@
                                         <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
                                             <div class="card-body">
                                                 <ul>
-                                                	<li><a href="#">All</a></li>
-                                                    <li><a href="#">Religion</a></li>
-                                                    <li><a href="#">Leaders</a></li>
-                                                    <li><a href="#">Movie Stars</a></li>
-                                                    <li><a href="#">Pets</a></li>
-                                                    <li><a href="#">Scenaries</a></li>
-                                                    <li><a href="#">Babies</a></li>
+                                                	<li class="active"><a href="/calendars">All</a></li>
+                                                    <c:forEach items="${categories}" var="category">
+							                        	<li><a href="/calendars?categoryId=${category.categoryId}">${category.displayName}</a></li>
+								                    </c:forEach>
                                                 </ul>
                                             </div>
                                         </div>
@@ -363,7 +360,7 @@
                 <div class="col-lg-4 col-md-6 col-sm-7">
                     <div class="footer__about">
                         <div class="footer__logo">
-                            <a href="./index.html"><img src="images/logo.png" alt=""></a>
+                            <a href="./index.jsp"><img src="images/logo.png" alt=""></a>
                         </div>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
                         cilisis.</p>
