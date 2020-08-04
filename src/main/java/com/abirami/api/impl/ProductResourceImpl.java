@@ -1,5 +1,6 @@
 package com.abirami.api.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,6 +115,27 @@ public class ProductResourceImpl implements ProductResource {
 		GenericDao productDao = new GenericDaoImpl();
 		try {
 			List<Product> products = productDao.getAllByForeignKey(Product.class, "category.categoryId", categoryId);
+			return Response.status(HttpStatus.SC_OK).entity(products).build();
+		}
+		catch (Exception e) {
+			ApiError apiError = new ApiError();
+			apiError.setErrorCode(2001);
+			apiError.setErrorDescription("server error" );
+			return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(apiError).build();
+		}
+	}
+
+	@Override
+	public Response getProductsInPriceRange(int priceMin, int priceMax) {
+		if(priceMax < priceMin) {
+			ApiError apiError = new ApiError();
+			apiError.setErrorCode(1001);
+			apiError.setErrorDescription("Max can't be less than min" );
+			return Response.status(HttpStatus.SC_BAD_REQUEST).entity(apiError).build();
+		}
+		GenericDao productDao = new GenericDaoImpl();
+		try {
+			List<Product> products = productDao.getAllByInRange(Product.class, "price", BigDecimal.valueOf(priceMin), BigDecimal.valueOf(priceMax));
 			return Response.status(HttpStatus.SC_OK).entity(products).build();
 		}
 		catch (Exception e) {

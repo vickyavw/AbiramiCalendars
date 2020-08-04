@@ -107,4 +107,23 @@ public class GenericDaoImpl implements GenericDao {
 		return genericItems;
 	}
 
+	@Override
+	public <T, S> List<T> getAllByInRange(Class<T> clazz, String keyQuery, S min, S max) {
+		Session session = null;
+		List<T> genericItems = null;
+		try {
+			session = HibernateConfig.getSessionFactory().openSession();
+			session.beginTransaction();
+			genericItems = session.createCriteria(clazz).add(Restrictions.between(keyQuery, min, max)).list();
+		}
+		catch(Exception e) {
+			throw e;
+		}
+		finally {
+			if(null != session)
+				session.close();
+		}
+		return genericItems;
+	}
+
 }

@@ -39,4 +39,8 @@ public interface ProductResource {
 	@Path("/category/{categoryId}")
 	public Response getProductsByCategory(@PathParam("categoryId") int categoryId);
 	
+	@GET
+	@Path("/price/{priceMin}/{priceMax}")
+	public Response getProductsInPriceRange(@PathParam("priceMin") int priceMin, @PathParam("priceMax") int priceMax);
+	
 }

@@ -58,6 +58,12 @@ public class ProductServlet extends HttpServlet {
 			req.getRequestDispatcher("products.jsp").forward(req, res);
 			return;
 		}
+		//if price filter is selected
+		else if(req.getRequestURI().equals("/calendars") && req.getParameter("priceFilter") != null) {
+			getCalendarsInPriceRange(req);
+			req.getRequestDispatcher("products.jsp").forward(req, res);
+			return;
+		}
 		else if(null != req.getParameter("productId")) {
 			getProductById(req);
 			req.getRequestDispatcher("product-details.jsp").forward(req, res);
@@ -154,6 +160,38 @@ public class ProductServlet extends HttpServlet {
 		
 		Client client = ClientBuilder.newClient();
 		WebTarget resource = client.target(ApiConstants.GET_PRODUCTS_BY_CATEGORY_API_URL + "/" +categoryId);
+		
+		Builder request = resource.request();
+		request.accept(MediaType.APPLICATION_JSON);
+		
+		Response response = request.get();
+
+		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
+			List<Product> products = new ArrayList<Product>();
+		    System.out.println("Success! " + response.getStatus());
+		    products = response.readEntity(new GenericType<List<Product>>() {});
+		    //get categories to set in the filters
+		    getCategories(req);
+	    	for(Product product : products) {
+	    		setBase64Image(product);
+	    	}
+		    req.setAttribute("products", products);
+		} else {
+			setApiError(req, response);
+		}
+		
+	}
+	
+	private void getCalendarsInPriceRange(HttpServletRequest req) throws IOException {
+		String priceMin = req.getParameter("priceMin").substring(3);//remove Rs.
+		String priceMax = req.getParameter("priceMax").substring(3);
+		if(!StringUtils.isNumeric(priceMin) || !StringUtils.isNumeric(priceMax)) {
+			req.setAttribute("products",null);
+			return;
+		}
+		
+		Client client = ClientBuilder.newClient();
+		WebTarget resource = client.target(ApiConstants.GET_PRODUCTS_BY_PRICE_API_URL + "/" +priceMin + "/" +priceMax);
 		
 		Builder request = resource.request();
 		request.accept(MediaType.APPLICATION_JSON);
