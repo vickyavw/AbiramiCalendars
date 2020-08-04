@@ -7,11 +7,17 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 /**
  * @author vicky
@@ -20,6 +26,7 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 @Entity
 @Table(name="product")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "productId", scope = Product.class)
 public class Product {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,6 +54,14 @@ public class Product {
 	
 	@Column(name = "time_to_print")
 	private Integer timeToPrint;
+	
+	@ManyToOne(optional = false)
+	@JoinColumn(name = "category_id")
+	@JsonBackReference
+	private Category category;
+	
+	@Transient
+	private String categoryName;
 	
 	public Integer getProductId() {
 		return productId;
@@ -112,6 +127,47 @@ public class Product {
 		this.timeToPrint = timeToPrint;
 	}
 	
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
+	}
+
+	public String getCategoryName() {
+		return categoryName;
+	}
+
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((productId == null) ? 0 : productId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Product other = (Product) obj;
+		if (productId == null) {
+			if (other.productId != null)
+				return false;
+		} else if (!productId.equals(other.productId))
+			return false;
+		return true;
+	}
+
 	@Override
     	public String toString() {
         	return ReflectionToStringBuilder.toString(this);

@@ -2,6 +2,7 @@ package com.abirami.web;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,17 +26,18 @@ import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.lang3.StringUtils;
 
 import com.abirami.model.ApiError;
+import com.abirami.model.Category;
 import com.abirami.model.Product;
 import com.google.common.io.BaseEncoding;
 import com.google.common.io.ByteStreams;
 
-@WebServlet(name = "UsersServlet", urlPatterns = {"user"}, loadOnStartup = 1) 
+@WebServlet(name = "ProductServlet", urlPatterns = {"/calendars", "/diaries", "/boxes", "/labels", "/customize", "/contact"}, loadOnStartup = 1) 
 @MultipartConfig(location="/tmp", fileSizeThreshold=1024*1024, 
 maxFileSize=1024*1024*5, maxRequestSize=1024*1024*5*5)
-public class HelloServlet extends HttpServlet {
+public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
-    public HelloServlet() {
+    public ProductServlet() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -66,6 +68,8 @@ public class HelloServlet extends HttpServlet {
 		    	if(null != product){
 		    		setBase64Image(product);
 		    		req.setAttribute("product", product);
+		    		req.getRequestDispatcher("product-details.jsp").forward(req, res);
+		    		return;
 		    	}
 		    }
 		    else {
@@ -88,6 +92,7 @@ public class HelloServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		String name = req.getParameter("productName");
 		String desc = req.getParameter("productDesc");
+		String categoryId = req.getParameter("categoryId");
 		String apiUrl = "http://localhost:8080/api/products";
 		Client client = ClientBuilder.newClient();
 		WebTarget resource = client.target(apiUrl);
@@ -103,20 +108,28 @@ public class HelloServlet extends HttpServlet {
 			stream = req.getPart("file").getInputStream();
 			product.setImage(ByteStreams.toByteArray(stream));
 		}
+		product.setPrice(new BigDecimal("10.50"));
+		
+		if(null == categoryId || !StringUtils.isNumeric(categoryId)) {
+			categoryId = "1";
+		}
+		
+		//Sending categoryId as name because of JsonIgnore on category object due to cyclic dependency
+		product.setCategoryName(categoryId);
+		
 		Response response = request.post(Entity.entity(product,MediaType.APPLICATION_JSON),Response.class);
+		
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
 		    System.out.println("Success! " + response.getStatus());
 		    product = response.readEntity(Product.class);
-		    List<Product> products = new ArrayList<Product>();
 	    	if(null != product){
 	    		if(null != product.getImage()) {
 	    			product.setBase64Image(DatatypeConverter.printBase64Binary(product.getImage()));
 	    		}
-	    		products.add(product);
 	    	}
-	    	req.setAttribute("products", products);
+	    	req.setAttribute("product", product);
 		}
-		req.getRequestDispatcher("products.jsp").forward(req, res);
+		req.getRequestDispatcher("product-details.jsp").forward(req, res);
 	}
 
 	private void setBase64Image(Product product) throws IOException {
@@ -124,7 +137,7 @@ public class HelloServlet extends HttpServlet {
 			product.setBase64Image(DatatypeConverter.printBase64Binary(product.getImage()));
 		}
 		else {
-			InputStream stream = getServletContext().getResourceAsStream("/images/no-image.jpg"); 
+			InputStream stream = getServletContext().getResourceAsStream("/images/product/no-image.jpg"); 
 			product.setBase64Image(BaseEncoding.base64().encode(ByteStreams.toByteArray(stream)));
 		}
 	}
