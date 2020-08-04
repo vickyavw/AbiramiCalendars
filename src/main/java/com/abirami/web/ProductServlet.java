@@ -31,7 +31,7 @@ import com.abirami.model.Product;
 import com.google.common.io.BaseEncoding;
 import com.google.common.io.ByteStreams;
 
-@WebServlet(name = "ProductServlet", urlPatterns = {"product"}, loadOnStartup = 1) 
+@WebServlet(name = "ProductServlet", urlPatterns = {"/calendars", "/diaries", "/boxes", "/labels", "/customize", "/contact"}, loadOnStartup = 1) 
 @MultipartConfig(location="/tmp", fileSizeThreshold=1024*1024, 
 maxFileSize=1024*1024*5, maxRequestSize=1024*1024*5*5)
 public class ProductServlet extends HttpServlet {

@@ -69,18 +69,20 @@
 		        <div class="col-xl-6 col-lg-7">
 		            <nav class="header__menu">
 		                <ul>
-		                    <li class="active"><a href="/product">Calendars</a></li>
-		                    <li><a href="./admin-category.html">Admin Categories</a></li>
-		                    <li><a href="/admin-product.html">Admin Products</a></li>
-		                    <li><a href="#">Pages</a>
+		                    <li class="active"><a href="/calendars">Calendars</a></li>
+		                    <li><a href="/diaries">Diaries</a></li>
+		                    <li><a href="/boxes">Boxes</a></li>
+		                    <li><a href="/labels">Labels</a>
 		                        <ul class="dropdown">
 		                            <li><a href="./product-details.html">Product Details</a></li>
 		                            <li><a href="/product">Shop Cart</a></li>
 		                            <li><a href="./checkout.html">Checkout</a></li>
 		                            <li><a href="./blog-details.html">Blog Details</a></li>
+		                            <li><a href="./admin-category.html">Admin Categories</a></li>
+									<li><a href="/admin-product.html">Admin Products</a></li>
 		                        </ul>
 		                    </li>
-		                    <li><a href="./contact.html">Contact</a></li>
+		                    <li><a href="/contact">Contact</a></li>
 		                </ul>
 		            </nav>
 		        </div>

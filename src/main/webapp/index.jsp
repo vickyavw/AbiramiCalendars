@@ -67,11 +67,10 @@
 		        <div class="col-xl-6 col-lg-7">
 		            <nav class="header__menu">
 		                <ul>
-		                   <!-- <li class="active"><a href="./index.jsp">Home</a></li> -->
-		                    <li><a href="/product">Calendars</a></li>
-		                    <li><a href="#">Diaries</a></li>
-		                    <li><a href="/product">Boxes</a></li>
-		                    <li><a href="#">Labels</a>
+		                    <li><a href="/calendars">Calendars</a></li>
+		                    <li><a href="/diaries">Diaries</a></li>
+		                    <li><a href="/boxes">Boxes</a></li>
+		                    <li><a href="/labels">Labels</a>
 		                        <ul class="dropdown">
 		                            <li><a href="./product-details.html">Product Details</a></li>
 		                            <li><a href="/product">Shop Cart</a></li>
@@ -81,8 +80,8 @@
 									<li><a href="/admin-product.html">Admin Products</a></li>
 		                        </ul>
 		                    </li>
-		                    <li><a href="./blog.html">Customize</a></li>
-		                    <li><a href="./contact.html">Contact</a></li>
+		                    <li><a href="/customize">Customize</a></li>
+		                    <li><a href="/contact">Contact</a></li>
 		                </ul>
 		            </nav>
 		        </div>
@@ -116,64 +115,66 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-6 p-0">
-                    <div class="categories__item categories__large__item set-bg"
-                    data-setbg="images/categories/category-1.jpg">
-                    <div class="categories__text">
-                        <h1><b>Daily Calendars</b></h1>
-                        <h5><b><i>"365 days to mark on a calendar"</i></b></h5>
-                        <br>
-                        <b>Shop now and get 25% offer. COUPON CODE : ABIRAMI25 </b>
-                        <br>
-                        <br>
-                        <a href="#">Shop now</a>
-                    </div>
+                	<a href="#">
+	                    <div class="categories__item categories__large__item set-bg" data-setbg="images/categories/category-1.jpg">
+	                    <div class="categories__text">
+	                    	<h2><b>Monthly Calendars</b></h2>
+							<br>
+	                        <h5><b><i>"Make every moment more special"</i></b></h5>
+	                        <br>
+	                        <h6><b><i>Shop now and get FLAT 25% offer. <br> COUPON CODE : ABIRAMI25 </i></b></h6>
+	                    </div>
                 </div>
+                </a>
             </div>
             <div class="col-lg-6">
                 <div class="row">
                     <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                        <div class="categories__item set-bg" data-setbg="images/categories/category-2.jpg">
-                            <div class="categories__text">
-                                <h2><b>Monthly Calendars</b></h2>
-                                <br>
-                                <h5><b><i>"Make every moment more special"</i></b></h5>
-                                <br>
-                                <a href="#">Shop now</a>
-                            </div>
-                        </div>
+                    	<a href="#">
+	                        <div class="categories__item set-bg" data-setbg="images/categories/category-2.jpg">
+	                            <div class="categories__text">
+	                            	<h2><b>Daily Calendars</b></h2>
+	                        		<br>
+	                        		<h5><b><i>"365 days to mark on a calendar"</i></b></h5>
+	                            </div>
+	                        </div>
+	                	</a>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                        <div class="categories__item set-bg" data-setbg="images/categories/category-3.jpg">
-                            <div class="categories__text">
-                                <h2><b>Desk Calendars</b></h2>
-                                <br>
-                                <h5><b><i>"Give a balance to your life"</i></b></h5>
-                                <br>
-                                <a href="#">Shop now</a>
-                            </div>
-                        </div>
+                    	<a href="#">
+	                        <div class="categories__item set-bg" data-setbg="images/categories/category-3.jpg">
+	                            <div class="categories__text">
+	                                <h2><b>Desk Calendars</b></h2>
+	                                <br>
+	                                <h5><b><i>"Give a balance to your life"</i></b></h5>
+	                                <br>
+	                            </div>
+	                        </div>
+	                	</a>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                        <div class="categories__item set-bg" data-setbg="images/categories/category-4.jpg">
-                            <div class="categories__text">
-                                <h2><b>Diaries</b></h2>
-                                <br>
-                                <h5><b><i>"Create your own story"</i></b></h5>
-                                <br>
-                                <a href="#">Shop now</a>
-                            </div>
-                        </div>
+                    	<a href="#">
+	                        <div class="categories__item set-bg" data-setbg="images/categories/category-4.jpg">
+	                            <div class="categories__text">
+	                                <h2><b>Diaries</b></h2>
+	                                <br>
+	                                <h5><b><i>"Create your own story"</i></b></h5>
+	                                <br>
+	                            </div>
+	                        </div>
+	                	</a>
                     </div>
                     <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                        <div class="categories__item set-bg" data-setbg="images/categories/category-5.jpg">
-                            <div class="categories__text">
-                                <h2><b>Planners</b></h2>
-                                <br>
-                                <h5><b><i>"Because every plan matters"</i></b></h5>
-                                <br>
-                                <a href="#">Shop now</a>
-                            </div>
-                        </div>
+                    	<a href="#">
+	                        <div class="categories__item set-bg" data-setbg="images/categories/category-5.jpg">
+	                            <div class="categories__text">
+	                                <h2><b>Planners</b></h2>
+	                                <br>
+	                                <h5><b><i>"Because every plan matters"</i></b></h5>
+	                                <br>
+	                            </div>
+	                        </div>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -188,7 +189,7 @@
         <div class="row">
             <div class="col-lg-4 col-md-4">
                 <div class="section-title">
-                    <h4>New product</h4>
+                    <h4>Our Latest Products</h4>
                 </div>
             </div>
             <div class="col-lg-8 col-md-8">
