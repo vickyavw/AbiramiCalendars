@@ -28,10 +28,11 @@ import org.apache.commons.lang3.StringUtils;
 import com.abirami.model.ApiError;
 import com.abirami.model.Category;
 import com.abirami.model.Product;
+import com.abirami.util.ApiConstants;
 import com.google.common.io.BaseEncoding;
 import com.google.common.io.ByteStreams;
 
-@WebServlet(name = "ProductServlet", urlPatterns = {"/calendars", "/diaries", "/boxes", "/labels", "/customize", "/contact"}, loadOnStartup = 1) 
+@WebServlet(name = "ProductServlet", urlPatterns = {"/calendars", "/diaries", "/boxes", "/labels", "/customize", "/contact", "/admin-product"}, loadOnStartup = 1) 
 @MultipartConfig(location="/tmp", fileSizeThreshold=1024*1024, 
 maxFileSize=1024*1024*5, maxRequestSize=1024*1024*5*5)
 public class ProductServlet extends HttpServlet {
@@ -43,9 +44,32 @@ public class ProductServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		
+		if(req.getRequestURI().equals("/admin-product")) {
+			Client client = ClientBuilder.newClient();
+			WebTarget resource = client.target(ApiConstants.CATEGORIES_API_URL);
+			
+			Builder request = resource.request();
+			request.accept(MediaType.APPLICATION_JSON);
+			
+			Response response = request.get();
+
+			if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
+				List<Category> categories = new ArrayList<Category>();
+			    System.out.println("Success! " + response.getStatus());
+			    categories = response.readEntity(new GenericType<List<Category>>() {});
+			    req.setAttribute("categories", categories);
+			} else {
+				ApiError error = response.readEntity(ApiError.class);
+			    System.out.println("ERROR! " + response.getStatus());    
+			    System.out.println(response.getStatus() + " : " +response.getStatusInfo().getReasonPhrase());
+			    req.setAttribute("errorCode", error.getErrorCode());
+			    req.setAttribute("errorDesc", error.getErrorDescription());
+			}
+			req.getRequestDispatcher("admin-product.jsp").forward(req, res);
+    		return;
+		}
 		String productId = req.getParameter("productId");
-		String apiUrl = "http://localhost:8080/api/products";
+		String apiUrl = ApiConstants.PRODUCTS_API_URL;
 		if(null != productId) {
 			if(StringUtils.isEmpty(productId)) {
 				productId = "0";
@@ -93,9 +117,8 @@ public class ProductServlet extends HttpServlet {
 		String name = req.getParameter("productName");
 		String desc = req.getParameter("productDesc");
 		String categoryId = req.getParameter("categoryId");
-		String apiUrl = "http://localhost:8080/api/products";
 		Client client = ClientBuilder.newClient();
-		WebTarget resource = client.target(apiUrl);
+		WebTarget resource = client.target(ApiConstants.PRODUCTS_API_URL);
 		
 		Builder request = resource.request();
 		request.accept(MediaType.APPLICATION_JSON);

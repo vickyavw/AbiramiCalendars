@@ -79,7 +79,7 @@
 		                            <li><a href="./checkout.html">Checkout</a></li>
 		                            <li><a href="./blog-details.html">Blog Details</a></li>
 		                            <li><a href="./admin-category.html">Admin Categories</a></li>
-									<li><a href="/admin-product.html">Admin Products</a></li>
+									<li><a href="/admin-product">Admin Products</a></li>
 		                        </ul>
 		                    </li>
 		                    <li><a href="/contact">Contact</a></li>
