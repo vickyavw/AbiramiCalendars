@@ -19,17 +19,20 @@
 		<br/><br/>
 		<h2>Add Product</h2>
 		<form action = "admin-product" enctype="multipart/form-data" method = "POST">
-			Product Name:<input name="productName" type="text" maxlength="512" id="productName"/><br/>
-			Product Desc:<input name="productDesc" type="text" maxlength="512" id="productDesc"/><br/>
-			Category Id:
-			<select name="categoryId" id="categoryId">
-			    <c:forEach items="${categories}" var="category">
-			        <option value="${category.categoryId}">${category.displayName}</option>
-			    </c:forEach>
-			</select>
-			<br/>
-			Image:<input type="file" name="file" /><br/>
-			<input type="submit" value="Add Product"/>
+			<table>
+				<tr><td>Product Name</td><td><input name="productName" type="text" maxlength="512" id="productName"/></td></tr>
+				<tr><td>Product Desc</td><td><input name="productDesc" type="text" maxlength="512" id="productDesc"/></td></tr>
+				<tr><td>Category Id</td><td>
+				<select name="categoryId" id="categoryId">
+				    <c:forEach items="${categories}" var="category">
+				        <option value="${category.categoryId}">${category.displayName}</option>
+				    </c:forEach>
+				</select>
+				</td></tr>
+				<tr><td>Price</td><td><input type="text" name="price" /></td></tr>
+				<tr><td>Image</td><td><input type="file" name="file" /></td></tr>
+				<tr><td colspan="2"><input type="submit" value="Add Product"/></td></tr>
+			</table>
 		</form>
 	</body>
 </html>

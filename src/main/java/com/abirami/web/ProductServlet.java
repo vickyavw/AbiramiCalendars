@@ -24,6 +24,7 @@ import javax.ws.rs.core.Response.Status.Family;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 import com.abirami.model.ApiError;
 import com.abirami.model.Category;
@@ -117,6 +118,7 @@ public class ProductServlet extends HttpServlet {
 		String name = req.getParameter("productName");
 		String desc = req.getParameter("productDesc");
 		String categoryId = req.getParameter("categoryId");
+		String price = req.getParameter("price");
 		Client client = ClientBuilder.newClient();
 		WebTarget resource = client.target(ApiConstants.PRODUCTS_API_URL);
 		
@@ -131,7 +133,10 @@ public class ProductServlet extends HttpServlet {
 			stream = req.getPart("file").getInputStream();
 			product.setImage(ByteStreams.toByteArray(stream));
 		}
-		product.setPrice(new BigDecimal("10.50"));
+		if(price == null || !NumberUtils.isCreatable(price))
+			product.setPrice(new BigDecimal("10.50"));
+		else
+			product.setPrice(new BigDecimal(price));
 		
 		if(null == categoryId || !StringUtils.isNumeric(categoryId)) {
 			categoryId = "1";
