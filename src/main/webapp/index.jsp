@@ -119,8 +119,12 @@
                     <div class="categories__item categories__large__item set-bg"
                     data-setbg="images/categories/category-1.jpg">
                     <div class="categories__text">
-                        <h1>Daily Calendars</h1>
-                        <p>365 days to mark on a calendar.</p>
+                        <h1><b>Daily Calendars</b></h1>
+                        <h5><b><i>"365 days to mark on a calendar"</i></b></h5>
+                        <br>
+                        <b>Shop now and get 25% offer. COUPON CODE : ABIRAMI25 </b>
+                        <br>
+                        <br>
                         <a href="#">Shop now</a>
                     </div>
                 </div>
@@ -130,8 +134,10 @@
                     <div class="col-lg-6 col-md-6 col-sm-6 p-0">
                         <div class="categories__item set-bg" data-setbg="images/categories/category-2.jpg">
                             <div class="categories__text">
-                                <h4>Monthly Calendars</h4>
-                                <p>358 items</p>
+                                <h2><b>Monthly Calendars</b></h2>
+                                <br>
+                                <h5><b><i>"Make every moment more special"</i></b></h5>
+                                <br>
                                 <a href="#">Shop now</a>
                             </div>
                         </div>
@@ -139,8 +145,10 @@
                     <div class="col-lg-6 col-md-6 col-sm-6 p-0">
                         <div class="categories__item set-bg" data-setbg="images/categories/category-3.jpg">
                             <div class="categories__text">
-                                <h4>Kidâs fashion</h4>
-                                <p>273 items</p>
+                                <h2><b>Desk Calendars</b></h2>
+                                <br>
+                                <h5><b><i>"Give a balance to your life"</i></b></h5>
+                                <br>
                                 <a href="#">Shop now</a>
                             </div>
                         </div>
@@ -148,8 +156,10 @@
                     <div class="col-lg-6 col-md-6 col-sm-6 p-0">
                         <div class="categories__item set-bg" data-setbg="images/categories/category-4.jpg">
                             <div class="categories__text">
-                                <h4>Cosmetics</h4>
-                                <p>159 items</p>
+                                <h2><b>Diaries</b></h2>
+                                <br>
+                                <h5><b><i>"Create your own story"</i></b></h5>
+                                <br>
                                 <a href="#">Shop now</a>
                             </div>
                         </div>
@@ -157,8 +167,10 @@
                     <div class="col-lg-6 col-md-6 col-sm-6 p-0">
                         <div class="categories__item set-bg" data-setbg="images/categories/category-5.jpg">
                             <div class="categories__text">
-                                <h4>Accessories</h4>
-                                <p>792 items</p>
+                                <h2><b>Planners</b></h2>
+                                <br>
+                                <h5><b><i>"Because every plan matters"</i></b></h5>
+                                <br>
                                 <a href="#">Shop now</a>
                             </div>
                         </div>

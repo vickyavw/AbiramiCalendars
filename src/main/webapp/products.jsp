@@ -69,17 +69,21 @@
 		        <div class="col-xl-6 col-lg-7">
 		            <nav class="header__menu">
 		                <ul>
-		                    <li class="active"><a href="/product">Calendars</a></li>
-		                    <li><a href="./admin-category.html">Admin Categories</a></li>
-		                    <li><a href="/admin-product.html">Admin Products</a></li>
-		                    <li><a href="#">Pages</a>
+		                   <!-- <li class="active"><a href="./index.jsp">Home</a></li> -->
+		                    <li><a href="/product">Calendars</a></li>
+		                    <li><a href="#">Diaries</a></li>
+		                    <li><a href="/product">Boxes</a></li>
+		                    <li><a href="#">Labels</a>
 		                        <ul class="dropdown">
 		                            <li><a href="./product-details.html">Product Details</a></li>
 		                            <li><a href="/product">Shop Cart</a></li>
 		                            <li><a href="./checkout.html">Checkout</a></li>
 		                            <li><a href="./blog-details.html">Blog Details</a></li>
+		                            <li><a href="./admin-category.html">Admin Categories</a></li>
+									<li><a href="/admin-product.html">Admin Products</a></li>
 		                        </ul>
 		                    </li>
+		                    <li><a href="./blog.html">Customize</a></li>
 		                    <li><a href="./contact.html">Contact</a></li>
 		                </ul>
 		            </nav>
