@@ -177,12 +177,20 @@ Created: Colorib
     minamount = $("#minamount"),
     maxamount = $("#maxamount"),
     minPrice = rangeSlider.data('min'),
-    maxPrice = rangeSlider.data('max');
+    maxPrice = rangeSlider.data('max'),
+	selectedMin = minPrice,
+	selectedMax = maxPrice;
+	if(minamount.val()!=""){
+		selectedMin = minamount.val();
+	}
+	if(maxamount.val()!=""){
+		selectedMax = maxamount.val();
+	}
     rangeSlider.slider({
     range: true,
     min: minPrice,
     max: maxPrice,
-    values: [minPrice, maxPrice],
+    values: [selectedMin, selectedMax],
     slide: function (event, ui) {
         minamount.val('Rs.' + ui.values[0]);
         maxamount.val('Rs.' + ui.values[1]);

@@ -70,10 +70,10 @@
 		            <nav class="header__menu">
 		                <ul>
 		                   <!-- <li class="active"><a href="./index.jsp">Home</a></li> -->
-		                    <li><a href="/product">Calendars</a></li>
-		                    <li><a href="#">Diaries</a></li>
-		                    <li><a href="/product">Boxes</a></li>
-		                    <li><a href="#">Labels</a>
+		                    <li class="${currentProduct == 'Calendars'? 'active' : ''}"><a href="/calendars">Calendars</a></li>
+		                    <li class="${currentProduct == 'Diaries'? 'active' : ''}"><a href="/diaries">Diaries</a></li>
+		                    <li class="${currentProduct == 'Boxes'? 'active' : ''}"><a href="/boxes">Boxes</a></li>
+		                    <li class="${currentProduct == 'Labels'? 'active' : ''}"><a href="/labels">Labels</a>
 		                        <ul class="dropdown">
 		                            <li><a href="./product-details.html">Product Details</a></li>
 		                            <li><a href="/product">Shop Cart</a></li>
@@ -83,8 +83,8 @@
 									<li><a href="/admin-product">Admin Products</a></li>
 		                        </ul>
 		                    </li>
-		                    <li><a href="./blog.html">Customize</a></li>
-		                    <li><a href="./contact.html">Contact</a></li>
+		                    <li class="${currentProduct == 'Customize'? 'active' : ''}"><a href="/customize">Customize</a></li>
+		                    <li class="${currentProduct == 'Contact'? 'active' : ''}"><a href="/contact">Contact</a></li>
 		                </ul>
 		            </nav>
 		        </div>
@@ -120,7 +120,7 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb__links">
                         <a href="./index.jsp"><i class="fa fa-home"></i> Home</a>
-                        <span>Shop</span>
+                        <span>${currentProduct}</span>
                     </div>
                 </div>
             </div>
@@ -147,9 +147,9 @@
                                         <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
                                             <div class="card-body">
                                                 <ul>
-                                                	<li class="active"><a href="/calendars">All</a></li>
+                                                	<li class="active"><a href="${currentProductUri}">All</a></li>
                                                     <c:forEach items="${categories}" var="category">
-							                        	<li><a href="/calendars?categoryId=${category.categoryId}">${category.displayName}</a></li>
+							                        	<li><a href="${currentProductUri}?categoryId=${category.categoryId}">${category.displayName}</a></li>
 								                    </c:forEach>
                                                 </ul>
                                             </div>
@@ -200,16 +200,16 @@
                             </div>
                             <div class="filter-range-wrap">
                                 <div class="price-range ui-slider ui-corner-all ui-slider-horizontal ui-widget ui-widget-content"
-                                data-min="1" data-max="99"></div>
+                                data-min="${priceMin}" data-max="${priceMax}"></div>
                                 <div class="range-slider">
                                     <div class="price-input">
                                         <p>Price:</p>
-                                        <input type="text" id="minamount">
-                                        <input type="text" id="maxamount">
+                                        <input type="text" id="minamount" value="${priceMinSel}">
+                                        <input type="text" id="maxamount" value="${priceMaxSel}">
                                     </div>
                                 </div>
                             </div>
-                            <a href="" onclick="this.href='/calendars?priceFilter=true&priceMin='+document.getElementById('minamount').value+'&priceMax='+document.getElementById('maxamount').value">Filter</a>
+                            <a href="" onclick="this.href='${currentProductUri}?priceFilter=true&priceMin='+document.getElementById('minamount').value.substr(3)+'&priceMax='+document.getElementById('maxamount').value.substr(3)">Filter</a>
                         </div>
                         <div class="sidebar__sizes">
                             <div class="section-title">
@@ -275,8 +275,8 @@
 	                                    </ul>
 	                                </div>
 	                                <div class="product__item__text">
-	                                    <h6><a href="/product?productId=${product.productId}">${product.displayName}</a></h6>
-	                                    <div class="product__price">Rs. ${product.price}</div>
+	                                    <h6><a href="${currentProductUri}?productId=${product.productId}&getRelated=4">${product.displayName}</a></h6>
+	                                    <div class="product__price">Rs.${product.price}</div>
 	                                </div>
 	                            </div>
 	                        </div>
@@ -295,63 +295,6 @@
         </div>
     </section>
     <!-- Shop Section End -->
-
-    <!-- Instagram Begin -->
-    <div class="instagram">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="images/instagram/insta-1.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="images/instagram/insta-2.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="images/instagram/insta-3.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="images/instagram/insta-4.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="images/instagram/insta-5.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="images/instagram/insta-6.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Instagram End -->
 
     <!-- Footer Section Begin -->
     <footer class="footer">

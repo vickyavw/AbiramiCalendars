@@ -12,7 +12,7 @@
 	<body>
 	
 		<h2>REST Webservice APIs</h2>
-		<a href="product">All Products</a>
+		<a href="admin-product?getAll=true">All Products</a>
 		<br/><br/>
 		<input name="productId" type="text" maxlength="512" id="productId"/>
 		<a id="submit" onclick="getProduct()" href="">Get Product Details</a>
