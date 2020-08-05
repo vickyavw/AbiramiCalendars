@@ -39,6 +39,9 @@ public class Product {
 	@Column
 	private String description;
 	
+	@Column(name = "product_type")
+	private String productType;
+	
 	@Lob
 	@Column(name = "image", columnDefinition="BLOB")
 	private byte[] image;
@@ -87,6 +90,14 @@ public class Product {
 		this.description = description;
 	}
 	
+	public String getProductType() {
+		return productType;
+	}
+
+	public void setProductType(String productType) {
+		this.productType = productType;
+	}
+
 	public byte[] getImage() {
 		return image;
 	}

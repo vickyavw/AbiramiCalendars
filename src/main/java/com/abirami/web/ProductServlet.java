@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -30,6 +31,7 @@ import com.abirami.model.ApiError;
 import com.abirami.model.Category;
 import com.abirami.model.Product;
 import com.abirami.util.ApiConstants;
+import com.abirami.util.ProductType;
 import com.google.common.io.BaseEncoding;
 import com.google.common.io.ByteStreams;
 
@@ -49,6 +51,8 @@ public class ProductServlet extends HttpServlet {
 		if(req.getRequestURI().equals("/admin-product")) {
 			//get categories to load the admin add product's category drop down
 			getCategories(req);
+			//set productTypes
+			req.setAttribute("productTypes", Arrays.asList(ProductType.values()));
 			req.getRequestDispatcher("admin-product.jsp").forward(req, res);
     		return;
 		}
@@ -81,6 +85,7 @@ public class ProductServlet extends HttpServlet {
 		String name = req.getParameter("productName");
 		String desc = req.getParameter("productDesc");
 		String categoryId = req.getParameter("categoryId");
+		String productType = req.getParameter("productType");
 		String price = req.getParameter("price");
 		Client client = ClientBuilder.newClient();
 		WebTarget resource = client.target(ApiConstants.PRODUCTS_API_URL);
@@ -107,6 +112,7 @@ public class ProductServlet extends HttpServlet {
 		
 		//Sending categoryId as name because of JsonIgnore on category object due to cyclic dependency
 		product.setCategoryName(categoryId);
+		product.setProductType(ProductType.valueOf(productType).toString());
 		
 		Response response = request.post(Entity.entity(product,MediaType.APPLICATION_JSON),Response.class);
 		
@@ -114,9 +120,7 @@ public class ProductServlet extends HttpServlet {
 		    System.out.println("Success! " + response.getStatus());
 		    product = response.readEntity(Product.class);
 	    	if(null != product){
-	    		if(null != product.getImage()) {
-	    			product.setBase64Image(DatatypeConverter.printBase64Binary(product.getImage()));
-	    		}
+	    		setBase64Image(product);
 	    	}
 	    	req.setAttribute("product", product);
 		}
