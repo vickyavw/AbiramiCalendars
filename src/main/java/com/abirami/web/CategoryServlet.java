@@ -24,6 +24,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.abirami.model.ApiError;
 import com.abirami.model.Category;
+import com.abirami.util.ApiConstants;
 
 @WebServlet(name = "CategoryServlet", urlPatterns = {"category"}, loadOnStartup = 1) 
 @MultipartConfig(location="/tmp", fileSizeThreshold=1024*1024, 
@@ -39,7 +40,7 @@ public class CategoryServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		
 		String categoryId = req.getParameter("categoryId");
-		String apiUrl = "http://localhost:8080/api/categories";
+		String apiUrl = ApiConstants.CATEGORIES_API_URL;
 		if(null != categoryId) {
 			if(StringUtils.isEmpty(categoryId)) {
 				categoryId = "0";
@@ -80,7 +81,7 @@ public class CategoryServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		String name = req.getParameter("categoryName");
 		String desc = req.getParameter("categoryDesc");
-		String apiUrl = "http://localhost:8080/api/categories";
+		String apiUrl = ApiConstants.CATEGORIES_API_URL;
 		Client client = ClientBuilder.newClient();
 		WebTarget resource = client.target(apiUrl);
 		

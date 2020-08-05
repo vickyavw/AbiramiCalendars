@@ -4,19 +4,20 @@ import java.util.List;
 
 import org.hibernate.Session;
 
-import com.abirami.dao.GenericDao;
+import com.abirami.dao.CategoryGenericDao;
 import com.abirami.dao.HibernateConfig;
+import com.abirami.model.Category;
 
-public class GenericDaoImpl implements GenericDao {
-	
+public class CategoryGenericDaoImpl implements CategoryGenericDao {
+
 	@Override
-	public <T> List<T> getAll(final Class<T> clazz) {
+	public List<Category> getAll() {
 		Session session = null;
-		List<T> genericItems = null;
+		List<Category> categories = null;
 		try {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
-			genericItems = session.createQuery("from " + clazz.getName()).list();
+			categories = session.createQuery("from Category").list();
 		}
 		catch(Exception e) {
 			throw e;
@@ -25,17 +26,17 @@ public class GenericDaoImpl implements GenericDao {
 			if(null != session)
 				session.close();
 		}
-		return genericItems;
+		return categories;
 	}
 
 	@Override
-	public <T> T get(final Class<T> clazz, final int id) {
+	public Category get(int id) {
 		Session session = null;
-		T genericItem = null;
+		Category category = null;
 		try {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
-			genericItem = session.get(clazz,id);
+			category = session.get(Category.class,id);
 		}
 		catch(Exception e) {
 			throw e;
@@ -44,17 +45,17 @@ public class GenericDaoImpl implements GenericDao {
 			if(null != session)
 				session.close();
 		}
-		return genericItem;
+		return category;
 	}
 
 	@Override
-	public <T> int save(final T object) {
+	public int save(Category category) {
 		Session session = null;
-		int genericItemId = 0;
+		int categoryId = 0;
 		try {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
-			genericItemId = (int) session.save(object);
+			categoryId = (int) session.save(category);
 			session.getTransaction().commit();
 		}
 		catch(Exception e) {
@@ -65,17 +66,17 @@ public class GenericDaoImpl implements GenericDao {
 			if(null != session)
 				session.close();
 		}
-		return genericItemId;
+		return categoryId;
 	}
 
 	@Override
-	public <T> List<T> getListOfIds(final Class<T> clazz, final List<Integer> ids) {
+	public List<Category> getListOfIds(List<Integer> ids) {
 		Session session = null;
-		List<T> genericItem = null;
+		List<Category> category = null;
 		try {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
-			genericItem = session.byMultipleIds(clazz).multiLoad(ids);
+			category = session.byMultipleIds(Category.class).multiLoad(ids);
 		}
 		catch(Exception e) {
 			throw e;
@@ -84,7 +85,7 @@ public class GenericDaoImpl implements GenericDao {
 			if(null != session)
 				session.close();
 		}
-		return genericItem;
+		return category;
 	}
 
 }

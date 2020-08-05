@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %> 
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %> 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <html lang="zxx">
 
 <head>
@@ -47,7 +48,7 @@
             </a></li>
         </ul>
         <div class="offcanvas__logo">
-            <a href="./index.html"><img src="images/logo.png" alt=""></a>
+            <a href="/"><img src="images/logo.png" alt=""></a>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__auth">
@@ -63,26 +64,27 @@
 		    <div class="row">
 		        <div class="col-xl-3 col-lg-2">
 		            <div class="header__logo">
-		                <a href="./index.jsp"><img src="images/logo.png" alt=""></a>
+		                <a href="/"><img src="images/logo.png" alt=""></a>
 		            </div>
 		        </div>
 		        <div class="col-xl-6 col-lg-7">
 		            <nav class="header__menu">
 		                <ul>
-		                    <li class="active"><a href="/calendars">Calendars</a></li>
-		                    <li><a href="/diaries">Diaries</a></li>
-		                    <li><a href="/boxes">Boxes</a></li>
-		                    <li><a href="/labels">Labels</a>
+		                    <li class="${currentProduct == 'Calendars'? 'active' : ''}"><a href="/calendars">Calendars</a></li>
+		                    <li class="${currentProduct == 'Diaries'? 'active' : ''}"><a href="/diaries">Diaries</a></li>
+		                    <li class="${currentProduct == 'Boxes'? 'active' : ''}"><a href="/boxes">Boxes</a></li>
+		                    <li class="${currentProduct == 'Labels'? 'active' : ''}"><a href="/labels">Labels</a>
 		                        <ul class="dropdown">
 		                            <li><a href="./product-details.html">Product Details</a></li>
 		                            <li><a href="/product">Shop Cart</a></li>
 		                            <li><a href="./checkout.html">Checkout</a></li>
 		                            <li><a href="./blog-details.html">Blog Details</a></li>
 		                            <li><a href="./admin-category.html">Admin Categories</a></li>
-									<li><a href="/admin-product.html">Admin Products</a></li>
+									<li><a href="/admin-product">Admin Products</a></li>
 		                        </ul>
 		                    </li>
-		                    <li><a href="/contact">Contact</a></li>
+		                    <li class="${currentProduct == 'Customize'? 'active' : ''}"><a href="/customize">Customize</a></li>
+		                    <li class="${currentProduct == 'Contact'? 'active' : ''}"><a href="/contact">Contact</a></li>
 		                </ul>
 		            </nav>
 		        </div>
@@ -117,8 +119,8 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="breadcrumb__links">
-                        <a href="./index.html"><i class="fa fa-home"></i> Home</a>
-                        <a href="#">Womenâs </a>
+                        <a href="/"><i class="fa fa-home"></i> Home</a>
+                        <a href="${currentProductUri}">${currentProduct} </a>
                         <span>${product.displayName}</span>
                     </div>
                 </div>
@@ -160,7 +162,8 @@
                 <div class="col-lg-6">
                     <div class="product__details__text">
                         <h3>${product.displayName} <span>${product.description}</span></h3>
-                        <div class="product__details__price">Rs. ${product.price} <span>Rs. ${product.price}</span></div>
+                        <fmt:formatNumber var="beforeDiscount" type="number" minFractionDigits="2" maxFractionDigits="2" value="${product.price * 1.1}" />
+                        <div class="product__details__price">Rs. ${product.price} <span>Rs. ${beforeDiscount}</span></div>
                         <p>${product.categoryName}</p>
                         <div class="product__details__button">
                             <div class="quantity">
@@ -240,102 +243,32 @@
                         <h5>RELATED PRODUCTS</h5>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="images/product/related/rp-1.jpg">
-                            <div class="label new">New</div>
-                            <ul class="product__hover">
-                                <li><a href="images/product/related/rp-1.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Buttons tweed blazer</a></h6>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                            </div>
-                            <div class="product__price">$ 59.0</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="images/product/related/rp-2.jpg">
-                            <ul class="product__hover">
-                                <li><a href="images/product/related/rp-2.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Flowy striped skirt</a></h6>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                            </div>
-                            <div class="product__price">$ 49.0</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="images/product/related/rp-3.jpg">
-                            <div class="label stockout">out of stock</div>
-                            <ul class="product__hover">
-                                <li><a href="images/product/related/rp-3.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Cotton T-Shirt</a></h6>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                            </div>
-                            <div class="product__price">$ 59.0</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="product__item">
-                        <div class="product__item__pic set-bg" data-setbg="images/product/related/rp-4.jpg">
-                            <ul class="product__hover">
-                                <li><a href="images/product/related/rp-4.jpg" class="image-popup"><span class="arrow_expand"></span></a></li>
-                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-                            </ul>
-                        </div>
-                        <div class="product__item__text">
-                            <h6><a href="#">Slim striped pocket shirt</a></h6>
-                            <div class="rating">
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                                <i class="fa fa-star"></i>
-                            </div>
-                            <div class="product__price">$ 59.0</div>
-                        </div>
-                    </div>
-                </div>
+                
+                <c:forEach items="${relatedProducts}" var="product">
+	                <div class="col-lg-3 col-md-4 col-sm-6">
+	                    <div class="product__item">
+	                        <div class="product__item__pic set-bg" data-setbg="data:image/jpg;base64,${product.base64Image}">
+	                            <div class="label new">New</div>
+	                            <ul class="product__hover">
+	                                <li><a href="data:image/jpg;base64,${product.base64Image}" class="image-popup"><span class="arrow_expand"></span></a></li>
+	                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+	                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
+	                            </ul>
+	                        </div>
+	                        <div class="product__item__text">
+	                           	<h6><a href="${currentProductUri}?productId=${product.productId}&getRelated=4">${product.displayName}</a></h6>
+	                           	<div class="product__price">Rs.${product.price}</div>
+	                       	</div>
+	                    </div>
+	                </div>
+                </c:forEach>
+                
             </div>
         </div>
     </section>
     <!-- Product Details Section End -->
 
-    <!-- Instagram Begin -->
+    <!-- Instagram Begin 
     <div class="instagram">
         <div class="container-fluid">
             <div class="row">
@@ -390,8 +323,7 @@
             </div>
         </div>
     </div>
-    <!-- Instagram End -->
-
+     Instagram End -->
     <!-- Footer Section Begin -->
     <footer class="footer">
         <div class="container">
@@ -399,7 +331,7 @@
                 <div class="col-lg-4 col-md-6 col-sm-7">
                     <div class="footer__about">
                         <div class="footer__logo">
-                            <a href="./index.html"><img src="images/logo.png" alt=""></a>
+                            <a href="/"><img src="images/logo.png" alt=""></a>
                         </div>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
                         cilisis.</p>

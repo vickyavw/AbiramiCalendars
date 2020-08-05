@@ -2,9 +2,10 @@ package com.abirami.web;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -14,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.Entity;
 import javax.ws.rs.client.Invocation.Builder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.GenericType;
@@ -25,17 +25,27 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.abirami.model.ApiError;
 import com.abirami.model.Category;
 import com.abirami.model.Product;
+import com.abirami.util.ApiConstants;
+import com.abirami.util.ProductType;
+import com.abirami.util.ProductUtils;
 import com.google.common.io.BaseEncoding;
 import com.google.common.io.ByteStreams;
 
-@WebServlet(name = "ProductServlet", urlPatterns = {"/calendars", "/diaries", "/boxes", "/labels", "/customize", "/contact"}, loadOnStartup = 1) 
+@WebServlet(name = "ProductServlet", urlPatterns = {"/calendars", "/diaries", "/boxes", "/labels" }, loadOnStartup = 1) 
 @MultipartConfig(location="/tmp", fileSizeThreshold=1024*1024, 
 maxFileSize=1024*1024*5, maxRequestSize=1024*1024*5*5)
 public class ProductServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	
+	private static final Map<String, String> URL_PRODUCT_TYPE_MAP = new HashMap<String, String>();
+	static {
+		URL_PRODUCT_TYPE_MAP.put("/calendars", ProductType.CALENDAR.toString());
+		URL_PRODUCT_TYPE_MAP.put("/diaries", ProductType.DIARY.toString());
+		URL_PRODUCT_TYPE_MAP.put("/boxes", ProductType.BOX.toString());
+		URL_PRODUCT_TYPE_MAP.put("/labels", ProductType.LABEL.toString());
+	}
        
     public ProductServlet() {
         super();
@@ -43,93 +53,37 @@ public class ProductServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+		setDefaultValuesInRequest(req);
 		
-		String productId = req.getParameter("productId");
-		String apiUrl = "http://localhost:8080/api/products";
-		if(null != productId) {
-			if(StringUtils.isEmpty(productId)) {
-				productId = "0";
-			}
-			apiUrl = apiUrl+"/"+productId;
+		//if category filter is selected
+		if(req.getParameter("categoryId") != null) {
+			getCalendarsByCategory(req);
+			req.getRequestDispatcher("products.jsp").forward(req, res);
+			return;
 		}
-		Client client = ClientBuilder.newClient();
-		WebTarget resource = client.target(apiUrl);
+		//if price filter is selected
+		else if(req.getParameter("priceFilter") != null) {
+			getCalendarsInPriceRange(req);
+			req.getRequestDispatcher("products.jsp").forward(req, res);
+			return;
+		}
+		//to view individual product
+		else if(null != req.getParameter("productId")) {
+			getProductById(req);
+			req.getRequestDispatcher("product-details.jsp").forward(req, res);
+    		return;
+		}
+		//view all products
+		else {
+			getAllProducts(req);
+			req.getRequestDispatcher("products.jsp").forward(req, res);
+			return;
+		}
 		
-		Builder request = resource.request();
-		request.accept(MediaType.APPLICATION_JSON);
-
-		Response response = request.get();
-
-		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
-		    System.out.println("Success! " + response.getStatus());
-		    List<Product> products = new ArrayList<Product>();
-		    if(StringUtils.isNotEmpty(productId)) {
-		    	Product product = response.readEntity(Product.class);
-		    	if(null != product){
-		    		setBase64Image(product);
-		    		req.setAttribute("product", product);
-		    		req.getRequestDispatcher("product-details.jsp").forward(req, res);
-		    		return;
-		    	}
-		    }
-		    else {
-		    	products = response.readEntity(new GenericType<List<Product>>() {});
-		    	for(Product product : products) {
-		    		setBase64Image(product);
-		    	}
-		    	req.setAttribute("products", products);
-		    }
-		} else {
-			ApiError error = response.readEntity(ApiError.class);
-		    System.out.println("ERROR! " + response.getStatus());    
-		    System.out.println(response.getStatus() + " : " +response.getStatusInfo().getReasonPhrase());
-		    req.setAttribute("errorCode", error.getErrorCode());
-		    req.setAttribute("errorDesc", error.getErrorDescription());
-		}
-		req.getRequestDispatcher("products.jsp").forward(req, res);
 	}
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		String name = req.getParameter("productName");
-		String desc = req.getParameter("productDesc");
-		String categoryId = req.getParameter("categoryId");
-		String apiUrl = "http://localhost:8080/api/products";
-		Client client = ClientBuilder.newClient();
-		WebTarget resource = client.target(apiUrl);
-		
-		Builder request = resource.request();
-		request.accept(MediaType.APPLICATION_JSON);
-		
-		Product product = new Product();
-		product.setDisplayName(name);
-		product.setDescription(desc);
-		InputStream stream;
-		if(req.getPart("file").getSize()>0){
-			stream = req.getPart("file").getInputStream();
-			product.setImage(ByteStreams.toByteArray(stream));
-		}
-		product.setPrice(new BigDecimal("10.50"));
-		
-		if(null == categoryId || !StringUtils.isNumeric(categoryId)) {
-			categoryId = "1";
-		}
-		
-		//Sending categoryId as name because of JsonIgnore on category object due to cyclic dependency
-		product.setCategoryName(categoryId);
-		
-		Response response = request.post(Entity.entity(product,MediaType.APPLICATION_JSON),Response.class);
-		
-		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
-		    System.out.println("Success! " + response.getStatus());
-		    product = response.readEntity(Product.class);
-	    	if(null != product){
-	    		if(null != product.getImage()) {
-	    			product.setBase64Image(DatatypeConverter.printBase64Binary(product.getImage()));
-	    		}
-	    	}
-	    	req.setAttribute("product", product);
-		}
-		req.getRequestDispatcher("product-details.jsp").forward(req, res);
+		doGet(req, res);
 	}
 
 	private void setBase64Image(Product product) throws IOException {
@@ -140,6 +94,198 @@ public class ProductServlet extends HttpServlet {
 			InputStream stream = getServletContext().getResourceAsStream("/images/product/no-image.jpg"); 
 			product.setBase64Image(BaseEncoding.base64().encode(ByteStreams.toByteArray(stream)));
 		}
+	}
+
+	private void getCategories(HttpServletRequest req) {
+		Client client = ClientBuilder.newClient();
+		WebTarget resource = client.target(ApiConstants.CATEGORIES_API_URL);
+		
+		Builder request = resource.request();
+		request.accept(MediaType.APPLICATION_JSON);
+		
+		Response response = request.get();
+
+		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
+			List<Category> categories = new ArrayList<Category>();
+		    System.out.println("Success! " + response.getStatus());
+		    categories = response.readEntity(new GenericType<List<Category>>() {});
+		    req.setAttribute("categories", categories);
+		} else {
+			ProductUtils.setServletError(req, response);
+		}
+	}
+	
+	private void getCalendarsByCategory(HttpServletRequest req) throws IOException {
+		String categoryId = req.getParameter("categoryId");
+		if(null == categoryId || !StringUtils.isNumeric(categoryId)) {
+			categoryId = "1";
+		}
+		
+		Client client = ClientBuilder.newClient();
+		WebTarget resource = client.target(ApiConstants.GET_PRODUCTS_BY_CATEGORY_API_URL.replace(ApiConstants.CATEGORY_ID_REPLACE, categoryId))
+										.queryParam(ApiConstants.PRODUCT_TYPE_QUERY_PARAM, URL_PRODUCT_TYPE_MAP.get(req.getRequestURI()));
+		
+		Builder request = resource.request();
+		request.accept(MediaType.APPLICATION_JSON);
+		
+		Response response = request.get();
+
+		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
+			List<Product> products = new ArrayList<Product>();
+		    System.out.println("Success! " + response.getStatus());
+		    products = response.readEntity(new GenericType<List<Product>>() {});
+		    //get categories to set in the filters
+		    getCategories(req);
+	    	for(Product product : products) {
+	    		setBase64Image(product);
+	    	}
+		    req.setAttribute("products", products);
+		} else {
+			ProductUtils.setServletError(req, response);
+		}
+		
+	}
+	
+	private void getCalendarsInPriceRange(HttpServletRequest req) throws IOException {
+		String priceMin = req.getParameter("priceMin");
+		String priceMax = req.getParameter("priceMax");
+		//setting to show the values selected after loading the screen
+		req.setAttribute("priceMinSel", priceMin);
+		req.setAttribute("priceMaxSel", priceMax);
+		if(!StringUtils.isNumeric(priceMin) || !StringUtils.isNumeric(priceMax)) {
+			req.setAttribute("products",null);
+			return;
+		}
+		
+		Client client = ClientBuilder.newClient();
+		WebTarget resource = client.target(ApiConstants.GET_PRODUCTS_BY_PRICE_API_URL)
+										.queryParam(ApiConstants.PRODUCT_TYPE_QUERY_PARAM, URL_PRODUCT_TYPE_MAP.get(req.getRequestURI()))
+										.queryParam(ApiConstants.PRICE_MIN_QUERY_PARAM, priceMin)
+										.queryParam(ApiConstants.PRICE_MAX_QUERY_PARAM, priceMax);
+		
+		Builder request = resource.request();
+		request.accept(MediaType.APPLICATION_JSON);
+		
+		Response response = request.get();
+
+		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
+			List<Product> products = new ArrayList<Product>();
+		    System.out.println("Success! " + response.getStatus());
+		    products = response.readEntity(new GenericType<List<Product>>() {});
+		    //get categories to set in the filters
+		    getCategories(req);
+	    	for(Product product : products) {
+	    		setBase64Image(product);
+	    	}
+		    req.setAttribute("products", products);
+		} else {
+			ProductUtils.setServletError(req, response);
+		}
+		
+	}
+	
+	private void getProductById(HttpServletRequest req) throws IOException {
+		String productId = req.getParameter("productId");
+		String relatedProducts = req.getParameter("getRelated");
+		int relatedProductsCount = 4;
+		if(StringUtils.isEmpty(productId)) {
+			productId = "0";
+		}
+		
+		Client client = ClientBuilder.newClient();
+		WebTarget resource = null;
+		if(null == relatedProducts) {
+			resource = client.target(ApiConstants.GET_PRODUCT_BY_ID_API_URL.replace(ApiConstants.PRODUCT_ID_REPLACE, productId))
+					.queryParam(ApiConstants.PRODUCT_TYPE_QUERY_PARAM, URL_PRODUCT_TYPE_MAP.get(req.getRequestURI()));
+		
+			Builder request = resource.request();
+			request.accept(MediaType.APPLICATION_JSON);
+	
+			Response response = request.get();
+	
+			if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
+			    System.out.println("Success! " + response.getStatus());
+		    	Product product = response.readEntity(Product.class);
+		    	if(null != product){
+		    		setBase64Image(product);
+		    		req.setAttribute("product", product);
+		    	}
+			} else {
+				ProductUtils.setServletError(req, response);
+			}
+		}
+		else {
+			if(StringUtils.isNumeric(relatedProducts)) {
+				relatedProductsCount = Integer.valueOf(relatedProducts);
+			}
+			getRelatedProducts(req, productId, relatedProductsCount);
+		}
+	}
+	
+	private void getRelatedProducts(HttpServletRequest req, String productId, int relatedProductsCount) throws IOException {
+		Client client = ClientBuilder.newClient();
+		WebTarget resource = client.target(ApiConstants.GET_RELATED_PRODUCTS_OF_ID_URL.replace(ApiConstants.PRODUCT_ID_REPLACE, productId))
+										.queryParam(ApiConstants.PRODUCT_TYPE_QUERY_PARAM, URL_PRODUCT_TYPE_MAP.get(req.getRequestURI()))
+										.queryParam(ApiConstants.ROWS_TO_FETCH, relatedProductsCount);
+		
+		Builder request = resource.request();
+		request.accept(MediaType.APPLICATION_JSON);
+
+		Response response = request.get();
+
+		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
+		    System.out.println("Success! " + response.getStatus());
+		    List<Product> responseMap = response.readEntity(new GenericType<List<Product>>() {});
+		    Product product = responseMap.get(0);
+		    if(null != product){
+	    		setBase64Image(product);
+	    		req.setAttribute("product", product);
+	    	}
+		    responseMap.remove(0);
+	    	for(Product relatedProducts : responseMap) {
+	    		setBase64Image(relatedProducts);
+	    	}
+		    req.setAttribute("relatedProducts", responseMap);
+		} else {
+			ProductUtils.setServletError(req, response);
+		}
+		
+	}
+
+	private void getAllProducts(HttpServletRequest req) throws IOException{
+		Client client = ClientBuilder.newClient();
+		WebTarget resource = client.target(ApiConstants.GET_ALL_PRODUCTS_API_URL)
+										.queryParam(ApiConstants.PRODUCT_TYPE_QUERY_PARAM, URL_PRODUCT_TYPE_MAP.get(req.getRequestURI()));
+		
+		Builder request = resource.request();
+		request.accept(MediaType.APPLICATION_JSON);
+
+		Response response = request.get();
+
+		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
+		    System.out.println("Success! " + response.getStatus());
+		    List<Product> products = new ArrayList<Product>();
+	    	products = response.readEntity(new GenericType<List<Product>>() {});
+	    	//get categories to set in the filters
+	    	getCategories(req);
+	    	for(Product product : products) {
+	    		setBase64Image(product);
+	    	}
+	    	req.setAttribute("products", products);
+		} else {
+			ProductUtils.setServletError(req, response);
+		}
+	}
+
+	private void setDefaultValuesInRequest(HttpServletRequest req) {
+		//set default values in request
+		req.setAttribute("currentProductUri", req.getRequestURI());
+		req.setAttribute("currentProduct", req.getRequestURI().substring(1, 2).toUpperCase() + req.getRequestURI().substring(2));
+		req.setAttribute("priceMin", "1");
+		req.setAttribute("priceMax", "99");
+		req.setAttribute("relatedProducts", null);
+		req.setAttribute("products", null);
+		req.setAttribute("product", null);
 	}
 
 }

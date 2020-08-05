@@ -45,7 +45,7 @@
             </a></li>
         </ul>
         <div class="offcanvas__logo">
-            <a href="./index.html"><img src="images/logo.png" alt=""></a>
+            <a href="/"><img src="images/logo.png" alt=""></a>
         </div>
         <div id="mobile-menu-wrap"></div>
         <div class="offcanvas__auth">
@@ -61,27 +61,27 @@
 		    <div class="row">
 		        <div class="col-xl-3 col-lg-2">
 		            <div class="header__logo">
-		                <a href="./index.jsp"><img src="images/logo.png" alt=""></a>
+		                <a href="/"><img src="images/logo.png" alt=""></a>
 		            </div>
 		        </div>
 		        <div class="col-xl-6 col-lg-7">
 		            <nav class="header__menu">
 		                <ul>
-		                    <li><a href="/calendars">Calendars</a></li>
-		                    <li><a href="/diaries">Diaries</a></li>
-		                    <li><a href="/boxes">Boxes</a></li>
-		                    <li><a href="/labels">Labels</a>
+		                    <li class="${currentProduct == 'Calendars'? 'active' : ''}"><a href="/calendars">Calendars</a></li>
+		                    <li class="${currentProduct == 'Diaries'? 'active' : ''}"><a href="/diaries">Diaries</a></li>
+		                    <li class="${currentProduct == 'Boxes'? 'active' : ''}"><a href="/boxes">Boxes</a></li>
+		                    <li class="${currentProduct == 'Labels'? 'active' : ''}"><a href="/labels">Labels</a>
 		                        <ul class="dropdown">
 		                            <li><a href="./product-details.html">Product Details</a></li>
 		                            <li><a href="/product">Shop Cart</a></li>
 		                            <li><a href="./checkout.html">Checkout</a></li>
 		                            <li><a href="./blog-details.html">Blog Details</a></li>
 		                            <li><a href="./admin-category.html">Admin Categories</a></li>
-									<li><a href="/admin-product.html">Admin Products</a></li>
+									<li><a href="/admin-product">Admin Products</a></li>
 		                        </ul>
 		                    </li>
-		                    <li><a href="/customize">Customize</a></li>
-		                    <li><a href="/contact">Contact</a></li>
+		                    <li class="${currentProduct == 'Customize'? 'active' : ''}"><a href="/customize">Customize</a></li>
+		                    <li class="${currentProduct == 'Contact'? 'active' : ''}"><a href="/contact">Contact</a></li>
 		                </ul>
 		            </nav>
 		        </div>
@@ -676,63 +676,6 @@
 </section>
 <!-- Services Section End -->
 
-<!-- Instagram Begin -->
-<div class="instagram">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                <div class="instagram__item set-bg" data-setbg="images/instagram/insta-1.jpg">
-                    <div class="instagram__text">
-                        <i class="fa fa-instagram"></i>
-                        <a href="#">@ ashion_shop</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                <div class="instagram__item set-bg" data-setbg="images/instagram/insta-2.jpg">
-                    <div class="instagram__text">
-                        <i class="fa fa-instagram"></i>
-                        <a href="#">@ ashion_shop</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                <div class="instagram__item set-bg" data-setbg="images/instagram/insta-3.jpg">
-                    <div class="instagram__text">
-                        <i class="fa fa-instagram"></i>
-                        <a href="#">@ ashion_shop</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                <div class="instagram__item set-bg" data-setbg="images/instagram/insta-4.jpg">
-                    <div class="instagram__text">
-                        <i class="fa fa-instagram"></i>
-                        <a href="#">@ ashion_shop</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                <div class="instagram__item set-bg" data-setbg="images/instagram/insta-5.jpg">
-                    <div class="instagram__text">
-                        <i class="fa fa-instagram"></i>
-                        <a href="#">@ ashion_shop</a>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                <div class="instagram__item set-bg" data-setbg="images/instagram/insta-6.jpg">
-                    <div class="instagram__text">
-                        <i class="fa fa-instagram"></i>
-                        <a href="#">@ ashion_shop</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Instagram End -->
-
 <!-- Footer Section Begin -->
 <footer class="footer">
     <div class="container">
@@ -740,7 +683,7 @@
             <div class="col-lg-4 col-md-6 col-sm-7">
                 <div class="footer__about">
                     <div class="footer__logo">
-                        <a href="./index.html"><img src="images/logo.png" alt=""></a>
+                        <a href="/"><img src="images/logo.png" alt=""></a>
                     </div>
                     <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
                     cilisis.</p>
