@@ -1,6 +1,7 @@
 package com.abirami.dao.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
@@ -13,6 +14,7 @@ import org.hibernate.criterion.Restrictions;
 import com.abirami.dao.HibernateConfig;
 import com.abirami.dao.ProductGenericDao;
 import com.abirami.model.Product;
+import com.abirami.model.ProductDTO;
 import com.abirami.model.ProductsApiResponse;
 
 public class ProductGenericDaoImpl implements ProductGenericDao {
@@ -34,7 +36,7 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 			response.setResultSize(getTotalRecords(null));
 			response.setPageNumber(pageNumber);
 			response.setPageSize(pageSize);
-			response.setProducts(products);
+			response.setProducts(products.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList()));
 		}
 		catch(Exception e) {
 			throw e;
@@ -54,6 +56,7 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
 			product = session.get(Product.class,id);
+			product.setCategoryName(product.getCategory().getDisplayName());
 		}
 		catch(Exception e) {
 			throw e;
@@ -130,7 +133,7 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 			response.setResultSize(getTotalRecords(productType));
 			response.setPageNumber(pageNumber);
 			response.setPageSize(pageSize);
-			response.setProducts(products);
+			response.setProducts(products.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList()));
 		}
 		catch(Exception e) {
 			throw e;
@@ -165,7 +168,7 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 			response.setResultSize(getTotalRecords(productType));
 			response.setPageNumber(pageNumber);
 			response.setPageSize(pageSize);
-			response.setProducts(products);
+			response.setProducts(products.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList()));
 		}
 		catch(Exception e) {
 			throw e;

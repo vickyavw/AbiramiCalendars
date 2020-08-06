@@ -3,14 +3,14 @@ package com.abirami.model;
 import java.io.Serializable;
 import java.util.List;
 
-public class ProductsApiResponse implements Serializable {
+public class CategoriesApiResponse implements Serializable {
 
-	private static final long serialVersionUID = -6595425364623757000L;
-	
+	private static final long serialVersionUID = 6345316715707590890L;
+
 	private Integer resultSize;
 	private Integer pageNumber;
 	private Integer pageSize;
-	private List<ProductDTO> products;
+	private List<CategoryDTO> categories;
 	
 	public Integer getResultSize() {
 		return resultSize;
@@ -36,12 +36,12 @@ public class ProductsApiResponse implements Serializable {
 		this.pageSize = pageSize;
 	}
 	
-	public List<ProductDTO> getProducts() {
-		return products;
+	public List<CategoryDTO> getCategories() {
+		return categories;
 	}
 	
-	public void setProducts(List<ProductDTO> products) {
-		this.products = products;
+	public void setCategories(List<CategoryDTO> categories) {
+		this.categories = categories;
 	}
 
 	

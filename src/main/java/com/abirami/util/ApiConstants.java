@@ -14,6 +14,7 @@ public interface ApiConstants {
 	String PRICE_MIN_QUERY_PARAM = "priceMin";
 	String PRICE_MAX_QUERY_PARAM = "priceMax";
 	String PRODUCT_TYPE_QUERY_PARAM = "productType";
+	String ROWS_TO_FETCH = "expectedCount";
 	String SORT_BY_QUERY_PARAM = "sortBy";
 	String SORT_DIRECTION_QUERY_PARAM = "sortDirection";
 	String PAGE_SIZE_QUERY_PARAM = "pageSize";

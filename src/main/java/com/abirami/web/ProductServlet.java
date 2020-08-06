@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -25,8 +26,10 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.abirami.model.Category;
+import com.abirami.model.CategoriesApiResponse;
+import com.abirami.model.CategoryDTO;
 import com.abirami.model.Product;
+import com.abirami.model.ProductDTO;
 import com.abirami.model.ProductsApiResponse;
 import com.abirami.util.ApiConstants;
 import com.abirami.util.ProductType;
@@ -87,7 +90,7 @@ public class ProductServlet extends HttpServlet {
 		doGet(req, res);
 	}
 
-	private void setBase64Image(Product product) throws IOException {
+	private void setBase64Image(ProductDTO product) throws IOException {
 		if(null != product.getImage() && product.getImage().length>0) {
 			product.setBase64Image(DatatypeConverter.printBase64Binary(product.getImage()));
 		}
@@ -107,9 +110,9 @@ public class ProductServlet extends HttpServlet {
 		Response response = request.get();
 
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
-			List<Category> categories = new ArrayList<Category>();
+			List<CategoryDTO> categories = new ArrayList<CategoryDTO>();
 		    System.out.println("Success! " + response.getStatus());
-		    categories = response.readEntity(new GenericType<List<Category>>() {});
+		    categories = response.readEntity(CategoriesApiResponse.class).getCategories();
 		    req.setAttribute("categories", categories);
 		} else {
 			ProductUtils.setServletError(req, response);
@@ -141,7 +144,7 @@ public class ProductServlet extends HttpServlet {
 		    apiResponse = response.readEntity(new GenericType<ProductsApiResponse>() {});
 	    	//get categories to set in the filters
 	    	getCategories(req);
-	    	for(Product product : apiResponse.getProducts()) {
+	    	for(ProductDTO product : apiResponse.getProducts()) {
 	    		setBase64Image(product);
 	    	}
 	    	setReqAttrFromApiResponse(req, apiResponse);
@@ -183,7 +186,7 @@ public class ProductServlet extends HttpServlet {
 		    apiResponse = response.readEntity(new GenericType<ProductsApiResponse>() {});
 	    	//get categories to set in the filters
 	    	getCategories(req);
-	    	for(Product product : apiResponse.getProducts()) {
+	    	for(ProductDTO product : apiResponse.getProducts()) {
 	    		setBase64Image(product);
 	    	}
 	    	setReqAttrFromApiResponse(req, apiResponse);
@@ -216,8 +219,9 @@ public class ProductServlet extends HttpServlet {
 			    System.out.println("Success! " + response.getStatus());
 		    	Product product = response.readEntity(Product.class);
 		    	if(null != product){
-		    		setBase64Image(product);
-		    		req.setAttribute("product", product);
+		    		ProductDTO productDTO = new ProductDTO(product);
+		    		setBase64Image(productDTO);
+		    		req.setAttribute("product", productDTO);
 		    	}
 			} else {
 				ProductUtils.setServletError(req, response);
@@ -234,7 +238,8 @@ public class ProductServlet extends HttpServlet {
 	private void getRelatedProducts(HttpServletRequest req, String productId, int relatedProductsCount) throws IOException {
 		Client client = ClientBuilder.newClient();
 		WebTarget resource = client.target(ApiConstants.GET_RELATED_PRODUCTS_OF_ID_URL.replace(ApiConstants.PRODUCT_ID_REPLACE, productId))
-										.queryParam(ApiConstants.PRODUCT_TYPE_QUERY_PARAM, URL_PRODUCT_TYPE_MAP.get(req.getRequestURI()));
+										.queryParam(ApiConstants.PRODUCT_TYPE_QUERY_PARAM, URL_PRODUCT_TYPE_MAP.get(req.getRequestURI()))
+										.queryParam(ApiConstants.ROWS_TO_FETCH, relatedProductsCount);
 		
 		Builder request = resource.request();
 		request.accept(MediaType.APPLICATION_JSON);
@@ -244,16 +249,17 @@ public class ProductServlet extends HttpServlet {
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
 		    System.out.println("Success! " + response.getStatus());
 		    List<Product> responseMap = response.readEntity(new GenericType<List<Product>>() {});
-		    Product product = responseMap.get(0);
+		    List<ProductDTO> dtoMap = responseMap.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList());
+		    ProductDTO product = dtoMap.get(0);
 		    if(null != product){
 	    		setBase64Image(product);
 	    		req.setAttribute("product", product);
 	    	}
-		    responseMap.remove(0);
-	    	for(Product relatedProducts : responseMap) {
-	    		setBase64Image(relatedProducts);
+		    dtoMap.remove(0);
+	    	for(ProductDTO relatedProduct : dtoMap) {
+	    		setBase64Image(relatedProduct);
 	    	}
-		    req.setAttribute("relatedProducts", responseMap);
+		    req.setAttribute("relatedProducts", dtoMap);
 		} else {
 			ProductUtils.setServletError(req, response);
 		}
@@ -285,7 +291,7 @@ public class ProductServlet extends HttpServlet {
 		    apiResponse = response.readEntity(new GenericType<ProductsApiResponse>() {});
 	    	//get categories to set in the filters
 	    	getCategories(req);
-	    	for(Product product : apiResponse.getProducts()) {
+	    	for(ProductDTO product : apiResponse.getProducts()) {
 	    		setBase64Image(product);
 	    	}
 	    	setReqAttrFromApiResponse(req, apiResponse);

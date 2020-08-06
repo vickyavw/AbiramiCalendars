@@ -68,7 +68,6 @@ public class ProductResourceImpl implements ProductResource {
 		ProductGenericDao productDao = new ProductGenericDaoImpl();
 		try {
 			Product product = productDao.get(productId);
-			product.setCategoryName(product.getCategory().getDisplayName());
 			return Response.status(HttpStatus.SC_OK).entity(product).build();
 		}
 		catch (Exception e) {
@@ -170,7 +169,6 @@ public class ProductResourceImpl implements ProductResource {
 		List<Product> responseProducts = new ArrayList<Product>();
 		try {
 			Product product = productDao.get(productId);
-			product.setCategoryName(product.getCategory().getDisplayName());
 			responseProducts.add(product);
 			List<Product> products = productDao.getRelatedProducts(product, expectedCount);
 			responseProducts.addAll(products);

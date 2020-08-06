@@ -15,6 +15,7 @@ import com.abirami.dao.CategoryGenericDao;
 import com.abirami.dao.impl.CategoryGenericDaoImpl;
 import com.abirami.model.ApiError;
 import com.abirami.model.Category;
+import com.abirami.model.CategoryDTO;
 import com.abirami.util.ProductUtils;
 
 @Path("categories")
@@ -25,10 +26,8 @@ public class CategoryResourceImpl implements CategoryResource {
 	@Override
 	public Response getCategories() {
 		CategoryGenericDao categoryDao = new CategoryGenericDaoImpl();
-		List<Category> categories = new ArrayList<Category>();
 		try {
-			categories = categoryDao.getAll();
-			return Response.status(HttpStatus.SC_OK).entity(categories).build();
+			return Response.status(HttpStatus.SC_OK).entity(categoryDao.getAll()).build();
 		}
 		catch (Exception e) {
 			return ProductUtils.setApiServerError();
@@ -45,7 +44,7 @@ public class CategoryResourceImpl implements CategoryResource {
 		}
 		CategoryGenericDao categoryDao = new CategoryGenericDaoImpl();
 		try {
-			return Response.status(HttpStatus.SC_OK).entity(categoryDao.get(categoryId)).build();
+			return Response.status(HttpStatus.SC_OK).entity(new CategoryDTO(categoryDao.get(categoryId))).build();
 		}
 		catch (Exception e) {
 			return ProductUtils.setApiServerError();

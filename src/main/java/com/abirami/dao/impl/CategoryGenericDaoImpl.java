@@ -1,23 +1,28 @@
 package com.abirami.dao.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.hibernate.Session;
 
 import com.abirami.dao.CategoryGenericDao;
 import com.abirami.dao.HibernateConfig;
+import com.abirami.model.CategoriesApiResponse;
 import com.abirami.model.Category;
+import com.abirami.model.CategoryDTO;
 
 public class CategoryGenericDaoImpl implements CategoryGenericDao {
 
 	@Override
-	public List<Category> getAll() {
+	public CategoriesApiResponse getAll() {
 		Session session = null;
 		List<Category> categories = null;
+		CategoriesApiResponse resp = new CategoriesApiResponse();
 		try {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
 			categories = session.createQuery("from Category").list();
+			resp.setCategories(categories.stream().map(e -> new CategoryDTO(e)).collect(Collectors.toList()));
 		}
 		catch(Exception e) {
 			throw e;
@@ -26,7 +31,7 @@ public class CategoryGenericDaoImpl implements CategoryGenericDao {
 			if(null != session)
 				session.close();
 		}
-		return categories;
+		return resp;
 	}
 
 	@Override
