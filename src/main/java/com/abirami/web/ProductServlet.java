@@ -124,6 +124,9 @@ public class ProductServlet extends HttpServlet {
 		if(null == categoryId || !StringUtils.isNumeric(categoryId)) {
 			categoryId = "1";
 		}
+		String pageNumber = req.getParameter(ApiConstants.PAGE_NUMBER_QUERY_PARAM);
+		if(StringUtils.isBlank(pageNumber) || !StringUtils.isNumeric(pageNumber))
+			pageNumber = "1";
 		
 		Client client = ClientBuilder.newClient();
 		WebTarget resource = client.target(ApiConstants.GET_PRODUCTS_BY_CATEGORY_API_URL.replace(ApiConstants.CATEGORY_ID_REPLACE, categoryId))
@@ -131,7 +134,7 @@ public class ProductServlet extends HttpServlet {
 										.queryParam(ApiConstants.SORT_BY_QUERY_PARAM, req.getAttribute(ApiConstants.SORT_BY_QUERY_PARAM))
 										.queryParam(ApiConstants.SORT_DIRECTION_QUERY_PARAM, req.getAttribute(ApiConstants.SORT_DIRECTION_QUERY_PARAM))
 										.queryParam(ApiConstants.PAGE_SIZE_QUERY_PARAM, req.getAttribute(ApiConstants.PAGE_SIZE_QUERY_PARAM))
-										.queryParam(ApiConstants.PAGE_NUMBER_QUERY_PARAM, req.getAttribute(ApiConstants.PAGE_NUMBER_QUERY_PARAM));
+										.queryParam(ApiConstants.PAGE_NUMBER_QUERY_PARAM, pageNumber);
 		
 		Builder request = resource.request();
 		request.accept(MediaType.APPLICATION_JSON);
@@ -164,6 +167,9 @@ public class ProductServlet extends HttpServlet {
 			req.setAttribute("products",null);
 			return;
 		}
+		String pageNumber = req.getParameter(ApiConstants.PAGE_NUMBER_QUERY_PARAM);
+		if(StringUtils.isBlank(pageNumber) || !StringUtils.isNumeric(pageNumber))
+			pageNumber = "1";
 		
 		Client client = ClientBuilder.newClient();
 		WebTarget resource = client.target(ApiConstants.GET_PRODUCTS_BY_PRICE_API_URL)
@@ -173,7 +179,7 @@ public class ProductServlet extends HttpServlet {
 										.queryParam(ApiConstants.SORT_BY_QUERY_PARAM, req.getAttribute(ApiConstants.SORT_BY_QUERY_PARAM))
 										.queryParam(ApiConstants.SORT_DIRECTION_QUERY_PARAM, req.getAttribute(ApiConstants.SORT_DIRECTION_QUERY_PARAM))
 										.queryParam(ApiConstants.PAGE_SIZE_QUERY_PARAM, req.getAttribute(ApiConstants.PAGE_SIZE_QUERY_PARAM))
-										.queryParam(ApiConstants.PAGE_NUMBER_QUERY_PARAM, req.getAttribute(ApiConstants.PAGE_NUMBER_QUERY_PARAM));
+										.queryParam(ApiConstants.PAGE_NUMBER_QUERY_PARAM, pageNumber);
 		
 		Builder request = resource.request();
 		request.accept(MediaType.APPLICATION_JSON);
@@ -301,6 +307,21 @@ public class ProductServlet extends HttpServlet {
 	}
 
 	private void setReqAttrFromApiResponse(HttpServletRequest req, ProductsApiResponse apiResponse) {
+		String queryParams = req.getQueryString();
+		/* Expected values - Can either have existing filter or only pageNumbers. 
+		 * So have to add existing filter if any
+		 * - categoryId=1&xyz=abc&pageNumber=2
+		 * - categoryId=2
+		 * - pageNumber=2
+		 * - <empty>
+		 */
+		if(null == queryParams)
+			queryParams = "";
+		else if(queryParams.contains(ApiConstants.PAGE_NUMBER_QUERY_PARAM))
+			queryParams = queryParams.substring(0, req.getQueryString().indexOf(ApiConstants.PAGE_NUMBER_QUERY_PARAM));
+		else
+			queryParams = queryParams+"&";
+		req.setAttribute("existingFilter", queryParams);
 		req.setAttribute("products", apiResponse.getProducts());
 		req.setAttribute(ApiConstants.PAGE_NUMBER_QUERY_PARAM, apiResponse.getPageNumber());
 		req.setAttribute(ApiConstants.TOTAL_PAGES_QUERY_PARAM, ((apiResponse.getResultSize() - 1) / apiResponse.getPageSize()) +1 );

@@ -130,7 +130,7 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 								.setMaxResults(pageSize)
 								.list();
 			
-			response.setResultSize(getTotalRecords(productType));
+			response.setResultSize(getTotalRecords(conjunction));
 			response.setPageNumber(pageNumber);
 			response.setPageSize(pageSize);
 			response.setProducts(products.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList()));
@@ -165,7 +165,7 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 								.setMaxResults(pageSize)
 								.list();
 			
-			response.setResultSize(getTotalRecords(productType));
+			response.setResultSize(getTotalRecords(conjunction));
 			response.setPageNumber(pageNumber);
 			response.setPageSize(pageSize);
 			response.setProducts(products.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList()));
@@ -210,15 +210,15 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 		return products;
 	}
 	
-	private int getTotalRecords(String productType) {
+	private int getTotalRecords(Conjunction conjunction) {
 		Integer rowCount = 0;
 		Session session = null;
 		try {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
 			Criteria criteria = session.createCriteria(Product.class);
-			if(StringUtils.isNotBlank(productType))
-				criteria.add(Restrictions.eq("productType", productType));
+			if(null != conjunction)
+				criteria.add(conjunction);
 			criteria.setProjection(Projections.rowCount());
             
             List records = criteria.list();

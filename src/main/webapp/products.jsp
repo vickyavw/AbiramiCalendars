@@ -209,7 +209,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="" onclick="this.href='${currentProductUri}?priceFilter=true&priceMin='+document.getElementById('minamount').value.substr(3)+'&priceMax='+document.getElementById('maxamount').value.substr(3)">Filter</a>
+                            <a href="" onclick="this.href='${currentProductUri}?${existingFilter}priceFilter=true&priceMin='+document.getElementById('minamount').value.substr(3)+'&priceMax='+document.getElementById('maxamount').value.substr(3)">Filter</a>
                         </div>
                         <div class="sidebar__sizes">
                             <div class="section-title">
@@ -285,11 +285,11 @@
                             <div class="pagination__option">
                             	<c:if test="${pageNumber != 1}">
                             		<a href="#"><i class="fa fa-angle-left"></i></a>
-                            		<a href="${currentProductUri}?pageNumber=${pageNumber - 1}">${pageNumber - 1}</a>
+                            		<a href="${currentProductUri}?${existingFilter}pageNumber=${pageNumber - 1}">${pageNumber - 1}</a>
                             	</c:if>
                                 <a>${pageNumber}</a>
                                 <c:if test="${pageNumber lt noOfPages}">
-                               	 	<a href="${currentProductUri}?pageNumber=${pageNumber+1}">${pageNumber+1}</a>
+                               	 	<a href="${currentProductUri}?${existingFilter}pageNumber=${pageNumber+1}">${pageNumber+1}</a>
 	                                <a href="#"><i class="fa fa-angle-right"></i></a>
                                	</c:if>
                             </div>
