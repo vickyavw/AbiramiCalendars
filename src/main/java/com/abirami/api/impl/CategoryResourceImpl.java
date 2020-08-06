@@ -31,7 +31,7 @@ public class CategoryResourceImpl implements CategoryResource {
 			return Response.status(HttpStatus.SC_OK).entity(categories).build();
 		}
 		catch (Exception e) {
-			return ProductUtils.setApiError();
+			return ProductUtils.setApiServerError();
 		}
 	}
 
@@ -48,7 +48,7 @@ public class CategoryResourceImpl implements CategoryResource {
 			return Response.status(HttpStatus.SC_OK).entity(categoryDao.get(categoryId)).build();
 		}
 		catch (Exception e) {
-			return ProductUtils.setApiError();
+			return ProductUtils.setApiServerError();
 		}
 	}
 
@@ -67,7 +67,7 @@ public class CategoryResourceImpl implements CategoryResource {
 			return Response.status(HttpStatus.SC_OK).entity(category).build();
 		}
 		catch (Exception e) {
-			return ProductUtils.setApiError();
+			return ProductUtils.setApiServerError();
 		}
 	}
 

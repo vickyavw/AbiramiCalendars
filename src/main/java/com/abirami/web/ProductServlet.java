@@ -27,6 +27,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.abirami.model.Category;
 import com.abirami.model.Product;
+import com.abirami.model.ProductsApiResponse;
 import com.abirami.util.ApiConstants;
 import com.abirami.util.ProductType;
 import com.abirami.util.ProductUtils;
@@ -123,7 +124,11 @@ public class ProductServlet extends HttpServlet {
 		
 		Client client = ClientBuilder.newClient();
 		WebTarget resource = client.target(ApiConstants.GET_PRODUCTS_BY_CATEGORY_API_URL.replace(ApiConstants.CATEGORY_ID_REPLACE, categoryId))
-										.queryParam(ApiConstants.PRODUCT_TYPE_QUERY_PARAM, URL_PRODUCT_TYPE_MAP.get(req.getRequestURI()));
+										.queryParam(ApiConstants.PRODUCT_TYPE_QUERY_PARAM, URL_PRODUCT_TYPE_MAP.get(req.getRequestURI()))
+										.queryParam(ApiConstants.SORT_BY_QUERY_PARAM, req.getAttribute(ApiConstants.SORT_BY_QUERY_PARAM))
+										.queryParam(ApiConstants.SORT_DIRECTION_QUERY_PARAM, req.getAttribute(ApiConstants.SORT_DIRECTION_QUERY_PARAM))
+										.queryParam(ApiConstants.PAGE_SIZE_QUERY_PARAM, req.getAttribute(ApiConstants.PAGE_SIZE_QUERY_PARAM))
+										.queryParam(ApiConstants.PAGE_NUMBER_QUERY_PARAM, req.getAttribute(ApiConstants.PAGE_NUMBER_QUERY_PARAM));
 		
 		Builder request = resource.request();
 		request.accept(MediaType.APPLICATION_JSON);
@@ -131,15 +136,15 @@ public class ProductServlet extends HttpServlet {
 		Response response = request.get();
 
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
-			List<Product> products = new ArrayList<Product>();
 		    System.out.println("Success! " + response.getStatus());
-		    products = response.readEntity(new GenericType<List<Product>>() {});
-		    //get categories to set in the filters
-		    getCategories(req);
-	    	for(Product product : products) {
+		    ProductsApiResponse apiResponse = new ProductsApiResponse();
+		    apiResponse = response.readEntity(new GenericType<ProductsApiResponse>() {});
+	    	//get categories to set in the filters
+	    	getCategories(req);
+	    	for(Product product : apiResponse.getProducts()) {
 	    		setBase64Image(product);
 	    	}
-		    req.setAttribute("products", products);
+	    	setReqAttrFromApiResponse(req, apiResponse);
 		} else {
 			ProductUtils.setServletError(req, response);
 		}
@@ -161,7 +166,11 @@ public class ProductServlet extends HttpServlet {
 		WebTarget resource = client.target(ApiConstants.GET_PRODUCTS_BY_PRICE_API_URL)
 										.queryParam(ApiConstants.PRODUCT_TYPE_QUERY_PARAM, URL_PRODUCT_TYPE_MAP.get(req.getRequestURI()))
 										.queryParam(ApiConstants.PRICE_MIN_QUERY_PARAM, priceMin)
-										.queryParam(ApiConstants.PRICE_MAX_QUERY_PARAM, priceMax);
+										.queryParam(ApiConstants.PRICE_MAX_QUERY_PARAM, priceMax)
+										.queryParam(ApiConstants.SORT_BY_QUERY_PARAM, req.getAttribute(ApiConstants.SORT_BY_QUERY_PARAM))
+										.queryParam(ApiConstants.SORT_DIRECTION_QUERY_PARAM, req.getAttribute(ApiConstants.SORT_DIRECTION_QUERY_PARAM))
+										.queryParam(ApiConstants.PAGE_SIZE_QUERY_PARAM, req.getAttribute(ApiConstants.PAGE_SIZE_QUERY_PARAM))
+										.queryParam(ApiConstants.PAGE_NUMBER_QUERY_PARAM, req.getAttribute(ApiConstants.PAGE_NUMBER_QUERY_PARAM));
 		
 		Builder request = resource.request();
 		request.accept(MediaType.APPLICATION_JSON);
@@ -169,15 +178,15 @@ public class ProductServlet extends HttpServlet {
 		Response response = request.get();
 
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
-			List<Product> products = new ArrayList<Product>();
 		    System.out.println("Success! " + response.getStatus());
-		    products = response.readEntity(new GenericType<List<Product>>() {});
-		    //get categories to set in the filters
-		    getCategories(req);
-	    	for(Product product : products) {
+		    ProductsApiResponse apiResponse = new ProductsApiResponse();
+		    apiResponse = response.readEntity(new GenericType<ProductsApiResponse>() {});
+	    	//get categories to set in the filters
+	    	getCategories(req);
+	    	for(Product product : apiResponse.getProducts()) {
 	    		setBase64Image(product);
 	    	}
-		    req.setAttribute("products", products);
+	    	setReqAttrFromApiResponse(req, apiResponse);
 		} else {
 			ProductUtils.setServletError(req, response);
 		}
@@ -225,8 +234,7 @@ public class ProductServlet extends HttpServlet {
 	private void getRelatedProducts(HttpServletRequest req, String productId, int relatedProductsCount) throws IOException {
 		Client client = ClientBuilder.newClient();
 		WebTarget resource = client.target(ApiConstants.GET_RELATED_PRODUCTS_OF_ID_URL.replace(ApiConstants.PRODUCT_ID_REPLACE, productId))
-										.queryParam(ApiConstants.PRODUCT_TYPE_QUERY_PARAM, URL_PRODUCT_TYPE_MAP.get(req.getRequestURI()))
-										.queryParam(ApiConstants.ROWS_TO_FETCH, relatedProductsCount);
+										.queryParam(ApiConstants.PRODUCT_TYPE_QUERY_PARAM, URL_PRODUCT_TYPE_MAP.get(req.getRequestURI()));
 		
 		Builder request = resource.request();
 		request.accept(MediaType.APPLICATION_JSON);
@@ -253,9 +261,18 @@ public class ProductServlet extends HttpServlet {
 	}
 
 	private void getAllProducts(HttpServletRequest req) throws IOException{
+
+		String pageNumber = req.getParameter(ApiConstants.PAGE_NUMBER_QUERY_PARAM);
+		if(StringUtils.isBlank(pageNumber) || !StringUtils.isNumeric(pageNumber))
+			pageNumber = "1";
+		
 		Client client = ClientBuilder.newClient();
 		WebTarget resource = client.target(ApiConstants.GET_ALL_PRODUCTS_API_URL)
-										.queryParam(ApiConstants.PRODUCT_TYPE_QUERY_PARAM, URL_PRODUCT_TYPE_MAP.get(req.getRequestURI()));
+										.queryParam(ApiConstants.PRODUCT_TYPE_QUERY_PARAM, URL_PRODUCT_TYPE_MAP.get(req.getRequestURI()))
+										.queryParam(ApiConstants.SORT_BY_QUERY_PARAM, req.getAttribute(ApiConstants.SORT_BY_QUERY_PARAM))
+										.queryParam(ApiConstants.SORT_DIRECTION_QUERY_PARAM, req.getAttribute(ApiConstants.SORT_DIRECTION_QUERY_PARAM))
+										.queryParam(ApiConstants.PAGE_SIZE_QUERY_PARAM, req.getAttribute(ApiConstants.PAGE_SIZE_QUERY_PARAM))
+										.queryParam(ApiConstants.PAGE_NUMBER_QUERY_PARAM, pageNumber);
 		
 		Builder request = resource.request();
 		request.accept(MediaType.APPLICATION_JSON);
@@ -264,17 +281,23 @@ public class ProductServlet extends HttpServlet {
 
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
 		    System.out.println("Success! " + response.getStatus());
-		    List<Product> products = new ArrayList<Product>();
-	    	products = response.readEntity(new GenericType<List<Product>>() {});
+		    ProductsApiResponse apiResponse = new ProductsApiResponse();
+		    apiResponse = response.readEntity(new GenericType<ProductsApiResponse>() {});
 	    	//get categories to set in the filters
 	    	getCategories(req);
-	    	for(Product product : products) {
+	    	for(Product product : apiResponse.getProducts()) {
 	    		setBase64Image(product);
 	    	}
-	    	req.setAttribute("products", products);
+	    	setReqAttrFromApiResponse(req, apiResponse);
 		} else {
 			ProductUtils.setServletError(req, response);
 		}
+	}
+
+	private void setReqAttrFromApiResponse(HttpServletRequest req, ProductsApiResponse apiResponse) {
+		req.setAttribute("products", apiResponse.getProducts());
+		req.setAttribute(ApiConstants.PAGE_NUMBER_QUERY_PARAM, apiResponse.getPageNumber());
+		req.setAttribute(ApiConstants.TOTAL_PAGES_QUERY_PARAM, ((apiResponse.getResultSize() - 1) / apiResponse.getPageSize()) +1 );
 	}
 
 	private void setDefaultValuesInRequest(HttpServletRequest req) {

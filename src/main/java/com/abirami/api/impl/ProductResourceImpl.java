@@ -3,10 +3,9 @@ package com.abirami.api.impl;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+import javax.validation.constraints.NotBlank;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -22,6 +21,8 @@ import com.abirami.dao.impl.CategoryGenericDaoImpl;
 import com.abirami.dao.impl.ProductGenericDaoImpl;
 import com.abirami.model.ApiError;
 import com.abirami.model.Product;
+import com.abirami.model.ProductsApiResponse;
+import com.abirami.util.ApiValidator;
 import com.abirami.util.ProductUtils;
 
 /**
@@ -35,22 +36,24 @@ import com.abirami.util.ProductUtils;
 public class ProductResourceImpl implements ProductResource {
 
 	@Override
-	public Response getProducts(String productType) {
+	public Response getProducts(String productType, String sortBy, String sortDirection, Integer pageSize, Integer pageNumber) {
 		ProductGenericDao productDao = new ProductGenericDaoImpl();
-		List<Product> products = new ArrayList<Product>();
+		ProductsApiResponse response = new ProductsApiResponse();
 		try {
+			if(!ApiValidator.isValidSortAttr(sortBy, sortDirection))
+				return ProductUtils.setApiBadRequestError(1001);
 			if(StringUtils.isNotBlank(productType)) {
 				//Filter by product type - calendars/diaries/labels etc
 				//Sending list of queryParams and list of paramValues
-				products = productDao.getAllByQueryParams(Arrays.asList("productType"), Arrays.asList(productType));
+				response = productDao.getAllByQueryParams(Arrays.asList("productType"), Arrays.asList(productType), sortBy, sortDirection, pageSize, pageNumber);
 			}else {
 				//get all products
-				products = productDao.getAll();
+				response = productDao.getAll(sortBy, sortDirection, pageSize, pageNumber);
 			}
-			return Response.status(HttpStatus.SC_OK).entity(products).build();
+			return Response.status(HttpStatus.SC_OK).entity(response).build();
 		}
 		catch (Exception e) {
-			return ProductUtils.setApiError();
+			return ProductUtils.setApiServerError();
 		}
 	}
 
@@ -69,7 +72,7 @@ public class ProductResourceImpl implements ProductResource {
 			return Response.status(HttpStatus.SC_OK).entity(product).build();
 		}
 		catch (Exception e) {
-			return ProductUtils.setApiError();
+			return ProductUtils.setApiServerError();
 		}
 	}
 
@@ -93,7 +96,7 @@ public class ProductResourceImpl implements ProductResource {
 			return Response.status(HttpStatus.SC_OK).entity(product).build();
 		}
 		catch (Exception e) {
-			return ProductUtils.setApiError();
+			return ProductUtils.setApiServerError();
 		}
 	}
 
@@ -110,7 +113,8 @@ public class ProductResourceImpl implements ProductResource {
 	}
 
 	@Override
-	public Response getProductsByCategory(int categoryId, String productType) {
+	public Response getProductsByCategory(int categoryId, String productType, String sortBy, String sortDirection,
+			Integer pageSize, Integer pageNumber) {
 		if(categoryId == 0) {
 			ApiError apiError = new ApiError();
 			apiError.setErrorCode(1001);
@@ -118,24 +122,25 @@ public class ProductResourceImpl implements ProductResource {
 			return Response.status(HttpStatus.SC_BAD_REQUEST).entity(apiError).build();
 		}
 		ProductGenericDao productDao = new ProductGenericDaoImpl();
+		ProductsApiResponse response = new ProductsApiResponse();
 		try {
-			List<Product> products = null;
 			if(StringUtils.isNotBlank(productType)) {
 				//Sending list of queryParams and list of paramValues
-				products = productDao.getAllByQueryParams(Arrays.asList("category.categoryId", "productType"), Arrays.asList(categoryId, productType));
+				response = productDao.getAllByQueryParams(Arrays.asList("category.categoryId", "productType"), Arrays.asList(categoryId, productType), sortBy, sortDirection, pageSize, pageNumber);
 			}
 			else {
-				products = productDao.getAllByQueryParams(Arrays.asList("category.categoryId"), Arrays.asList(categoryId));
+				response = productDao.getAllByQueryParams(Arrays.asList("category.categoryId"), Arrays.asList(categoryId), sortBy, sortDirection, pageSize, pageNumber);
 			}
-			return Response.status(HttpStatus.SC_OK).entity(products).build();
+			return Response.status(HttpStatus.SC_OK).entity(response).build();
 		}
 		catch (Exception e) {
-			return ProductUtils.setApiError();
+			return ProductUtils.setApiServerError();
 		}
 	}
 
 	@Override
-	public Response getProductsInPriceRange(String productType, int priceMin, int priceMax) {
+	public Response getProductsInPriceRange(String productType, @NotBlank int priceMin, @NotBlank int priceMax,
+			String sortBy, String sortDirection, Integer pageSize, Integer pageNumber) {
 		if(priceMax < priceMin) {
 			ApiError apiError = new ApiError();
 			apiError.setErrorCode(1001);
@@ -143,12 +148,13 @@ public class ProductResourceImpl implements ProductResource {
 			return Response.status(HttpStatus.SC_BAD_REQUEST).entity(apiError).build();
 		}
 		ProductGenericDao productDao = new ProductGenericDaoImpl();
+		ProductsApiResponse response = new ProductsApiResponse();
 		try {
-			List<Product> products = productDao.getAllInRange(productType, "price", BigDecimal.valueOf(priceMin), BigDecimal.valueOf(priceMax));
-			return Response.status(HttpStatus.SC_OK).entity(products).build();
+			response = productDao.getAllInRange(productType, "price", BigDecimal.valueOf(priceMin), BigDecimal.valueOf(priceMax), sortBy, sortDirection, pageSize, pageNumber);
+			return Response.status(HttpStatus.SC_OK).entity(response).build();
 		}
 		catch (Exception e) {
-			return ProductUtils.setApiError();
+			return ProductUtils.setApiServerError();
 		}
 	}
 
@@ -171,7 +177,7 @@ public class ProductResourceImpl implements ProductResource {
 			return Response.status(HttpStatus.SC_OK).entity(responseProducts).build();
 		}
 		catch (Exception e) {
-			return ProductUtils.setApiError();
+			return ProductUtils.setApiServerError();
 		}
 	}
 

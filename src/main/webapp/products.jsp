@@ -283,10 +283,15 @@
 	                    	</c:forEach>
                         <div class="col-lg-12 text-center">
                             <div class="pagination__option">
-                                <a href="#">1</a>
-                                <a href="#">2</a>
-                                <a href="#">3</a>
-                                <a href="#"><i class="fa fa-angle-right"></i></a>
+                            	<c:if test="${pageNumber != 1}">
+                            		<a href="#"><i class="fa fa-angle-left"></i></a>
+                            		<a href="${currentProductUri}?pageNumber=${pageNumber - 1}">${pageNumber - 1}</a>
+                            	</c:if>
+                                <a>${pageNumber}</a>
+                                <c:if test="${pageNumber lt noOfPages}">
+                               	 	<a href="${currentProductUri}?pageNumber=${pageNumber+1}">${pageNumber+1}</a>
+	                                <a href="#"><i class="fa fa-angle-right"></i></a>
+                               	</c:if>
                             </div>
                         </div>
                     </div>
