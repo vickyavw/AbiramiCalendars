@@ -7,8 +7,8 @@ create user 'springuser'@'%' identified by 'admin@123';
 --giving all permissions to the new user
 grant all on abirami_traders.* to 'springuser'@'%';
 
-create table product(product_id INT not null auto_increment, display_name varchar(100) not null, description varchar(100), 
-	product_type varchar(100) not null,image MEDIUMBLOB, price decimal(5,2), availability_count int, time_to_print int, primary key (product_id));
+create table product_temp(product_id INT not null auto_increment, display_name varchar(100) not null, description varchar(100), 
+	product_type ENUM('CALENDAR','DIARY','BOX','LABEL') not null,image MEDIUMBLOB, price decimal(5,2), availability_count int, time_to_print int, primary key (product_id));
 
 create table category(category_id INT not null auto_increment, display_name varchar(100) not null, description varchar(100), primary key (category_id));
 
