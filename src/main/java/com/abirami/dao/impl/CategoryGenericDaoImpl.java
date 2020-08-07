@@ -7,17 +7,17 @@ import org.hibernate.Session;
 
 import com.abirami.dao.CategoryGenericDao;
 import com.abirami.dao.HibernateConfig;
-import com.abirami.model.CategoriesApiResponse;
 import com.abirami.model.Category;
 import com.abirami.model.CategoryDTO;
+import com.abirami.model.PaginatedCategoriesApiResponse;
 
 public class CategoryGenericDaoImpl implements CategoryGenericDao {
 
 	@Override
-	public CategoriesApiResponse getAll() {
+	public PaginatedCategoriesApiResponse getAll() {
 		Session session = null;
 		List<Category> categories = null;
-		CategoriesApiResponse resp = new CategoriesApiResponse();
+		PaginatedCategoriesApiResponse resp = new PaginatedCategoriesApiResponse();
 		try {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();

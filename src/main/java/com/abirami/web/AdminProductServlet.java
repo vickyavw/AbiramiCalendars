@@ -27,11 +27,11 @@ import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import com.abirami.model.CategoriesApiResponse;
 import com.abirami.model.CategoryDTO;
+import com.abirami.model.PaginatedCategoriesApiResponse;
+import com.abirami.model.PaginatedProductsApiResponse;
 import com.abirami.model.Product;
 import com.abirami.model.ProductDTO;
-import com.abirami.model.ProductsApiResponse;
 import com.abirami.util.ApiConstants;
 import com.abirami.util.ProductType;
 import com.abirami.util.ProductUtils;
@@ -145,7 +145,7 @@ public class AdminProductServlet extends HttpServlet {
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
 			List<CategoryDTO> categories = new ArrayList<CategoryDTO>();
 		    System.out.println("Success! " + response.getStatus());
-		    categories = response.readEntity(CategoriesApiResponse.class).getCategories();
+		    categories = response.readEntity(PaginatedCategoriesApiResponse.class).getCategories();
 		    req.setAttribute("categories", categories);
 		} else {
 			ProductUtils.setServletError(req, response);
@@ -189,8 +189,8 @@ public class AdminProductServlet extends HttpServlet {
 
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
 		    System.out.println("Success! " + response.getStatus());
-		    ProductsApiResponse apiResponse = new ProductsApiResponse();
-		    apiResponse = response.readEntity(new GenericType<ProductsApiResponse>() {});
+		    PaginatedProductsApiResponse apiResponse = new PaginatedProductsApiResponse();
+		    apiResponse = response.readEntity(new GenericType<PaginatedProductsApiResponse>() {});
 	    	//get categories to set in the filters
 	    	getCategories(req);
 	    	for(ProductDTO product : apiResponse.getProducts()) {

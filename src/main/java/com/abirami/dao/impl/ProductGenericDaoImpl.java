@@ -15,17 +15,17 @@ import org.hibernate.criterion.Restrictions;
 
 import com.abirami.dao.HibernateConfig;
 import com.abirami.dao.ProductGenericDao;
+import com.abirami.model.PaginatedProductsApiResponse;
 import com.abirami.model.Product;
 import com.abirami.model.ProductDTO;
-import com.abirami.model.ProductsApiResponse;
 
 public class ProductGenericDaoImpl implements ProductGenericDao {
 	
 	@Override
-	public ProductsApiResponse getAll(String sortBy, String sortDirection, Integer pageSize, Integer pageNumber) {
+	public PaginatedProductsApiResponse getAll(String sortBy, String sortDirection, Integer pageSize, Integer pageNumber) {
 		Session session = null;
 		List<Product> products = null;
-		ProductsApiResponse response = new ProductsApiResponse();
+		PaginatedProductsApiResponse response = new PaginatedProductsApiResponse();
 		try {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
@@ -111,7 +111,7 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 	}
 
 	@Override
-	public ProductsApiResponse getAllByQueryParams(String productType, 
+	public PaginatedProductsApiResponse getAllByQueryParams(String productType, 
 			Map<String, Map<String, Object>> queryParamsMap, 
 			String sortBy,  
 			String sortDirection, 
@@ -119,7 +119,7 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 			Integer pageNumber) {
 
 		Session session = null;
-		ProductsApiResponse response = new ProductsApiResponse();
+		PaginatedProductsApiResponse response = new PaginatedProductsApiResponse();
 		List<Product> products = null;
 		try {
 			Conjunction conjunction = Restrictions.conjunction();
@@ -179,9 +179,9 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 	}
 
 	@Override
-	public <T> ProductsApiResponse getAllInRange(String productType, String keyQuery, T min, T max, String sortBy, String sortDirection, Integer pageSize, Integer pageNumber) {
+	public <T> PaginatedProductsApiResponse getAllInRange(String productType, String keyQuery, T min, T max, String sortBy, String sortDirection, Integer pageSize, Integer pageNumber) {
 		Session session = null;
-		ProductsApiResponse response = new ProductsApiResponse();
+		PaginatedProductsApiResponse response = new PaginatedProductsApiResponse();
 		List<Product> products = null;
 		try {
 			Conjunction conjunction = Restrictions.conjunction();

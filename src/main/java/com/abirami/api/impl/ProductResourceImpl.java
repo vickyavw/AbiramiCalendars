@@ -15,9 +15,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 
 import com.abirami.api.ProductResource;
 import com.abirami.dao.CategoryGenericDao;
@@ -25,8 +23,8 @@ import com.abirami.dao.ProductGenericDao;
 import com.abirami.dao.impl.CategoryGenericDaoImpl;
 import com.abirami.dao.impl.ProductGenericDaoImpl;
 import com.abirami.model.ApiError;
+import com.abirami.model.PaginatedProductsApiResponse;
 import com.abirami.model.Product;
-import com.abirami.model.ProductsApiResponse;
 import com.abirami.util.ApiConstants;
 import com.abirami.util.ApiValidator;
 import com.abirami.util.ProductUtils;
@@ -44,7 +42,7 @@ public class ProductResourceImpl implements ProductResource {
 	@Override
 	public Response getProducts(String productType, String sortBy, String sortDirection, Integer pageSize, Integer pageNumber) {
 		ProductGenericDao productDao = new ProductGenericDaoImpl();
-		ProductsApiResponse response = new ProductsApiResponse();
+		PaginatedProductsApiResponse response = new PaginatedProductsApiResponse();
 		try {
 			if(!ApiValidator.isValidSortAttr(sortBy, sortDirection))
 				return ProductUtils.setApiBadRequestError(1001);
@@ -121,7 +119,7 @@ public class ProductResourceImpl implements ProductResource {
 	public Response getProductsByCriteria(String productType, String queryParams, String sortBy, String sortDirection, Integer pageSize, Integer pageNumber) {
 		
 		ProductGenericDao productDao = new ProductGenericDaoImpl();
-		ProductsApiResponse response = new ProductsApiResponse();
+		PaginatedProductsApiResponse response = new PaginatedProductsApiResponse();
 		try {
 			Map<String, Map<String, Object>> queryParamsMap = new HashMap<String, Map<String,Object>>(); 
 			populateQueryParamsMap(queryParams, queryParamsMap);

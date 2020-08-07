@@ -23,10 +23,10 @@ import javax.ws.rs.core.Response.Status.Family;
 import org.apache.commons.lang3.StringUtils;
 
 import com.abirami.model.ApiError;
-import com.abirami.model.CategoriesApiResponse;
 import com.abirami.model.Category;
 import com.abirami.model.CategoryDTO;
-import com.abirami.model.ProductsApiResponse;
+import com.abirami.model.PaginatedCategoriesApiResponse;
+import com.abirami.model.PaginatedProductsApiResponse;
 import com.abirami.util.ApiConstants;
 
 @WebServlet(name = "CategoryServlet", urlPatterns = {"category"}, loadOnStartup = 1) 
@@ -71,7 +71,7 @@ public class CategoryServlet extends HttpServlet {
 		    	req.setAttribute("categories", categories);
 		    }
 		    else {
-		    	CategoriesApiResponse apiResponse = response.readEntity(new GenericType<CategoriesApiResponse>() {});
+		    	PaginatedCategoriesApiResponse apiResponse = response.readEntity(new GenericType<PaginatedCategoriesApiResponse>() {});
 		    	req.setAttribute("categories", apiResponse.getCategories());
 		    }
 		} else {
@@ -133,8 +133,8 @@ public class CategoryServlet extends HttpServlet {
 
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
 		    System.out.println("Success! " + response.getStatus());
-		    ProductsApiResponse apiResponse = new ProductsApiResponse();
-		    apiResponse = response.readEntity(new GenericType<ProductsApiResponse>() {});
+		    PaginatedProductsApiResponse apiResponse = new PaginatedProductsApiResponse();
+		    apiResponse = response.readEntity(new GenericType<PaginatedProductsApiResponse>() {});
 		    req.setAttribute("products", apiResponse.getProducts());
 			req.setAttribute(ApiConstants.PAGE_NUMBER_QUERY_PARAM, apiResponse.getPageNumber());
 			req.setAttribute(ApiConstants.TOTAL_PAGES_QUERY_PARAM, ((apiResponse.getResultSize() - 1) / apiResponse.getPageSize()) +1 );

@@ -3,7 +3,7 @@ package com.abirami.model;
 import java.io.Serializable;
 import java.util.List;
 
-public class ProductsApiResponse implements Serializable {
+public class PaginatedProductsApiResponse implements Serializable {
 
 	private static final long serialVersionUID = -6595425364623757000L;
 	

@@ -2,12 +2,12 @@ package com.abirami.dao;
 
 import java.util.List;
 
-import com.abirami.model.CategoriesApiResponse;
 import com.abirami.model.Category;
+import com.abirami.model.PaginatedCategoriesApiResponse;
 
 public interface CategoryGenericDao {
 
-	CategoriesApiResponse getAll();
+	PaginatedCategoriesApiResponse getAll();
 	
 	Category get(final int id);
 	
