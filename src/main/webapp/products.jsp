@@ -285,7 +285,7 @@
                 <div class="col-lg-9 col-md-9">
                     <div class="row">
                     	<c:forEach items="${products}" var="product">
-                        	<div class="col-lg-4 col-md-6">
+                        	<div class="col-lg-3 col-md-6">
                             	<div class="product__item">
                             	
 	                                <div class="product__item__pic set-bg" data-setbg="data:image/jpg;base64,${product.base64Image}">
