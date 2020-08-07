@@ -113,13 +113,14 @@ public class CategoryServlet extends HttpServlet {
 	}
 	
 	private void getAllProductsByCategory(HttpServletRequest req) throws IOException {
-		String categoryId = req.getParameter("categoryId");
-		if(null == categoryId || !StringUtils.isNumeric(categoryId)) {
-			categoryId = "1";
-		}
-		
+//		String categoryId = req.getParameter("categoryId");
+//		if(null == categoryId || !StringUtils.isNumeric(categoryId)) {
+//			categoryId = "1";
+//		}
+//		
 		Client client = ClientBuilder.newClient();
-		WebTarget resource = client.target(ApiConstants.GET_PRODUCTS_BY_CATEGORY_API_URL.replace(ApiConstants.CATEGORY_ID_REPLACE, categoryId))
+		WebTarget resource = client.target(ApiConstants.GET_PRODUCTS_BY_QUERY_API_URL)
+										.queryParam(ApiConstants.API_QUERY_PARAMS, req.getQueryString())
 										.queryParam(ApiConstants.SORT_BY_QUERY_PARAM, req.getAttribute(ApiConstants.SORT_BY_QUERY_PARAM))
 										.queryParam(ApiConstants.SORT_DIRECTION_QUERY_PARAM, req.getAttribute(ApiConstants.SORT_DIRECTION_QUERY_PARAM))
 										.queryParam(ApiConstants.PAGE_SIZE_QUERY_PARAM, req.getAttribute(ApiConstants.PAGE_SIZE_QUERY_PARAM))

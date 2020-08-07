@@ -209,7 +209,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="" onclick="this.href='${currentProductUri}?${existingFilter}priceFilter=true&priceMin='+document.getElementById('minamount').value.substr(3)+'&priceMax='+document.getElementById('maxamount').value.substr(3)">Filter</a>
+                            <a href="" onclick="this.href='${currentProductUri}?${existingFilter}priceMin='+document.getElementById('minamount').value.substr(3)+'&priceMax='+document.getElementById('maxamount').value.substr(3)">Filter</a>
                         </div>
                         <div class="sidebar__sizes">
                             <div class="section-title">

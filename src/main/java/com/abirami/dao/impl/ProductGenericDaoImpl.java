@@ -1,6 +1,8 @@
 package com.abirami.dao.impl;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
@@ -109,17 +111,48 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 	}
 
 	@Override
-	public <T> ProductsApiResponse getAllByQueryParams(List<String> queryParam, List<T> value, String sortBy, String sortDirection, Integer pageSize, Integer pageNumber) {
+	public ProductsApiResponse getAllByQueryParams(String productType, 
+			Map<String, Map<String, Object>> queryParamsMap, 
+			String sortBy,  
+			String sortDirection, 
+			Integer pageSize, 
+			Integer pageNumber) {
+
 		Session session = null;
 		ProductsApiResponse response = new ProductsApiResponse();
 		List<Product> products = null;
-		String productType = null;
 		try {
 			Conjunction conjunction = Restrictions.conjunction();
-			for(int i=0;i<queryParam.size();i++) {
-				conjunction.add(Restrictions.eq(queryParam.get(i), value.get(i)));
-				if(queryParam.get(i).equals("productType"))
-					productType = (String) value.get(i);
+			if(StringUtils.isNotEmpty(productType)) {
+				conjunction.add(Restrictions.eq("productType", productType));
+			}
+			for (Entry<String, Map<String, Object>> entry : queryParamsMap.entrySet()) {
+				if("exactMatch".equals(entry.getKey())){
+					//adding equal criteria
+					for( Entry<String, Object> entryList :entry.getValue().entrySet()) {
+						conjunction.add(Restrictions.eq(entryList.getKey(), entryList.getValue()));
+					}
+				}
+				else if("partialMatch".equals(entry.getKey())){
+					//adding equal criteria
+					for( Entry<String, Object> entryList :entry.getValue().entrySet()) {
+						conjunction.add(Restrictions.like(entryList.getKey(), entryList.getValue()));
+					}
+				}
+				else if("range".equals(entry.getKey())){
+					//adding equal criteria
+					for( Entry<String, Object> entryList :entry.getValue().entrySet()) {
+						List ranges = (List) entryList.getValue();
+						conjunction.add(Restrictions.between(entryList.getKey(), ranges.get(0), ranges.get(1)));
+					}
+				}
+				else if("in".equals(entry.getKey())){
+					//adding equal criteria
+					for( Entry<String, Object> entryList :entry.getValue().entrySet()) {
+						conjunction.add(Restrictions.in(entryList.getKey(), entryList.getValue()));
+					}
+				}
+				
 			}
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();

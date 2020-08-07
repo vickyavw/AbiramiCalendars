@@ -1,6 +1,7 @@
 package com.abirami.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.abirami.model.Product;
 import com.abirami.model.ProductsApiResponse;
@@ -18,9 +19,8 @@ public interface ProductGenericDao {
 	
 	List<Product> getListOfIds(final List<Integer> ids);
 	
-	//Making it generic list to support any type of values
-	<T> ProductsApiResponse getAllByQueryParams(final List<String> queryParam, 
-			final List<T> value,
+	//Making it generic Object to support any type of values
+	ProductsApiResponse getAllByQueryParams(final String productType, final Map<String, Map<String, Object>> queryParamsMap,
 			final String sortBy, 
 			final String sortDirection, 
 			final Integer pageSize,
