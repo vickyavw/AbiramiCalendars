@@ -24,6 +24,9 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.abirami.model.ApiError;
 import com.abirami.model.Category;
+import com.abirami.model.CategoryDTO;
+import com.abirami.model.PaginatedCategoriesApiResponse;
+import com.abirami.model.PaginatedProductsApiResponse;
 import com.abirami.util.ApiConstants;
 
 @WebServlet(name = "CategoryServlet", urlPatterns = {"category"}, loadOnStartup = 1) 
@@ -57,17 +60,20 @@ public class CategoryServlet extends HttpServlet {
 
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
 		    System.out.println("Success! " + response.getStatus());
-		    List<Category> categories = new ArrayList<Category>();
+		    List<CategoryDTO> categories = new ArrayList<CategoryDTO>();
 		    if(StringUtils.isNotEmpty(categoryId)) {
-		    	Category category = response.readEntity(Category.class);
-		    	if(null != category){
-		    		categories.add(category);
+		    	CategoryDTO apiResponse = response.readEntity(new GenericType<CategoryDTO>() {});
+		    	if(null != apiResponse){
+		    		categories.add(apiResponse);
+		    		getAllProductsByCategory(req);
+		    	
 		    	}
+		    	req.setAttribute("categories", categories);
 		    }
 		    else {
-		    	categories = response.readEntity(new GenericType<List<Category>>() {});
+		    	PaginatedCategoriesApiResponse apiResponse = response.readEntity(new GenericType<PaginatedCategoriesApiResponse>() {});
+		    	req.setAttribute("categories", apiResponse.getCategories());
 		    }
-		    req.setAttribute("categories", categories);
 		} else {
 			ApiError error = response.readEntity(ApiError.class);
 		    System.out.println("ERROR! " + response.getStatus());    
@@ -104,6 +110,36 @@ public class CategoryServlet extends HttpServlet {
 	    	req.setAttribute("categories", categories);
 		}
 		req.getRequestDispatcher("admin-categories-view.jsp").forward(req, res);
+	}
+	
+	private void getAllProductsByCategory(HttpServletRequest req) throws IOException {
+//		String categoryId = req.getParameter("categoryId");
+//		if(null == categoryId || !StringUtils.isNumeric(categoryId)) {
+//			categoryId = "1";
+//		}
+//		
+		Client client = ClientBuilder.newClient();
+		WebTarget resource = client.target(ApiConstants.GET_PRODUCTS_BY_QUERY_API_URL)
+										.queryParam(ApiConstants.API_QUERY_PARAMS, req.getQueryString())
+										.queryParam(ApiConstants.SORT_BY_QUERY_PARAM, req.getAttribute(ApiConstants.SORT_BY_QUERY_PARAM))
+										.queryParam(ApiConstants.SORT_DIRECTION_QUERY_PARAM, req.getAttribute(ApiConstants.SORT_DIRECTION_QUERY_PARAM))
+										.queryParam(ApiConstants.PAGE_SIZE_QUERY_PARAM, req.getAttribute(ApiConstants.PAGE_SIZE_QUERY_PARAM))
+										.queryParam(ApiConstants.PAGE_NUMBER_QUERY_PARAM, req.getAttribute(ApiConstants.PAGE_NUMBER_QUERY_PARAM));
+		
+		Builder request = resource.request();
+		request.accept(MediaType.APPLICATION_JSON);
+		
+		Response response = request.get();
+
+		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
+		    System.out.println("Success! " + response.getStatus());
+		    PaginatedProductsApiResponse apiResponse = new PaginatedProductsApiResponse();
+		    apiResponse = response.readEntity(new GenericType<PaginatedProductsApiResponse>() {});
+		    req.setAttribute("products", apiResponse.getProducts());
+			req.setAttribute(ApiConstants.PAGE_NUMBER_QUERY_PARAM, apiResponse.getPageNumber());
+			req.setAttribute(ApiConstants.TOTAL_PAGES_QUERY_PARAM, ((apiResponse.getResultSize() - 1) / apiResponse.getPageSize()) +1 );
+		} 
+		
 	}
 
 }

@@ -25,6 +25,7 @@
     <link rel="stylesheet" href="css/owl.carousel.min.css" type="text/css">
     <link rel="stylesheet" href="css/slicknav.min.css" type="text/css">
     <link rel="stylesheet" href="css/style.css" type="text/css">
+    
 </head>
 
 <body>
@@ -56,7 +57,28 @@
         </div>
     </div>
     <!-- Offcanvas Menu End -->
-
+	
+	  <script type="text/javascript">
+	   	function call_func(){
+	   		debugger;
+	   		var uri = '${currentProductUri}' +'?'+ '${existingFilter}';
+	   		var priceMin = document.getElementById('minamount').value.substr(3);
+	   		var priceMax = document.getElementById('maxamount').value.substr(3);
+	   		uri = updateQueryStringParameter(uri, 'priceMin', priceMin);
+	   		uri = updateQueryStringParameter(uri, 'priceMax', priceMax);
+	   		window.location.href = uri;
+	   	}
+	   	function updateQueryStringParameter(uri, key, value) {
+	   		var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+	   		var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+	   		if (uri.match(re)) {
+	   			return uri.replace(re, '$1' + key + "=" + value + '$2');
+	    	}
+	    	else {
+	    	  	return uri + separator + key + "=" + value;
+	    	}
+	   	}
+	   </script>
     <!-- Header Section Begin -->
     <header class="header">
         <div class="container-fluid">
@@ -209,7 +231,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="" onclick="this.href='${currentProductUri}?priceFilter=true&priceMin='+document.getElementById('minamount').value.substr(3)+'&priceMax='+document.getElementById('maxamount').value.substr(3)">Filter</a>
+                            <a href="javascript:call_func();">Filter</a>
                         </div>
                         <div class="sidebar__sizes">
                             <div class="section-title">
@@ -283,10 +305,15 @@
 	                    	</c:forEach>
                         <div class="col-lg-12 text-center">
                             <div class="pagination__option">
-                                <a href="#">1</a>
-                                <a href="#">2</a>
-                                <a href="#">3</a>
-                                <a href="#"><i class="fa fa-angle-right"></i></a>
+                            	<c:if test="${pageNumber != 1}">
+                            		<a href="#"><i class="fa fa-angle-left"></i></a>
+                            		<a href="${currentProductUri}?${existingFilter}pageNumber=${pageNumber - 1}">${pageNumber - 1}</a>
+                            	</c:if>
+                                <a>${pageNumber}</a>
+                                <c:if test="${pageNumber lt noOfPages}">
+                               	 	<a href="${currentProductUri}?${existingFilter}pageNumber=${pageNumber+1}">${pageNumber+1}</a>
+	                                <a href="#"><i class="fa fa-angle-right"></i></a>
+                               	</c:if>
                             </div>
                         </div>
                     </div>

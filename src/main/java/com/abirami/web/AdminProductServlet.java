@@ -27,8 +27,11 @@ import javax.xml.bind.DatatypeConverter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import com.abirami.model.Category;
+import com.abirami.model.CategoryDTO;
+import com.abirami.model.PaginatedCategoriesApiResponse;
+import com.abirami.model.PaginatedProductsApiResponse;
 import com.abirami.model.Product;
+import com.abirami.model.ProductDTO;
 import com.abirami.util.ApiConstants;
 import com.abirami.util.ProductType;
 import com.abirami.util.ProductUtils;
@@ -47,7 +50,8 @@ public class AdminProductServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		
+		req.setAttribute("currentProductUri", req.getRequestURI());
+		req.setAttribute("currentProduct", req.getRequestURI().substring(1, 2).toUpperCase() + req.getRequestURI().substring(2));
 		if(null != req.getParameter("productId")) {
 			//get product for admin
 			getProductById(req);
@@ -111,14 +115,15 @@ public class AdminProductServlet extends HttpServlet {
 		    System.out.println("Success! " + response.getStatus());
 		    product = response.readEntity(Product.class);
 	    	if(null != product){
-	    		setBase64Image(product);
+	    		ProductDTO productDTO = new ProductDTO(product);
+	    		setBase64Image(productDTO);
+	    		req.setAttribute("product", productDTO);
 	    	}
-	    	req.setAttribute("product", product);
 		}
 		req.getRequestDispatcher("product-details.jsp").forward(req, res);
 	}
 
-	private void setBase64Image(Product product) throws IOException {
+	private void setBase64Image(ProductDTO product) throws IOException {
 		if(null != product.getImage() && product.getImage().length>0) {
 			product.setBase64Image(DatatypeConverter.printBase64Binary(product.getImage()));
 		}
@@ -138,9 +143,9 @@ public class AdminProductServlet extends HttpServlet {
 		Response response = request.get();
 
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
-			List<Category> categories = new ArrayList<Category>();
+			List<CategoryDTO> categories = new ArrayList<CategoryDTO>();
 		    System.out.println("Success! " + response.getStatus());
-		    categories = response.readEntity(new GenericType<List<Category>>() {});
+		    categories = response.readEntity(PaginatedCategoriesApiResponse.class).getCategories();
 		    req.setAttribute("categories", categories);
 		} else {
 			ProductUtils.setServletError(req, response);
@@ -164,8 +169,9 @@ public class AdminProductServlet extends HttpServlet {
 		    System.out.println("Success! " + response.getStatus());
 	    	Product product = response.readEntity(Product.class);
 	    	if(null != product){
-	    		setBase64Image(product);
-	    		req.setAttribute("product", product);
+	    		ProductDTO productDTO = new ProductDTO(product);
+	    		setBase64Image(productDTO);
+	    		req.setAttribute("product", productDTO);
 	    	}
 		} else {
 			ProductUtils.setServletError(req, response);
@@ -183,14 +189,14 @@ public class AdminProductServlet extends HttpServlet {
 
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
 		    System.out.println("Success! " + response.getStatus());
-		    List<Product> products = new ArrayList<Product>();
-	    	products = response.readEntity(new GenericType<List<Product>>() {});
+		    PaginatedProductsApiResponse apiResponse = new PaginatedProductsApiResponse();
+		    apiResponse = response.readEntity(new GenericType<PaginatedProductsApiResponse>() {});
 	    	//get categories to set in the filters
 	    	getCategories(req);
-	    	for(Product product : products) {
+	    	for(ProductDTO product : apiResponse.getProducts()) {
 	    		setBase64Image(product);
 	    	}
-	    	req.setAttribute("products", products);
+	    	req.setAttribute("products", apiResponse.getProducts());
 		} else {
 			ProductUtils.setServletError(req, response);
 		}

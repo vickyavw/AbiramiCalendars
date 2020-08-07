@@ -1,8 +1,10 @@
 package com.abirami.api.impl;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,7 +23,10 @@ import com.abirami.dao.ProductGenericDao;
 import com.abirami.dao.impl.CategoryGenericDaoImpl;
 import com.abirami.dao.impl.ProductGenericDaoImpl;
 import com.abirami.model.ApiError;
+import com.abirami.model.PaginatedProductsApiResponse;
 import com.abirami.model.Product;
+import com.abirami.util.ApiConstants;
+import com.abirami.util.ApiValidator;
 import com.abirami.util.ProductUtils;
 
 /**
@@ -35,22 +40,24 @@ import com.abirami.util.ProductUtils;
 public class ProductResourceImpl implements ProductResource {
 
 	@Override
-	public Response getProducts(String productType) {
+	public Response getProducts(String productType, String sortBy, String sortDirection, Integer pageSize, Integer pageNumber) {
 		ProductGenericDao productDao = new ProductGenericDaoImpl();
-		List<Product> products = new ArrayList<Product>();
+		PaginatedProductsApiResponse response = new PaginatedProductsApiResponse();
 		try {
+			if(!ApiValidator.isValidSortAttr(sortBy, sortDirection))
+				return ProductUtils.setApiBadRequestError(1001);
 			if(StringUtils.isNotBlank(productType)) {
 				//Filter by product type - calendars/diaries/labels etc
 				//Sending list of queryParams and list of paramValues
-				products = productDao.getAllByQueryParams(Arrays.asList("productType"), Arrays.asList(productType));
+				response = productDao.getAllByQueryParams(productType, new HashMap<String, Map<String,Object>>(), sortBy, sortDirection, pageSize, pageNumber);
 			}else {
 				//get all products
-				products = productDao.getAll();
+				response = productDao.getAll(sortBy, sortDirection, pageSize, pageNumber);
 			}
-			return Response.status(HttpStatus.SC_OK).entity(products).build();
+			return Response.status(HttpStatus.SC_OK).entity(response).build();
 		}
 		catch (Exception e) {
-			return ProductUtils.setApiError();
+			return ProductUtils.setApiServerError();
 		}
 	}
 
@@ -65,11 +72,10 @@ public class ProductResourceImpl implements ProductResource {
 		ProductGenericDao productDao = new ProductGenericDaoImpl();
 		try {
 			Product product = productDao.get(productId);
-			product.setCategoryName(product.getCategory().getDisplayName());
 			return Response.status(HttpStatus.SC_OK).entity(product).build();
 		}
 		catch (Exception e) {
-			return ProductUtils.setApiError();
+			return ProductUtils.setApiServerError();
 		}
 	}
 
@@ -93,7 +99,7 @@ public class ProductResourceImpl implements ProductResource {
 			return Response.status(HttpStatus.SC_OK).entity(product).build();
 		}
 		catch (Exception e) {
-			return ProductUtils.setApiError();
+			return ProductUtils.setApiServerError();
 		}
 	}
 
@@ -110,45 +116,19 @@ public class ProductResourceImpl implements ProductResource {
 	}
 
 	@Override
-	public Response getProductsByCategory(int categoryId, String productType) {
-		if(categoryId == 0) {
-			ApiError apiError = new ApiError();
-			apiError.setErrorCode(1001);
-			apiError.setErrorDescription("Category Id mandatory" );
-			return Response.status(HttpStatus.SC_BAD_REQUEST).entity(apiError).build();
-		}
+	public Response getProductsByCriteria(String productType, String queryParams, String sortBy, String sortDirection, Integer pageSize, Integer pageNumber) {
+		
 		ProductGenericDao productDao = new ProductGenericDaoImpl();
+		PaginatedProductsApiResponse response = new PaginatedProductsApiResponse();
 		try {
-			List<Product> products = null;
-			if(StringUtils.isNotBlank(productType)) {
-				//Sending list of queryParams and list of paramValues
-				products = productDao.getAllByQueryParams(Arrays.asList("category.categoryId", "productType"), Arrays.asList(categoryId, productType));
-			}
-			else {
-				products = productDao.getAllByQueryParams(Arrays.asList("category.categoryId"), Arrays.asList(categoryId));
-			}
-			return Response.status(HttpStatus.SC_OK).entity(products).build();
+			Map<String, Map<String, Object>> queryParamsMap = new HashMap<String, Map<String,Object>>(); 
+			populateQueryParamsMap(queryParams, queryParamsMap);
+			response = productDao.getAllByQueryParams(productType, queryParamsMap, sortBy, sortDirection, pageSize, pageNumber);
+			
+			return Response.status(HttpStatus.SC_OK).entity(response).build();
 		}
 		catch (Exception e) {
-			return ProductUtils.setApiError();
-		}
-	}
-
-	@Override
-	public Response getProductsInPriceRange(String productType, int priceMin, int priceMax) {
-		if(priceMax < priceMin) {
-			ApiError apiError = new ApiError();
-			apiError.setErrorCode(1001);
-			apiError.setErrorDescription("Max can't be less than min" );
-			return Response.status(HttpStatus.SC_BAD_REQUEST).entity(apiError).build();
-		}
-		ProductGenericDao productDao = new ProductGenericDaoImpl();
-		try {
-			List<Product> products = productDao.getAllInRange(productType, "price", BigDecimal.valueOf(priceMin), BigDecimal.valueOf(priceMax));
-			return Response.status(HttpStatus.SC_OK).entity(products).build();
-		}
-		catch (Exception e) {
-			return ProductUtils.setApiError();
+			return ProductUtils.setApiServerError();
 		}
 	}
 
@@ -164,15 +144,94 @@ public class ProductResourceImpl implements ProductResource {
 		List<Product> responseProducts = new ArrayList<Product>();
 		try {
 			Product product = productDao.get(productId);
-			product.setCategoryName(product.getCategory().getDisplayName());
 			responseProducts.add(product);
 			List<Product> products = productDao.getRelatedProducts(product, expectedCount);
 			responseProducts.addAll(products);
 			return Response.status(HttpStatus.SC_OK).entity(responseProducts).build();
 		}
 		catch (Exception e) {
-			return ProductUtils.setApiError();
+			return ProductUtils.setApiServerError();
 		}
+	}
+
+	//Add all the queryParam mapping here
+	private void populateQueryParamsMap(String queryParams, Map<String, Map<String, Object>> queryParamsMap) {
+		
+		if (StringUtils.isNotEmpty(queryParams)) {
+			try {
+				queryParams = URLDecoder.decode(queryParams, StandardCharsets.UTF_8.toString());
+		        String[] parameters = queryParams.split("&");
+		        for (String parameter : parameters) {
+		            String[] keyValuePair = parameter.split("=");
+		            /*
+		             * Adding only category and price filter for now
+		             * To add more filters when needed
+		             * Map of map Setup examples. Map will contain following keys with value examples
+		             * {exactMatch={category.categoryId=1}}
+		             * partialMatch - {displayName, test}, {}, {}
+		             * range - {price, {1,100}}, {}
+		             * in - {displayName, {'test', 'a', 'b', .....}}
+		             */
+		            if(null != ApiConstants.ALLOWED_EXACT_MATCH_QUERY_PARAMS_TO_CRITERIA.get(keyValuePair[0])) {
+		            	Map<String, Object> values = queryParamsMap.get("exactMatch");
+		            	if(null == values)
+		            		values = new HashMap<String, Object>();
+		            	if(StringUtils.isNumeric(keyValuePair[1]))
+		            		values.put(ApiConstants.ALLOWED_EXACT_MATCH_QUERY_PARAMS_TO_CRITERIA.get(keyValuePair[0]), Integer.parseInt(keyValuePair[1]));
+		            	else
+		            		values.put(ApiConstants.ALLOWED_EXACT_MATCH_QUERY_PARAMS_TO_CRITERIA.get(keyValuePair[0]), keyValuePair[1]);
+		            	queryParamsMap.put("exactMatch", values);
+		            }
+		            else if(null != ApiConstants.ALLOWED_RANGE_QUERY_PARAMS_TO_CRITERIA.get(keyValuePair[0])) {
+		            	Map<String, Object> values = queryParamsMap.get("range");
+		            	List<BigDecimal> priceMinMax = null;
+		            	
+		            	if(null == values) {
+		            		values = new HashMap<String, Object>();
+		            		priceMinMax = new ArrayList<BigDecimal>();
+		            	}
+		            	else if (values.get(ApiConstants.ALLOWED_RANGE_QUERY_PARAMS_TO_CRITERIA.get(keyValuePair[0])) == null) {
+		            		priceMinMax = new ArrayList<BigDecimal>();
+		            	}
+		            	else {
+		            		priceMinMax = (List<BigDecimal>) values.get(ApiConstants.ALLOWED_RANGE_QUERY_PARAMS_TO_CRITERIA.get(keyValuePair[0]));
+		            	}
+		            	
+		            	priceMinMax.add(new BigDecimal(keyValuePair[1]));
+		            	values.put(ApiConstants.ALLOWED_RANGE_QUERY_PARAMS_TO_CRITERIA.get(keyValuePair[0]), priceMinMax);
+		            	queryParamsMap.put("range", values);
+		            }
+		            else if(null != ApiConstants.ALLOWED_PARTIAL_MATCH_QUERY_PARAMS_TO_CRITERIA.get(keyValuePair[0])) {
+		            	Map<String, Object> values = queryParamsMap.get("partialMatch");
+		            	if(null == values)
+		            		values = new HashMap<String, Object>();
+		            	values.put(ApiConstants.ALLOWED_PARTIAL_MATCH_QUERY_PARAMS_TO_CRITERIA.get(keyValuePair[0]), keyValuePair[1]);
+		            	queryParamsMap.put("partialMatch", values);
+		            }
+		            else if(null != ApiConstants.ALLOWED_IN_QUERY_PARAMS_TO_CRITERIA.get(keyValuePair[0])) {
+		            	Map<String, Object> values = queryParamsMap.get("in");
+		            	List<Object> priceMinMax = null;
+		            	
+		            	if(null == values) {
+		            		values = new HashMap<String, Object>();
+		            	}
+		            	else if (values.get(ApiConstants.ALLOWED_IN_QUERY_PARAMS_TO_CRITERIA.get(keyValuePair[0])) == null) {
+		            		priceMinMax = new ArrayList<>();
+		            	}
+		            	else {
+		            		priceMinMax = (List<Object>) values.get(ApiConstants.ALLOWED_RANGE_QUERY_PARAMS_TO_CRITERIA.get(keyValuePair[0]));
+		            	}
+		            	
+		            	priceMinMax.add(new BigDecimal(keyValuePair[1]));
+		            	values.put(ApiConstants.ALLOWED_RANGE_QUERY_PARAMS_TO_CRITERIA.get(keyValuePair[0]), priceMinMax);
+		            	queryParamsMap.put("in", values);
+		            }
+		        }
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    }
 	}
 
 }

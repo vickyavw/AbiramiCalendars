@@ -1,27 +1,44 @@
 package com.abirami.dao.impl;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 
 import com.abirami.dao.HibernateConfig;
 import com.abirami.dao.ProductGenericDao;
+import com.abirami.model.PaginatedProductsApiResponse;
 import com.abirami.model.Product;
+import com.abirami.model.ProductDTO;
 
 public class ProductGenericDaoImpl implements ProductGenericDao {
 	
 	@Override
-	public List<Product> getAll() {
+	public PaginatedProductsApiResponse getAll(String sortBy, String sortDirection, Integer pageSize, Integer pageNumber) {
 		Session session = null;
 		List<Product> products = null;
+		PaginatedProductsApiResponse response = new PaginatedProductsApiResponse();
 		try {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
-			products = session.createQuery("from Product order by displayName asc").list();
+			
+			products = session.createQuery("from Product order by "+sortBy+" "+sortDirection)
+									.setFirstResult((pageNumber-1) * pageSize)
+									.setMaxResults(pageSize)
+									.list();
+			
+			response.setResultSize(getTotalRecords(null));
+			response.setPageNumber(pageNumber);
+			response.setPageSize(pageSize);
+			response.setProducts(products.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList()));
 		}
 		catch(Exception e) {
 			throw e;
@@ -30,7 +47,7 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 			if(null != session)
 				session.close();
 		}
-		return products;
+		return response;
 	}
 
 	@Override
@@ -41,6 +58,7 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
 			product = session.get(Product.class,id);
+			product.setCategoryName(product.getCategory().getDisplayName());
 		}
 		catch(Exception e) {
 			throw e;
@@ -93,20 +111,62 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 	}
 
 	@Override
-	public <T> List<Product> getAllByQueryParams(List<String> queryParam, List<T> value) {
+	public PaginatedProductsApiResponse getAllByQueryParams(String productType, 
+			Map<String, Map<String, Object>> queryParamsMap, 
+			String sortBy,  
+			String sortDirection, 
+			Integer pageSize, 
+			Integer pageNumber) {
+
 		Session session = null;
+		PaginatedProductsApiResponse response = new PaginatedProductsApiResponse();
 		List<Product> products = null;
 		try {
 			Conjunction conjunction = Restrictions.conjunction();
-			for(int i=0;i<queryParam.size();i++) {
-				conjunction.add(Restrictions.eq(queryParam.get(i), value.get(i)));
+			if(StringUtils.isNotEmpty(productType)) {
+				conjunction.add(Restrictions.eq("productType", productType));
+			}
+			for (Entry<String, Map<String, Object>> entry : queryParamsMap.entrySet()) {
+				if("exactMatch".equals(entry.getKey())){
+					//adding equal criteria
+					for( Entry<String, Object> entryList :entry.getValue().entrySet()) {
+						conjunction.add(Restrictions.eq(entryList.getKey(), entryList.getValue()));
+					}
+				}
+				else if("partialMatch".equals(entry.getKey())){
+					//adding equal criteria
+					for( Entry<String, Object> entryList :entry.getValue().entrySet()) {
+						conjunction.add(Restrictions.like(entryList.getKey(), entryList.getValue()));
+					}
+				}
+				else if("range".equals(entry.getKey())){
+					//adding equal criteria
+					for( Entry<String, Object> entryList :entry.getValue().entrySet()) {
+						List ranges = (List) entryList.getValue();
+						conjunction.add(Restrictions.between(entryList.getKey(), ranges.get(0), ranges.get(1)));
+					}
+				}
+				else if("in".equals(entry.getKey())){
+					//adding equal criteria
+					for( Entry<String, Object> entryList :entry.getValue().entrySet()) {
+						conjunction.add(Restrictions.in(entryList.getKey(), entryList.getValue()));
+					}
+				}
+				
 			}
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
 			products = session.createCriteria(Product.class)
 								.add(conjunction)
-								.addOrder(Order.asc("displayName"))
+								.addOrder("desc".equals(sortDirection)?Order.desc(sortBy):Order.asc(sortBy))
+								.setFirstResult((pageNumber-1) * pageSize)
+								.setMaxResults(pageSize)
 								.list();
+			
+			response.setResultSize(getTotalRecords(conjunction));
+			response.setPageNumber(pageNumber);
+			response.setPageSize(pageSize);
+			response.setProducts(products.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList()));
 		}
 		catch(Exception e) {
 			throw e;
@@ -115,12 +175,13 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 			if(null != session)
 				session.close();
 		}
-		return products;
+		return response;
 	}
 
 	@Override
-	public <T> List<Product> getAllInRange(String productType, String keyQuery, T min, T max) {
+	public <T> PaginatedProductsApiResponse getAllInRange(String productType, String keyQuery, T min, T max, String sortBy, String sortDirection, Integer pageSize, Integer pageNumber) {
 		Session session = null;
+		PaginatedProductsApiResponse response = new PaginatedProductsApiResponse();
 		List<Product> products = null;
 		try {
 			Conjunction conjunction = Restrictions.conjunction();
@@ -132,8 +193,15 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 			session.beginTransaction();
 			products = session.createCriteria(Product.class)
 								.add(conjunction)
-								.addOrder(Order.asc("displayName"))
+								.addOrder("desc".equals(sortDirection)?Order.desc(sortBy):Order.asc(sortBy))
+								.setFirstResult((pageNumber-1) * pageSize)
+								.setMaxResults(pageSize)
 								.list();
+			
+			response.setResultSize(getTotalRecords(conjunction));
+			response.setPageNumber(pageNumber);
+			response.setPageSize(pageSize);
+			response.setProducts(products.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList()));
 		}
 		catch(Exception e) {
 			throw e;
@@ -142,7 +210,7 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 			if(null != session)
 				session.close();
 		}
-		return products;
+		return response;
 	}
 
 	@Override
@@ -173,6 +241,35 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 				session.close();
 		}
 		return products;
+	}
+	
+	private int getTotalRecords(Conjunction conjunction) {
+		Integer rowCount = 0;
+		Session session = null;
+		try {
+			session = HibernateConfig.getSessionFactory().openSession();
+			session.beginTransaction();
+			Criteria criteria = session.createCriteria(Product.class);
+			if(null != conjunction)
+				criteria.add(conjunction);
+			criteria.setProjection(Projections.rowCount());
+            
+            List records = criteria.list();
+            if (records!=null) {
+                rowCount = ((Long) records.get(0)).intValue();
+                System.out.println("Total Results:" + rowCount);
+            }
+             
+            session.getTransaction().commit();
+		}
+		catch(Exception e) {
+			throw e;
+		}
+		finally {
+			if(null != session)
+				session.close();
+		}
+		return rowCount;
 	}
 
 }

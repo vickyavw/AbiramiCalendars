@@ -1,13 +1,17 @@
 package com.abirami.api;
 
+import javax.validation.constraints.NotBlank;
 import javax.ws.rs.DELETE;
+import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import com.abirami.model.Product;
 
@@ -18,7 +22,12 @@ import com.abirami.model.Product;
 public interface ProductResource {
 	@GET
 	@Path("/")
-	public Response getProducts(@QueryParam("productType") String productType);
+	public Response getProducts(@QueryParam("productType") String productType, 
+			@QueryParam("sortBy") @DefaultValue("displayName") String sortBy, 
+			@QueryParam("sortDirection") @DefaultValue("asc") String sortDirection,
+			@QueryParam("pageSize") @DefaultValue("50") Integer pageSize,
+			@QueryParam("pageNumber") @DefaultValue("1") Integer pageNumber
+			);
 	
 	@GET
 	@Path("/{productId}")
@@ -37,12 +46,13 @@ public interface ProductResource {
 	public Response deleteProduct(@PathParam("productId") int productId);
 	
 	@GET
-	@Path("/category/{categoryId}")
-	public Response getProductsByCategory(@PathParam("categoryId") int categoryId, @QueryParam("productType") String productType);
-	
-	@GET
-	@Path("/price/")
-	public Response getProductsInPriceRange(@QueryParam("productType") String productType, @QueryParam("priceMin") int priceMin, @QueryParam("priceMax") int priceMax);
+	@Path("/query")
+	public <T> Response getProductsByCriteria(@QueryParam("productType") String productType, 
+			@QueryParam("queryParams") String queryParams,
+			@QueryParam("sortBy") @DefaultValue("displayName") String sortBy, 
+			@QueryParam("sortDirection") @DefaultValue("asc") String sortDirection,
+			@QueryParam("pageSize") @DefaultValue("50") Integer pageSize,
+			@QueryParam("pageNumber") @DefaultValue("1") Integer pageNumber);
 	
 	@GET
 	@Path("/related/{productId}")

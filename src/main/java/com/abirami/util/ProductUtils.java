@@ -9,11 +9,18 @@ import com.abirami.model.ApiError;
 
 public class ProductUtils {
 
-	public static Response setApiError() {
+	public static Response setApiServerError() {
 		ApiError apiError = new ApiError();
 		apiError.setErrorCode(2001);
 		apiError.setErrorDescription("server error" );
 		return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(apiError).build();
+	}
+	
+	public static Response setApiBadRequestError(int code) {
+		ApiError apiError = new ApiError();
+		apiError.setErrorCode(code);
+		apiError.setErrorDescription("server error" );
+		return Response.status(HttpStatus.SC_BAD_REQUEST).entity(apiError).build();
 	}
 	
 	public static void setServletError(HttpServletRequest req, Response response) {

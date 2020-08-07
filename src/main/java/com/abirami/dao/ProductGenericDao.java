@@ -1,12 +1,17 @@
 package com.abirami.dao;
 
 import java.util.List;
+import java.util.Map;
 
+import com.abirami.model.PaginatedProductsApiResponse;
 import com.abirami.model.Product;
 
 public interface ProductGenericDao {
 
-	List<Product> getAll();
+	PaginatedProductsApiResponse getAll(final String sortBy, 
+			final String sortDirection, 
+			final Integer pageSize,
+			final Integer pageNumber);
 	
 	Product get(final int id);
 	
@@ -14,13 +19,25 @@ public interface ProductGenericDao {
 	
 	List<Product> getListOfIds(final List<Integer> ids);
 	
-	//Making it generic list to support any type of values
-	<T> List<Product> getAllByQueryParams(final List<String> queryParam, final List<T> value);
+	//Making it generic Object to support any type of values
+	PaginatedProductsApiResponse getAllByQueryParams(final String productType, final Map<String, Map<String, Object>> queryParamsMap,
+			final String sortBy, 
+			final String sortDirection, 
+			final Integer pageSize,
+			final Integer pageNumber);
 	
 	//Making it generic to support any value in range
-	<T> List<Product> getAllInRange(final String productType, final String keyQuery, final T min, final T max);
+	<T> PaginatedProductsApiResponse getAllInRange(final String productType, 
+			final String keyQuery, 
+			final T min, 
+			final T max,
+			final String sortBy, 
+			final String sortDirection, 
+			final Integer pageSize,
+			final Integer pageNumber);
 	
-	List<Product> getRelatedProducts(final Product product, final int expectedCount);
+	List<Product> getRelatedProducts(final Product product, 
+			final int expectedCount);
 	
 	//<Product> void saveOrUpdate(final Product object);
 }
