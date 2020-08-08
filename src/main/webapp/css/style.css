@@ -3144,7 +3144,7 @@ ol {
 	width: 100%;
 }
 
-/*--------------------------------- Responsive Media Quaries -----------------------------*/
+/*--------------------------------- Responsive Media Queries -----------------------------*/
 
 @media only screen and (min-width: 1600px) and (max-width: 1900px) {
 	.header {
@@ -3163,7 +3163,7 @@ ol {
 
 @media only screen and (min-width: 1200px) {
 	.container {
-		max-width: 1170px;
+		max-width: 95%;
 	}
 }
 
