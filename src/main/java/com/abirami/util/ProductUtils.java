@@ -1,6 +1,7 @@
 package com.abirami.util;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.HttpStatus;
@@ -24,7 +25,7 @@ public class ProductUtils {
 	}
 	
 	public static void setServletError(HttpServletRequest req, Response response) {
-		ApiError error = response.readEntity(ApiError.class);
+		ApiError error = response.readEntity(new GenericType<ApiError>() {});
 		System.out.println("ERROR! " + response.getStatus());    
 		System.out.println(response.getStatus() + " : " +response.getStatusInfo().getReasonPhrase());
 		req.setAttribute("errorCode", error.getErrorCode());

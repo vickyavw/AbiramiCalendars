@@ -19,12 +19,15 @@ import org.apache.commons.lang3.StringUtils;
 
 import com.abirami.api.ProductResource;
 import com.abirami.dao.CategoryGenericDao;
+import com.abirami.dao.FormatGenericDao;
 import com.abirami.dao.ProductGenericDao;
 import com.abirami.dao.impl.CategoryGenericDaoImpl;
+import com.abirami.dao.impl.FormatGenericDaoImpl;
 import com.abirami.dao.impl.ProductGenericDaoImpl;
 import com.abirami.model.ApiError;
 import com.abirami.model.PaginatedProductsApiResponse;
 import com.abirami.model.Product;
+import com.abirami.model.ProductDTO;
 import com.abirami.util.ApiConstants;
 import com.abirami.util.ApiValidator;
 import com.abirami.util.ProductUtils;
@@ -71,7 +74,7 @@ public class ProductResourceImpl implements ProductResource {
 		}
 		ProductGenericDao productDao = new ProductGenericDaoImpl();
 		try {
-			Product product = productDao.get(productId);
+			ProductDTO product = productDao.get(productId);
 			return Response.status(HttpStatus.SC_OK).entity(product).build();
 		}
 		catch (Exception e) {
@@ -81,21 +84,25 @@ public class ProductResourceImpl implements ProductResource {
 
 	@Override
 	public Response addProduct(Product product) {
-		if(null == product || null == product.getCategoryName()) {
+		if(null == product || null == product.getCategoryName() || null == product.getFormatName()) {
 			ApiError apiError = new ApiError();
 			apiError.setErrorCode(1001);
-			apiError.setErrorDescription("Product mandatory" );
+			apiError.setErrorDescription("Mandatory Params missing" );
 			return Response.status(HttpStatus.SC_BAD_REQUEST).entity(apiError).build();
 		}
 		CategoryGenericDao categoryDao = new CategoryGenericDaoImpl();
 		ProductGenericDao productDao = new ProductGenericDaoImpl();
+		FormatGenericDao formatDao = new FormatGenericDaoImpl();
 		try {
-			//get Category by categoryId and set in the product before saving the product.
+			//get Category by categoryId sent in categoryName and set in the product before saving the product.
 			product.setCategory(categoryDao.get(Integer.valueOf(product.getCategoryName())));
+			//get Format by formatId sent in formatName and set in the product before saving the product.
+			product.setFormat(formatDao.get(Integer.valueOf(product.getFormatName())));
 			int id = productDao.save(product);
 			product.setProductId(id);
 			//setting the correct product name in the response
-			product.setCategoryName(product.getCategory().getDisplayName());
+			product.setCategoryName(product.getCategory().getCategoryName());
+			product.setFormatName(product.getFormat().getFormatName());
 			return Response.status(HttpStatus.SC_OK).entity(product).build();
 		}
 		catch (Exception e) {
@@ -141,11 +148,11 @@ public class ProductResourceImpl implements ProductResource {
 			return Response.status(HttpStatus.SC_BAD_REQUEST).entity(apiError).build();
 		}
 		ProductGenericDao productDao = new ProductGenericDaoImpl();
-		List<Product> responseProducts = new ArrayList<Product>();
+		List<ProductDTO> responseProducts = new ArrayList<ProductDTO>();
 		try {
-			Product product = productDao.get(productId);
+			ProductDTO product = productDao.get(productId);
 			responseProducts.add(product);
-			List<Product> products = productDao.getRelatedProducts(product, expectedCount);
+			List<ProductDTO> products = productDao.getRelatedProducts(product, expectedCount);
 			responseProducts.addAll(products);
 			return Response.status(HttpStatus.SC_OK).entity(responseProducts).build();
 		}

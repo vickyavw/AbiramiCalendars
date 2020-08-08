@@ -3,7 +3,7 @@ package com.abirami.model;
 public class CategoryDTO {
 
 	private Integer categoryId;
-	private String displayName;
+	private String categoryName;
 	private String description;
 
 	public CategoryDTO() {
@@ -13,7 +13,7 @@ public class CategoryDTO {
 	public CategoryDTO(Category category) {
 		super();
 		this.categoryId = category.getCategoryId();
-		this.displayName = category.getDisplayName();
+		this.categoryName = category.getCategoryName();
 		this.description = category.getDescription();
 	}
 
@@ -25,12 +25,12 @@ public class CategoryDTO {
 		this.categoryId = categoryId;
 	}
 	
-	public String getDisplayName() {
-		return displayName;
+	public String getCategoryName() {
+		return categoryName;
 	}
 	
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 	
 	public String getDescription() {

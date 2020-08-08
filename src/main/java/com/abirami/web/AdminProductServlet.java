@@ -28,6 +28,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.abirami.model.CategoryDTO;
+import com.abirami.model.FormatDTO;
 import com.abirami.model.PaginatedCategoriesApiResponse;
 import com.abirami.model.PaginatedProductsApiResponse;
 import com.abirami.model.Product;
@@ -68,6 +69,7 @@ public class AdminProductServlet extends HttpServlet {
 			//If Admin request
 			//get categories to load the admin add product's category drop down
 			getCategories(req);
+			getFormats(req);
 			//set productTypes
 			req.setAttribute("productTypes", Arrays.asList(ProductType.values()));
 			req.getRequestDispatcher("admin-product.jsp").forward(req, res);
@@ -79,6 +81,7 @@ public class AdminProductServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		String name = req.getParameter("productName");
 		String desc = req.getParameter("productDesc");
+		String formatId = req.getParameter("formatId");
 		String categoryId = req.getParameter("categoryId");
 		String productType = req.getParameter("productType");
 		String price = req.getParameter("price");
@@ -89,7 +92,7 @@ public class AdminProductServlet extends HttpServlet {
 		request.accept(MediaType.APPLICATION_JSON);
 		
 		Product product = new Product();
-		product.setDisplayName(name);
+		product.setProductName(name);
 		product.setDescription(desc);
 		InputStream stream;
 		if(req.getPart("file").getSize()>0){
@@ -105,8 +108,9 @@ public class AdminProductServlet extends HttpServlet {
 			categoryId = "1";
 		}
 		
-		//Sending categoryId as name because of JsonIgnore on category object due to cyclic dependency
+		//Sending categoryId and formatId as name because of JsonIgnore on category object due to cyclic dependency
 		product.setCategoryName(categoryId);
+		product.setFormatName(formatId);
 		product.setProductType(ProductType.valueOf(productType).toString());
 		
 		Response response = request.post(Entity.entity(product,MediaType.APPLICATION_JSON),Response.class);
@@ -147,6 +151,25 @@ public class AdminProductServlet extends HttpServlet {
 		    System.out.println("Success! " + response.getStatus());
 		    categories = response.readEntity(PaginatedCategoriesApiResponse.class).getCategories();
 		    req.setAttribute("categories", categories);
+		} else {
+			ProductUtils.setServletError(req, response);
+		}
+	}
+	
+	private void getFormats(HttpServletRequest req) {
+		Client client = ClientBuilder.newClient();
+		WebTarget resource = client.target(ApiConstants.FORMATS_API_URL);
+		
+		Builder request = resource.request();
+		request.accept(MediaType.APPLICATION_JSON);
+		
+		Response response = request.get();
+
+		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
+			List<FormatDTO> formats = new ArrayList<FormatDTO>();
+		    System.out.println("Success! " + response.getStatus());
+		    formats = response.readEntity(new GenericType<List<FormatDTO>>() {});
+		    req.setAttribute("formats", formats);
 		} else {
 			ProductUtils.setServletError(req, response);
 		}

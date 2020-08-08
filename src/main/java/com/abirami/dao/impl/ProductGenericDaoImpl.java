@@ -51,14 +51,15 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 	}
 
 	@Override
-	public Product get(int id) {
+	public ProductDTO get(int id) {
 		Session session = null;
 		Product product = null;
 		try {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
 			product = session.get(Product.class,id);
-			product.setCategoryName(product.getCategory().getDisplayName());
+			product.setCategoryName(product.getCategory().getCategoryName());
+			product.setFormatName(product.getFormat().getFormatName());
 		}
 		catch(Exception e) {
 			throw e;
@@ -67,7 +68,7 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 			if(null != session)
 				session.close();
 		}
-		return product;
+		return new ProductDTO(product);
 	}
 
 	@Override
@@ -214,7 +215,7 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 	}
 
 	@Override
-	public List<Product> getRelatedProducts(Product product, int expectedCount) {
+	public List<ProductDTO> getRelatedProducts(ProductDTO product, int expectedCount) {
 		Session session = null;
 		List<Product> products = null;
 		try {
@@ -222,8 +223,10 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 			conjunction.add(Restrictions.ne("productId", product.getProductId()));
 			if(StringUtils.isNotBlank(product.getProductType()))
 				conjunction.add(Restrictions.eq("productType", product.getProductType()));
-			if(null != product.getCategory() && null != product.getCategory().getCategoryId())
-				conjunction.add(Restrictions.eq("category.categoryId", product.getCategory().getCategoryId()));
+			if(null != product.getFormatId())
+				conjunction.add(Restrictions.eq("format.formatId", product.getFormatId()));
+			if(null != product.getCategoryId())
+				conjunction.add(Restrictions.eq("category.categoryId", product.getCategoryId()));
 			
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
@@ -240,7 +243,7 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 			if(null != session)
 				session.close();
 		}
-		return products;
+		return products.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList());
 	}
 	
 	private int getTotalRecords(Conjunction conjunction) {

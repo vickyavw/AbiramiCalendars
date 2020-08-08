@@ -5,6 +5,7 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
 
 import com.abirami.model.Category;
+import com.abirami.model.Format;
 import com.abirami.model.Product;
 
 public class HibernateConfig {
@@ -15,6 +16,7 @@ public class HibernateConfig {
 
         configuration.addAnnotatedClass(Product.class);
         configuration.addAnnotatedClass(Category.class);
+        configuration.addAnnotatedClass(Format.class);
         configuration.setProperty("hibernate.connection.driver_class","com.mysql.jdbc.Driver");
         configuration.setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/abirami_traders");                                
         configuration.setProperty("hibernate.connection.username", "springuser");     

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.abirami.model.PaginatedProductsApiResponse;
 import com.abirami.model.Product;
+import com.abirami.model.ProductDTO;
 
 public interface ProductGenericDao {
 
@@ -13,7 +14,7 @@ public interface ProductGenericDao {
 			final Integer pageSize,
 			final Integer pageNumber);
 	
-	Product get(final int id);
+	ProductDTO get(final int id);
 	
 	int save(final Product product);
 	
@@ -36,7 +37,7 @@ public interface ProductGenericDao {
 			final Integer pageSize,
 			final Integer pageNumber);
 	
-	List<Product> getRelatedProducts(final Product product, 
+	List<ProductDTO> getRelatedProducts(final ProductDTO product, 
 			final int expectedCount);
 	
 	//<Product> void saveOrUpdate(final Product object);

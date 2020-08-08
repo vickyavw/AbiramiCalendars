@@ -30,12 +30,21 @@
 						    </c:forEach>
 						</select>
 					</td>
+				</tr>	
+				<tr><td>Format </td>
+					<td>	
+						<select name="formatId" id="formatId">
+						    <c:forEach items="${formats}" var="format">
+						        <option value="${format.formatId}">${format.formatName}</option>
+						    </c:forEach>
+						</select>
+					</td>
 				</tr>			
 				<tr><td>Category </td>
 					<td>
 					<select name="categoryId" id="categoryId">
 					    <c:forEach items="${categories}" var="category">
-					        <option value="${category.categoryId}">${category.displayName}</option>
+					        <option value="${category.categoryId}">${category.categoryName}</option>
 					    </c:forEach>
 					</select>
 					</td>

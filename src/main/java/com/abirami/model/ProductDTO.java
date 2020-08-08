@@ -8,7 +8,7 @@ public class ProductDTO {
 
 	private Integer productId;
 	
-	private String displayName;
+	private String productName;
 	
 	private String description;
 	
@@ -22,7 +22,13 @@ public class ProductDTO {
 	
 	private String base64Image;
 	
+	private Integer categoryId;
+	
 	private String categoryName;
+	
+	private Integer formatId;
+	
+	private String formatName;
 	
 	public ProductDTO() {
 		
@@ -31,13 +37,20 @@ public class ProductDTO {
 	public ProductDTO(Product product) {
 		super();
 		this.productId = product.getProductId();
-		this.displayName = product.getDisplayName();
+		this.productName = product.getProductName();
 		this.description = product.getDescription();
 		this.productType = product.getProductType();
 		this.image = product.getImage();
 		this.price = product.getPrice();
 		this.availabilityCount = product.getAvailabilityCount();
+		if(null != product.getCategory()) {
+			this.categoryId = product.getCategory().getCategoryId();
+		}
 		this.categoryName = product.getCategoryName();
+		if(null != product.getFormat()) {
+			this.formatId = product.getFormat().getFormatId();
+		}
+		this.formatName = product.getFormatName();
 	}
 	
 	public Integer getProductId() {
@@ -48,12 +61,12 @@ public class ProductDTO {
 		this.productId = productId;
 	}
 	
-	public String getDisplayName() {
-		return displayName;
+	public String getProductName() {
+		return productName;
 	}
 	
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 	
 	public String getDescription() {
@@ -104,12 +117,36 @@ public class ProductDTO {
 		this.base64Image = base64Image;
 	}
 
+	public Integer getCategoryId() {
+		return categoryId;
+	}
+
+	public void setCategoryId(Integer categoryId) {
+		this.categoryId = categoryId;
+	}
+
 	public String getCategoryName() {
 		return categoryName;
 	}
 
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
+	}
+
+	public Integer getFormatId() {
+		return formatId;
+	}
+
+	public void setFormatId(Integer formatId) {
+		this.formatId = formatId;
+	}
+
+	public String getFormatName() {
+		return formatName;
+	}
+
+	public void setFormatName(String formatName) {
+		this.formatName = formatName;
 	}
 
 	@Override
