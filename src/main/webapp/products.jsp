@@ -216,6 +216,19 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="sidebar__categories">
+                        	<div class="section-title">
+                                <h4>Sort By</h4>
+                            </div>
+                            <div class="card-size__list">
+                                <a href="#" style="font-size: 14px; color: #444444; display: block; padding-top: 6px; padding-left: 16px;line-height: 30px;"> Price: High to Low </a>
+                                <a href="#" style="font-size: 14px; color: #444444; display: block; padding-top: 6px; padding-left: 16px;line-height: 30px;"> Price: Low to High </a>
+                                <a href="#" style="font-size: 14px; color: #444444; display: block; padding-top: 6px; padding-left: 16px;line-height: 30px;"> Name: Ascending </a>
+                                <a href="#" style="font-size: 14px; color: #444444; display: block; padding-top: 6px; padding-left: 16px;line-height: 30px;"> Name: Descending </a>
+                                <a href="#" style="font-size: 14px; color: #444444; display: block; padding-top: 6px; padding-left: 16px;line-height: 30px;"> Newest First </a>
+                                <a href="#" style="font-size: 14px; color: #444444; display: block; padding-top: 6px; padding-left: 16px;line-height: 30px;"> Discount </a>
+                            </div>
+	                	</div>
                         <div class="sidebar__filter">
                             <div class="section-title">
                                 <h4>Shop by price</h4>
