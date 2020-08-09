@@ -171,7 +171,7 @@
                                                 <ul>
                                                 	<li class="active"><a href="${currentProductUri}">All</a></li>
                                                     <c:forEach items="${categories}" var="category">
-							                        	<li><a href="${currentProductUri}?categoryId=${category.categoryId}">${category.displayName}</a></li>
+							                        	<li><a href="${currentProductUri}?categoryId=${category.categoryId}">${category.categoryName}</a></li>
 								                    </c:forEach>
                                                 </ul>
                                             </div>
@@ -310,7 +310,7 @@
 		                                    </ul>
 	                                </div>
 	                                <div class="product__item__text">
-	                                    <h6>${product.displayName}</h6>
+	                                    <h6>${product.productName}</h6>
 	                                    <div class="product__price">Rs.${product.price}</div>
 	                                </div>
 	                            </div>

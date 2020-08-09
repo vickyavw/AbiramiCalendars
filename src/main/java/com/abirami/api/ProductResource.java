@@ -1,6 +1,5 @@
 package com.abirami.api;
 
-import javax.validation.constraints.NotBlank;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
@@ -9,9 +8,7 @@ import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
 import com.abirami.model.Product;
 
@@ -23,7 +20,7 @@ public interface ProductResource {
 	@GET
 	@Path("/")
 	public Response getProducts(@QueryParam("productType") String productType, 
-			@QueryParam("sortBy") @DefaultValue("displayName") String sortBy, 
+			@QueryParam("sortBy") @DefaultValue("productName") String sortBy, 
 			@QueryParam("sortDirection") @DefaultValue("asc") String sortDirection,
 			@QueryParam("pageSize") @DefaultValue("50") Integer pageSize,
 			@QueryParam("pageNumber") @DefaultValue("1") Integer pageNumber
@@ -49,7 +46,7 @@ public interface ProductResource {
 	@Path("/query")
 	public <T> Response getProductsByCriteria(@QueryParam("productType") String productType, 
 			@QueryParam("queryParams") String queryParams,
-			@QueryParam("sortBy") @DefaultValue("displayName") String sortBy, 
+			@QueryParam("sortBy") @DefaultValue("productName") String sortBy, 
 			@QueryParam("sortDirection") @DefaultValue("asc") String sortDirection,
 			@QueryParam("pageSize") @DefaultValue("50") Integer pageSize,
 			@QueryParam("pageNumber") @DefaultValue("1") Integer pageNumber);

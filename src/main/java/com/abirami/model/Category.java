@@ -9,6 +9,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -33,14 +34,17 @@ public class Category {
 	private Integer categoryId;
 	
 	@Column(name = "display_name")
-	private String displayName;
+	private String categoryName;
 	
 	@Column
 	private String description;
 	
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JsonManagedReference
+	@JsonManagedReference("category")
 	private Set<Product> products;
+	
+	@ManyToMany(mappedBy = "categories")
+	private Set<Format> formats;
 	
 	public Integer getCategoryId() {
 		return categoryId;
@@ -50,12 +54,12 @@ public class Category {
 		this.categoryId = categoryId;
 	}
 	
-	public String getDisplayName() {
-		return displayName;
+	public String getCategoryName() {
+		return categoryName;
 	}
 	
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
+	public void setCategoryName(String categoryName) {
+		this.categoryName = categoryName;
 	}
 	
 	public String getDescription() {
@@ -65,13 +69,21 @@ public class Category {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
+
 	public Set<Product> getProducts() {
 		return products;
 	}
 
 	public void setProducts(Set<Product> products) {
 		this.products = products;
+	}
+
+	public Set<Format> getFormats() {
+		return formats;
+	}
+
+	public void setFormats(Set<Format> formats) {
+		this.formats = formats;
 	}
 
 	@Override

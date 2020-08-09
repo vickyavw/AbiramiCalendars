@@ -95,7 +95,7 @@ public class CategoryServlet extends HttpServlet {
 		request.accept(MediaType.APPLICATION_JSON);
 		
 		Category category = new Category();
-		category.setDisplayName(name);
+		category.setCategoryName(name);
 		category.setDescription(desc);
 		
 		Response response = request.post(Entity.entity(category,MediaType.APPLICATION_JSON),Response.class);

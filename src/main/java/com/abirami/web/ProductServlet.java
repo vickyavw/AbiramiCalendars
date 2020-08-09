@@ -176,11 +176,10 @@ public class ProductServlet extends HttpServlet {
 	
 			if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
 			    System.out.println("Success! " + response.getStatus());
-		    	Product product = response.readEntity(Product.class);
+			    ProductDTO product = response.readEntity(ProductDTO.class);
 		    	if(null != product){
-		    		ProductDTO productDTO = new ProductDTO(product);
-		    		setBase64Image(productDTO);
-		    		req.setAttribute("product", productDTO);
+		    		setBase64Image(product);
+		    		req.setAttribute("product", product);
 		    	}
 			} else {
 				ProductUtils.setServletError(req, response);
@@ -207,18 +206,17 @@ public class ProductServlet extends HttpServlet {
 
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
 		    System.out.println("Success! " + response.getStatus());
-		    List<Product> responseMap = response.readEntity(new GenericType<List<Product>>() {});
-		    List<ProductDTO> dtoMap = responseMap.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList());
-		    ProductDTO product = dtoMap.get(0);
+		    List<ProductDTO> responseMap = response.readEntity(new GenericType<List<ProductDTO>>() {});
+		    ProductDTO product = responseMap.get(0);
 		    if(null != product){
 	    		setBase64Image(product);
 	    		req.setAttribute("product", product);
 	    	}
-		    dtoMap.remove(0);
-	    	for(ProductDTO relatedProduct : dtoMap) {
+		    responseMap.remove(0);
+	    	for(ProductDTO relatedProduct : responseMap) {
 	    		setBase64Image(relatedProduct);
 	    	}
-		    req.setAttribute("relatedProducts", dtoMap);
+		    req.setAttribute("relatedProducts", responseMap);
 		} else {
 			ProductUtils.setServletError(req, response);
 		}

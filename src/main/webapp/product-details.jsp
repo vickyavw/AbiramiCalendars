@@ -121,7 +121,7 @@
                     <div class="breadcrumb__links">
                         <a href="/"><i class="fa fa-home"></i> Home</a>
                         <a href="${currentProductUri}">${currentProduct} </a>
-                        <span>${product.displayName}</span>
+                        <span>${product.productName}</span>
                     </div>
                 </div>
             </div>
@@ -161,7 +161,7 @@
                 </div>
                 <div class="col-lg-6">
                     <div class="product__details__text">
-                        <h3>${product.displayName} <span>${product.description}</span></h3>
+                        <h3>${product.productName} <span>${product.description}</span></h3>
                         <fmt:formatNumber var="beforeDiscount" type="number" minFractionDigits="2" maxFractionDigits="2" value="${product.price * 1.1}" />
                         <div class="product__details__price">Rs. ${product.price} <span>Rs. ${beforeDiscount}</span></div>
                         <p>${product.categoryName}</p>
@@ -256,7 +256,7 @@
 	                            </ul>
 	                        </div>
 	                        <div class="product__item__text">
-	                           	<h6><a href="${currentProductUri}?productId=${product.productId}&getRelated=4">${product.displayName}</a></h6>
+	                           	<h6><a href="${currentProductUri}?productId=${product.productId}&getRelated=4">${product.productName}</a></h6>
 	                           	<div class="product__price">Rs.${product.price}</div>
 	                       	</div>
 	                    </div>

@@ -35,7 +35,7 @@ public class Product {
 	private Integer productId;
 	
 	@Column(name = "display_name")
-	private String displayName;
+	private String productName;
 	
 	@Column
 	private String description;
@@ -61,11 +61,19 @@ public class Product {
 	
 	@ManyToOne(optional = false, fetch = FetchType.LAZY)
 	@JoinColumn(name = "category_id")
-	@JsonBackReference
+	@JsonBackReference("category")
 	private Category category;
+	
+	@ManyToOne(optional = false, fetch = FetchType.LAZY)
+	@JoinColumn(name = "format_id")
+	@JsonBackReference("formats")
+	private Format format;
 	
 	@Transient
 	private String categoryName;
+	
+	@Transient
+	private String formatName;
 	
 	public Integer getProductId() {
 		return productId;
@@ -75,12 +83,12 @@ public class Product {
 		this.productId = productId;
 	}
 	
-	public String getDisplayName() {
-		return displayName;
+	public String getProductName() {
+		return productName;
 	}
 	
-	public void setDisplayName(String displayName) {
-		this.displayName = displayName;
+	public void setProductName(String productName) {
+		this.productName = productName;
 	}
 	
 	public String getDescription() {
@@ -153,6 +161,30 @@ public class Product {
 
 	public void setCategoryName(String categoryName) {
 		this.categoryName = categoryName;
+	}
+
+	public Format getFormat() {
+		return format;
+	}
+
+	public void setFormat(Format format) {
+		this.format = format;
+	}
+	
+//	public FormatCategory getFormatCategory() {
+//		return formatCategory;
+//	}
+//	
+//	public void setFormatCategory(FormatCategory formatCategory) {
+//		this.formatCategory = formatCategory;
+//	}
+
+	public String getFormatName() {
+		return formatName;
+	}
+
+	public void setFormatName(String formatName) {
+		this.formatName = formatName;
 	}
 
 	@Override

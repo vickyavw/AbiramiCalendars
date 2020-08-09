@@ -12,6 +12,8 @@ public class ApiConstants {
 	
 	public static final String CATEGORIES_API_URL = "http://localhost:8080/api/categories";
 	
+	public static final String FORMATS_API_URL = "http://localhost:8080/api/formats";
+	
 	//Query Params for APIs
 	public static final String PRICE_MIN_QUERY_PARAM = "priceMin";
 	public static final String PRICE_MAX_QUERY_PARAM = "priceMax";
