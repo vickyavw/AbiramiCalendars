@@ -43,14 +43,20 @@ public class ProductDTO {
 		this.image = product.getImage();
 		this.price = product.getPrice();
 		this.availabilityCount = product.getAvailabilityCount();
-		if(null != product.getCategory()) {
-			this.categoryId = product.getCategory().getCategoryId();
+		//to avoid lazy initializing on getAll products. getCategoryName will be set in dao only for get of single product.
+		if(null != product.getCategoryName()){
+			this.categoryName = product.getCategoryName();
+			if(null != product.getCategory()) {
+				this.categoryId = product.getCategory().getCategoryId();
+			}
 		}
-		this.categoryName = product.getCategoryName();
-		if(null != product.getFormat()) {
-			this.formatId = product.getFormat().getFormatId();
+		//to avoid lazy initializing on getAll products.
+		if(null != product.getFormatName()) {
+			this.formatName = product.getFormatName();
+			if(null != product.getFormat()) {
+				this.formatId = product.getFormat().getFormatId();
+			}
 		}
-		this.formatName = product.getFormatName();
 	}
 	
 	public Integer getProductId() {

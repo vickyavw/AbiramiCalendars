@@ -43,8 +43,8 @@ public class Category {
 	@JsonManagedReference("category")
 	private Set<Product> products;
 	
-	@ManyToMany(mappedBy = "categories")
-	private Set<Format> formats;
+//	@ManyToMany(mappedBy = "categories")
+//	private Set<Format> formats;
 	
 	public Integer getCategoryId() {
 		return categoryId;
@@ -78,13 +78,13 @@ public class Category {
 		this.products = products;
 	}
 
-	public Set<Format> getFormats() {
-		return formats;
-	}
-
-	public void setFormats(Set<Format> formats) {
-		this.formats = formats;
-	}
+//	public Set<Format> getFormats() {
+//		return formats;
+//	}
+//
+//	public void setFormats(Set<Format> formats) {
+//		this.formats = formats;
+//	}
 
 	@Override
 	public String toString() {
