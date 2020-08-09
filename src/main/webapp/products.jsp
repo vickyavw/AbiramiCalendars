@@ -220,13 +220,13 @@
                         	<div class="section-title">
                                 <h4>Sort By</h4>
                             </div>
-                            <div class="card-size__list">
-                                <a href="#" style="font-size: 14px; color: #444444; display: block; padding-top: 6px; padding-left: 16px;line-height: 30px;"> Price: High to Low </a>
-                                <a href="#" style="font-size: 14px; color: #444444; display: block; padding-top: 6px; padding-left: 16px;line-height: 30px;"> Price: Low to High </a>
-                                <a href="#" style="font-size: 14px; color: #444444; display: block; padding-top: 6px; padding-left: 16px;line-height: 30px;"> Name: Ascending </a>
-                                <a href="#" style="font-size: 14px; color: #444444; display: block; padding-top: 6px; padding-left: 16px;line-height: 30px;"> Name: Descending </a>
-                                <a href="#" style="font-size: 14px; color: #444444; display: block; padding-top: 6px; padding-left: 16px;line-height: 30px;"> Newest First </a>
-                                <a href="#" style="font-size: 14px; color: #444444; display: block; padding-top: 6px; padding-left: 16px;line-height: 30px;"> Discount </a>
+                            <div class="sortby__filter__option">
+                                <a href="#" > Price: High to Low </a>
+                                <a href="#" > Price: Low to High </a>
+                                <a href="#" > Name: Ascending (A to Z)</a>
+                                <a href="#" > Name: Descending (Z to A)</a>
+                                <a href="#" > Newest First </a>
+                                <a href="#" > Discount </a>
                             </div>
 	                	</div>
                         <div class="sidebar__filter">

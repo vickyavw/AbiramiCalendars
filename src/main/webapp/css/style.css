@@ -1603,6 +1603,21 @@ ol {
 	color: #ffffff;
 }
 
+.sortby__filter__option {
+	font-size: 14px; 
+	color: #444444; 
+	display: block; 
+}
+
+.sortby__filter__option a {
+	font-size: 14px; 
+	color: #444444; 
+	display: block; 
+	padding-top: 6px; 
+	padding-left: 16px;
+	line-height: 30px;
+}
+
 /*---------------------
   Product Details
 -----------------------*/
