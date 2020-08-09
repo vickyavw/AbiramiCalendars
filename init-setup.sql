@@ -14,12 +14,9 @@ create table format(format_id INT not null auto_increment, display_name varchar(
 
 create table product(product_id INT not null auto_increment, display_name varchar(100) not null, description varchar(100), 
 	product_type ENUM('CALENDAR','DIARY','BOX','LABEL') not null,image MEDIUMBLOB, price decimal(5,2), availability_count int, 
-	time_to_print int, category_id INT, primary key (product_id),
-	CONSTRAINT product_category_fk FOREIGN KEY (category_id) REFERENCES category(category_id));
-
-create table format_category(format_category_id INT not null auto_increment, format_id INT not null, category_id INT not null, primary key (format_category_id),
-	CONSTRAINT fk_format FOREIGN KEY (format_id) REFERENCES format(format_id),
-	CONSTRAINT fk_category FOREIGN KEY (category_id) REFERENCES category(category_id));
+	time_to_print int, category_id INT, format_id INT, primary key (product_id),
+	CONSTRAINT product_category_fk FOREIGN KEY (category_id) REFERENCES category(category_id))
+        CONSTRAINT product_format_fk FOREIGN KEY (format_id) REFERENCES format(format_id));
 
 insert into product (display_name, description, price, availability_count, time_to_print) values ('Calendar1','Test Calendar 1','12.5','1000','5');
 
