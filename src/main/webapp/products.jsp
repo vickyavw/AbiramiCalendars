@@ -220,13 +220,13 @@
                         	<div class="section-title">
                                 <h4>Sort By</h4>
                             </div>
-                            <div class="card-size__list">
-                                <a href="#" style="font-size: 14px; color: #444444; display: block; padding-top: 6px; padding-left: 16px;line-height: 30px;"> Price: High to Low </a>
-                                <a href="#" style="font-size: 14px; color: #444444; display: block; padding-top: 6px; padding-left: 16px;line-height: 30px;"> Price: Low to High </a>
-                                <a href="#" style="font-size: 14px; color: #444444; display: block; padding-top: 6px; padding-left: 16px;line-height: 30px;"> Name: Ascending </a>
-                                <a href="#" style="font-size: 14px; color: #444444; display: block; padding-top: 6px; padding-left: 16px;line-height: 30px;"> Name: Descending </a>
-                                <a href="#" style="font-size: 14px; color: #444444; display: block; padding-top: 6px; padding-left: 16px;line-height: 30px;"> Newest First </a>
-                                <a href="#" style="font-size: 14px; color: #444444; display: block; padding-top: 6px; padding-left: 16px;line-height: 30px;"> Discount </a>
+                            <div class="sortby__filter__option">
+                                <a href="#" > Price: High to Low </a>
+                                <a href="#" > Price: Low to High </a>
+                                <a href="#" > Name: Ascending (A to Z)</a>
+                                <a href="#" > Name: Descending (Z to A)</a>
+                                <a href="#" > Newest First </a>
+                                <a href="#" > Discount </a>
                             </div>
 	                	</div>
                         <div class="sidebar__filter">
@@ -299,20 +299,23 @@
                     <div class="row">
                     	<c:forEach items="${products}" var="product">
                         	<div class="col-lg-3 col-md-6">
-                            	<div class="product__item" onclick="window.location='${currentProductUri}?productId=${product.productId}&getRelated=4'" style="cursor: pointer">
-                            	
-	                                <div class="product__item__pic set-bg" data-setbg="data:image/jpg;base64,${product.base64Image}">
-		                                    <div class="label new">New</div>
-		                                    <ul class="product__hover">
-		                                        <li><a href="data:image/jpg;base64,${product.base64Image}" class="image-popup"><span class="arrow_expand"></span></a></li>
-		                                        <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-		                                        <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-		                                    </ul>
-	                                </div>
-	                                <div class="product__item__text">
-	                                    <h6>${product.productName}</h6>
-	                                    <div class="product__price">Rs.${product.price}</div>
-	                                </div>
+                            	<div class="product__item"> 
+                            		<a href="${currentProductUri}?productId=${product.productId}&getRelated=4" display: block height: 100%>
+		                                <div class="product__item__pic set-bg" data-setbg="data:image/jpg;base64,${product.base64Image}">
+		                            		<object type="owo/uwu">
+			                                    <div class="label new">New</div>
+			                                    <ul class="product__hover">
+			                                        <li><a href="data:image/jpg;base64,${product.base64Image}" class="image-popup"><span class="arrow_expand"></span></a></li>
+			                                        <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+			                                        <li><a href="#"><span class="icon_bag_alt"></span></a></li>
+			                                    </ul>
+			                                </object>
+		                                </div>
+		                                <div class="product__item__text">
+		                                    <h6>${product.productName}</h6>
+		                                    <div class="product__price">Rs.${product.price}</div>
+		                                </div>
+	                         		</a>
 	                            </div>
 	                        </div>
 	                    	</c:forEach>
