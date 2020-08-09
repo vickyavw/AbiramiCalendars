@@ -122,6 +122,9 @@ public class AdminProductServlet extends HttpServlet {
 	    		ProductDTO productDTO = new ProductDTO(product);
 	    		setBase64Image(productDTO);
 	    		req.setAttribute("product", productDTO);
+	    		//resetting the formatCategory session for the product added newly
+	    		String mapName = productType.substring(0, 1) + productType.substring(1).toLowerCase()+"FormatCategoryMap";
+	    		req.getSession().setAttribute(mapName,null);
 	    	}
 		}
 		req.getRequestDispatcher("product-details.jsp").forward(req, res);
@@ -190,9 +193,8 @@ public class AdminProductServlet extends HttpServlet {
 
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
 		    System.out.println("Success! " + response.getStatus());
-	    	Product product = response.readEntity(Product.class);
-	    	if(null != product){
-	    		ProductDTO productDTO = new ProductDTO(product);
+		    ProductDTO productDTO = response.readEntity(ProductDTO.class);
+	    	if(null != productDTO){
 	    		setBase64Image(productDTO);
 	    		req.setAttribute("product", productDTO);
 	    	}

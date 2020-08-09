@@ -3,6 +3,7 @@ package com.abirami.model;
 import java.math.BigDecimal;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.hibernate.Hibernate;
 
 public class ProductDTO {
 
@@ -43,19 +44,20 @@ public class ProductDTO {
 		this.image = product.getImage();
 		this.price = product.getPrice();
 		this.availabilityCount = product.getAvailabilityCount();
-		//to avoid lazy initializing on getAll products. getCategoryName will be set in dao only for get of single product.
-		if(null != product.getCategoryName()){
-			this.categoryName = product.getCategoryName();
-			if(null != product.getCategory()) {
-				this.categoryId = product.getCategory().getCategoryId();
-			}
+		//if called from DAO category object will fetched and loaded. else just categoryName will be available from product due to lazy initialization
+		if(null != product.getCategory() && Hibernate.isInitialized(product.getCategory())) {
+			this.categoryId = product.getCategory().getCategoryId();
+			this.categoryName = product.getCategory().getCategoryName();
 		}
-		//to avoid lazy initializing on getAll products.
-		if(null != product.getFormatName()) {
+		else {
+			this.categoryName = product.getCategoryName();
+		}
+		if(null != product.getFormat() && Hibernate.isInitialized(product.getFormat())) {
+			this.formatId = product.getFormat().getFormatId();
+			this.formatName = product.getFormat().getFormatName();
+		}
+		else {
 			this.formatName = product.getFormatName();
-			if(null != product.getFormat()) {
-				this.formatId = product.getFormat().getFormatId();
-			}
 		}
 	}
 	
