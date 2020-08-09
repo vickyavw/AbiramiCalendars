@@ -299,20 +299,23 @@
                     <div class="row">
                     	<c:forEach items="${products}" var="product">
                         	<div class="col-lg-3 col-md-6">
-                            	<div class="product__item" onclick="window.location='${currentProductUri}?productId=${product.productId}&getRelated=4'" style="cursor: pointer">
-                            	
-	                                <div class="product__item__pic set-bg" data-setbg="data:image/jpg;base64,${product.base64Image}">
-		                                    <div class="label new">New</div>
-		                                    <ul class="product__hover">
-		                                        <li><a href="data:image/jpg;base64,${product.base64Image}" class="image-popup"><span class="arrow_expand"></span></a></li>
-		                                        <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-		                                        <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-		                                    </ul>
-	                                </div>
-	                                <div class="product__item__text">
-	                                    <h6>${product.productName}</h6>
-	                                    <div class="product__price">Rs.${product.price}</div>
-	                                </div>
+                            	<div class="product__item"> 
+                            		<a href="${currentProductUri}?productId=${product.productId}&getRelated=4" display: block height: 100%>
+		                                <div class="product__item__pic set-bg" data-setbg="data:image/jpg;base64,${product.base64Image}">
+		                            		<object type="owo/uwu">
+			                                    <div class="label new">New</div>
+			                                    <ul class="product__hover">
+			                                        <li><a href="data:image/jpg;base64,${product.base64Image}" class="image-popup"><span class="arrow_expand"></span></a></li>
+			                                        <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+			                                        <li><a href="#"><span class="icon_bag_alt"></span></a></li>
+			                                    </ul>
+			                                </object>
+		                                </div>
+		                                <div class="product__item__text">
+		                                    <h6>${product.productName}</h6>
+		                                    <div class="product__price">Rs.${product.price}</div>
+		                                </div>
+	                         		</a>
 	                            </div>
 	                        </div>
 	                    	</c:forEach>
