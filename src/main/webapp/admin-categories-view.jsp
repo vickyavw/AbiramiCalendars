@@ -12,13 +12,13 @@
 		   		<c:forEach items="${categories}" var="category">
 	    		<table>
 		  				<tr> <td>Category Id </td><td> ${category.categoryId}</td> </tr>
-		    			<tr> <td>Category Name </td><td> ${category.displayName}</td> </tr>
+		    			<tr> <td>Category Name </td><td> ${category.categoryName}</td> </tr>
 		    			<tr> <td>Category Description </td><td> ${category.description}</td> </tr>
 		    			<c:if test="${not empty products}">
 		    				<tr> <td>List of Products in the category </td><td></td> </tr>
 		    				<c:forEach items="${products}" var="product">
 		    					<tr> <td>Product Id </td><td> ${product.productId}</td> </tr>
-		    					<tr> <td>Product Name </td><td> ${product.displayName}</td> </tr>
+		    					<tr> <td>Product Name </td><td> ${product.productName}</td> </tr>
 		    					<tr></tr>
 		    				</c:forEach>
 		    			</c:if>

@@ -3,6 +3,7 @@ package com.abirami.model;
 import java.math.BigDecimal;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.hibernate.Hibernate;
 
 public class ProductDTO {
 
@@ -43,14 +44,21 @@ public class ProductDTO {
 		this.image = product.getImage();
 		this.price = product.getPrice();
 		this.availabilityCount = product.getAvailabilityCount();
-		if(null != product.getCategory()) {
+		//if called from DAO category object will fetched and loaded. else just categoryName will be available from product due to lazy initialization
+		if(null != product.getCategory() && Hibernate.isInitialized(product.getCategory())) {
 			this.categoryId = product.getCategory().getCategoryId();
+			this.categoryName = product.getCategory().getCategoryName();
 		}
-		this.categoryName = product.getCategoryName();
-		if(null != product.getFormat()) {
+		else {
+			this.categoryName = product.getCategoryName();
+		}
+		if(null != product.getFormat() && Hibernate.isInitialized(product.getFormat())) {
 			this.formatId = product.getFormat().getFormatId();
+			this.formatName = product.getFormat().getFormatName();
 		}
-		this.formatName = product.getFormatName();
+		else {
+			this.formatName = product.getFormatName();
+		}
 	}
 	
 	public Integer getProductId() {

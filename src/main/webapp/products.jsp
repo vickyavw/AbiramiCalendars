@@ -162,57 +162,24 @@
                             </div>
                             <div class="categories__accordion">
                                 <div class="accordion" id="accordionExample">
-                                    <div class="card">
-                                        <div class="card-heading active">
-                                            <a data-toggle="collapse" data-target="#collapseOne">Daily Calendars</a>
-                                        </div>
-                                        <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
-                                            <div class="card-body">
-                                                <ul>
-                                                	<li class="active"><a href="${currentProductUri}">All</a></li>
-                                                    <c:forEach items="${categories}" var="category">
-							                        	<li><a href="${currentProductUri}?categoryId=${category.categoryId}">${category.categoryName}</a></li>
-								                    </c:forEach>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card">
-                                        <div class="card-heading">
-                                            <a data-toggle="collapse" data-target="#collapseTwo">Monthly Calendars</a>
-                                        </div>
-                                        <div id="collapseTwo" class="collapse" data-parent="#accordionExample">
-                                            <div class="card-body">
-                                                <ul>
-                                                	<li><a href="#">All</a></li>
-                                                    <li><a href="#">Religion</a></li>
-                                                    <li><a href="#">Leaders</a></li>
-                                                    <li><a href="#">Movie Stars</a></li>
-                                                    <li><a href="#">Pets</a></li>
-                                                    <li><a href="#">Scenaries</a></li>
-                                                    <li><a href="#">Babies</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card">
-                                        <div class="card-heading">
-                                            <a data-toggle="collapse" data-target="#collapseThree">Desk Calendars</a>
-                                        </div>
-                                        <div id="collapseThree" class="collapse" data-parent="#accordionExample">
-                                            <div class="card-body">
-                                                <ul>
-                                                	<li><a href="#">All</a></li>
-                                                    <li><a href="#">Religion</a></li>
-                                                    <li><a href="#">Leaders</a></li>
-                                                    <li><a href="#">Movie Stars</a></li>
-                                                    <li><a href="#">Pets</a></li>
-                                                    <li><a href="#">Scenaries</a></li>
-                                                    <li><a href="#">Babies</a></li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
+                                	<c:set var='paramMap' value="${currentProduct}FormatCategoryMap" />
+                                	<c:forEach items="${sessionScope[paramMap]}" var="entry">
+	                                    <div class="card">
+	                                        <div class="card-heading active">
+	                                            <a data-toggle="collapse" data-target="#collapseOne">${entry.key}</a>
+	                                        </div>
+	                                        <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+	                                            <div class="card-body">
+	                                                <ul>
+	                                                	<li class="active"><a href="${currentProductUri}?formatName=${entry.key}">All</a></li>
+	                                                    <c:forEach items="${entry.value}" var="category">
+								                        	<li><a href="${currentProductUri}?formatName=${entry.key}&categoryName=${category}">${category}</a></li>
+									                    </c:forEach>
+	                                                </ul>
+	                                            </div>
+	                                        </div>
+	                                    </div>
+	                                </c:forEach>
                                 </div>
                             </div>
                         </div>

@@ -9,9 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -50,9 +47,9 @@ public class Format {
 	
 	//@OneToMany(fetch = FetchType.LAZY, mappedBy = "format", cascade=CascadeType.ALL)
 	//@JsonManagedReference
-	@ManyToMany(cascade=CascadeType.ALL)
-	@JoinTable(name="format_category", joinColumns = { @JoinColumn(name="format_id") }, inverseJoinColumns = { @JoinColumn(name="category_id") })
-	private Set<Category> categories;
+	//@ManyToMany(cascade=CascadeType.ALL)
+	//@JoinTable(name="format_category", joinColumns = { @JoinColumn(name="format_id") }, inverseJoinColumns = { @JoinColumn(name="category_id") })
+	//private Set<Category> categories;
 	
 	public Format() {
 
@@ -98,13 +95,13 @@ public class Format {
 		this.products = products;
 	}
 
-	public Set<Category> getCategories() {
-		return categories;
-	}
-
-	public void setCategories(Set<Category> categories) {
-		this.categories = categories;
-	}
+//	public Set<Category> getCategories() {
+//		return categories;
+//	}
+//
+//	public void setCategories(Set<Category> categories) {
+//		this.categories = categories;
+//	}
 
 	@Override
 	public String toString() {

@@ -19,6 +19,9 @@ public class ApiConstants {
 	public static final String PRICE_MAX_QUERY_PARAM = "priceMax";
 	public static final String PRODUCT_TYPE_QUERY_PARAM = "productType";
 	public static final String CATEGORY_ID_QUERY_PARAM = "categoryId";
+	public static final String CATEGORY_NAME_QUERY_PARAM = "categoryName";
+	public static final String FORMAT_ID_QUERY_PARAM = "formatId";
+	public static final String FORMAT_NAME_QUERY_PARAM = "formatName";
 	public static final String ROWS_TO_FETCH = "expectedCount";
 	public static final String API_QUERY_PARAMS = "queryParams";
 	public static final String SORT_BY_QUERY_PARAM = "sortBy";
@@ -42,6 +45,9 @@ public class ApiConstants {
     { 
     	ALLOWED_EXACT_MATCH_QUERY_PARAMS_TO_CRITERIA = new HashMap<>(); 
     	ALLOWED_EXACT_MATCH_QUERY_PARAMS_TO_CRITERIA.put(CATEGORY_ID_QUERY_PARAM, "category.categoryId"); 
+    	ALLOWED_EXACT_MATCH_QUERY_PARAMS_TO_CRITERIA.put(CATEGORY_NAME_QUERY_PARAM, "category.categoryName"); 
+    	ALLOWED_EXACT_MATCH_QUERY_PARAMS_TO_CRITERIA.put(FORMAT_ID_QUERY_PARAM, "format.formatId"); 
+    	ALLOWED_EXACT_MATCH_QUERY_PARAMS_TO_CRITERIA.put(FORMAT_NAME_QUERY_PARAM, "format.formatName"); 
     	
     	ALLOWED_RANGE_QUERY_PARAMS_TO_CRITERIA = new HashMap<>();
     	ALLOWED_RANGE_QUERY_PARAMS_TO_CRITERIA.put(PRICE_MIN_QUERY_PARAM, "price");

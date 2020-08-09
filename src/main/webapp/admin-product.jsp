@@ -20,8 +20,8 @@
 		<h2>Add Product</h2>
 		<form action = "admin-product" enctype="multipart/form-data" method = "POST">
 			<table>
-				<tr><td>Product Name </td><td><input name="productName" type="text" maxlength="512" id="productName"/></td></tr>
-				<tr><td>Product Desc </td><td><input name="productDesc" type="text" maxlength="512" id="productDesc"/></td></tr>
+				<tr><td>Product Name </td><td><input name="productName" type="text" maxlength="512" id="productName" required="required"/></td></tr>
+				<tr><td>Product Desc </td><td><input name="productDesc" type="text" maxlength="512" id="productDesc" required="required"/></td></tr>
 				<tr><td>Product Type </td>
 					<td>	
 						<select name="productType" id="productType">
@@ -49,8 +49,8 @@
 					</select>
 					</td>
 				</tr>
-				<tr><td>Price </td><td><input type="text" name="price" /></td></tr>
-				<tr><td>Image </td><td><input type="file" name="file" /></td></tr>
+				<tr><td>Price </td><td><input type="text" name="price" required="required"/></td></tr>
+				<tr><td>Image </td><td><input type="file" name="file" required="required"/></td></tr>
 				<tr><td colspan="2" align="center"><input type="submit" value="Add Product"/></td></tr>
 			</table>
 		</form>

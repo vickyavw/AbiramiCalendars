@@ -158,6 +158,8 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
 			products = session.createCriteria(Product.class)
+								.createAlias("format", "format")
+								.createAlias("category", "category")
 								.add(conjunction)
 								.addOrder("desc".equals(sortDirection)?Order.desc(sortBy):Order.asc(sortBy))
 								.setFirstResult((pageNumber-1) * pageSize)
@@ -252,7 +254,9 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 		try {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
-			Criteria criteria = session.createCriteria(Product.class);
+			Criteria criteria = session.createCriteria(Product.class)
+											.createAlias("format", "format")
+											.createAlias("category", "category");
 			if(null != conjunction)
 				criteria.add(conjunction);
 			criteria.setProjection(Projections.rowCount());

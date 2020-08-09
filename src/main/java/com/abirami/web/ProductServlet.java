@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -26,10 +25,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.lang3.StringUtils;
 
-import com.abirami.model.CategoryDTO;
-import com.abirami.model.PaginatedCategoriesApiResponse;
 import com.abirami.model.PaginatedProductsApiResponse;
-import com.abirami.model.Product;
 import com.abirami.model.ProductDTO;
 import com.abirami.util.ApiConstants;
 import com.abirami.util.ProductType;
@@ -95,22 +91,29 @@ public class ProductServlet extends HttpServlet {
 		}
 	}
 
-	private void getCategories(HttpServletRequest req) {
-		Client client = ClientBuilder.newClient();
-		WebTarget resource = client.target(ApiConstants.CATEGORIES_API_URL);
-		
-		Builder request = resource.request();
-		request.accept(MediaType.APPLICATION_JSON);
-		
-		Response response = request.get();
-
-		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
-			List<CategoryDTO> categories = new ArrayList<CategoryDTO>();
-		    System.out.println("Success! " + response.getStatus());
-		    categories = response.readEntity(PaginatedCategoriesApiResponse.class).getCategories();
-		    req.setAttribute("categories", categories);
-		} else {
-			ProductUtils.setServletError(req, response);
+	private void populateFormatCategoryMap(HttpServletRequest req, List<ProductDTO> list) {
+		/*
+		 * FormatCategoryMap will be static for each Product type.
+		 * Hence saving in the session for each product type when loading each product.
+		 * session attributes will be named like - CalendarFormatCategoryMap, DiaryFormatCategoryMap, etc.
+		 */
+		String currentProductMap = (String) req.getAttribute("currentProduct") + "FormatCategoryMap";
+		if(req.getSession().getAttribute(currentProductMap) == null) {
+			Map<String, List<String>> formatCategoryMap = new HashMap<String, List<String>>();
+			for(ProductDTO product : list) {
+				List<String> categories;
+				if(null == formatCategoryMap.get(product.getFormatName())) {
+					categories = new ArrayList<String>();
+				}
+				else {
+					categories = formatCategoryMap.get(product.getFormatName());
+				}
+				if(!categories.contains(product.getCategoryName()))
+					categories.add(product.getCategoryName());
+				formatCategoryMap.put(product.getFormatName(), categories);
+			}
+		    //req.setAttribute("formatCategoryMap", formatCategoryMap);
+		    req.getSession().setAttribute(currentProductMap, formatCategoryMap);
 		}
 	}
 	
@@ -144,7 +147,7 @@ public class ProductServlet extends HttpServlet {
 		    PaginatedProductsApiResponse apiResponse = new PaginatedProductsApiResponse();
 		    apiResponse = response.readEntity(new GenericType<PaginatedProductsApiResponse>() {});
 	    	//get categories to set in the filters
-	    	getCategories(req);
+	    	populateFormatCategoryMap(req, apiResponse.getProducts());
 	    	for(ProductDTO product : apiResponse.getProducts()) {
 	    		setBase64Image(product);
 	    	}
@@ -247,7 +250,7 @@ public class ProductServlet extends HttpServlet {
 		    PaginatedProductsApiResponse apiResponse = new PaginatedProductsApiResponse();
 		    apiResponse = response.readEntity(new GenericType<PaginatedProductsApiResponse>() {});
 	    	//get categories to set in the filters
-	    	getCategories(req);
+	    	populateFormatCategoryMap(req, apiResponse.getProducts());
 	    	for(ProductDTO product : apiResponse.getProducts()) {
 	    		setBase64Image(product);
 	    	}
