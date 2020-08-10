@@ -12,7 +12,6 @@ import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.stat.Statistics;
 
 import com.abirami.dao.HibernateConfig;
 import com.abirami.dao.ProductGenericDao;
@@ -36,11 +35,8 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 									.setMaxResults(pageSize)
 									.setCacheable(true)
 									.list();
-//			Integer rowsFetched = products.size();
-//			if(products.size() < pageSize)
-//				response.setResultSize(rowsFetched);
-//			else
-				response.setResultSize(getTotalRecords(null));
+			
+			response.setResultSize(getTotalRecords(null));
 			response.setPageNumber(pageNumber);
 			response.setPageSize(pageSize);
 			response.setProducts(products.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList()));
@@ -163,9 +159,6 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
 			
-			Statistics statistics = HibernateConfig.getSessionFactory().getStatistics();
-		    statistics.setStatisticsEnabled(true);
-	
 			products = session.createCriteria(Product.class)
 								.createAlias("format", "format")
 								.createAlias("category", "category")
@@ -176,13 +169,7 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 								.setCacheable(true)
 								.list();
 			
-//		    Integer rowsFetched = products.size();
-//		    //If the result size is less than page size, there will not be any more records to fetch.
-//		    //so only in the other case, get total records to display number of pages in pagination
-//			if(products.size() < pageSize)
-//				response.setResultSize(rowsFetched);
-//			else
-				response.setResultSize(getTotalRecords(conjunction));
+			response.setResultSize(getTotalRecords(conjunction));
 			response.setPageNumber(pageNumber);
 			response.setPageSize(pageSize);
 			response.setProducts(products.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList()));

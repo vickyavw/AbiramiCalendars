@@ -41,7 +41,7 @@ public class Format {
 	@Column
 	private String description;
 	
-	@Column
+	@Column(name="product_type")
 	private String productType;
 	
 	@OneToMany(mappedBy = "format", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

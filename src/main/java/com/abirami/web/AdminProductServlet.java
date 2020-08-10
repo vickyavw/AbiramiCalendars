@@ -51,7 +51,6 @@ public class AdminProductServlet extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-		req.setAttribute("currentProductUri", req.getRequestURI());
 		req.setAttribute("currentProduct", req.getRequestURI().substring(1, 2).toUpperCase() + req.getRequestURI().substring(2));
 		if(null != req.getParameter("productId")) {
 			//get product for admin
@@ -81,10 +80,14 @@ public class AdminProductServlet extends HttpServlet {
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
 		String name = req.getParameter("productName");
 		String desc = req.getParameter("productDesc");
-		String formatId = req.getParameter("formatId");
 		String categoryId = req.getParameter("categoryId");
 		String productType = req.getParameter("productType");
+		//Multiple hidden format dropdowns will be there. Selected value will be in dropdown with selected productType name - LABELFormatId
+		String formatId = req.getParameter(productType+"FormatId");
 		String price = req.getParameter("price");
+		//Capitalize first letter alone
+		req.setAttribute("currentProduct", productType.substring(0, 1).toUpperCase() + productType.substring(1).toLowerCase());
+
 		Client client = ClientBuilder.newClient();
 		WebTarget resource = client.target(ApiConstants.GET_ALL_PRODUCTS_API_URL);
 		

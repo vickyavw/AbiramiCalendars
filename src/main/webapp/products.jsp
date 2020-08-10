@@ -61,7 +61,7 @@
 	  <script type="text/javascript">
 	   	function call_func(){
 	   		debugger;
-	   		var uri = '${currentProductUri}' +'?'+ '${existingFilter}';
+	   		var uri = '/products?productType=${product.productType}' +'&'+ '${existingFilter}';
 	   		var priceMin = document.getElementById('minamount').value.substr(3);
 	   		var priceMax = document.getElementById('maxamount').value.substr(3);
 	   		uri = updateQueryStringParameter(uri, 'priceMin', priceMin);
@@ -92,10 +92,10 @@
 		            <nav class="header__menu">
 		                <ul>
 		                   <!-- <li class="active"><a href="./index.jsp">Home</a></li> -->
-		                    <li class="${currentProduct == 'Calendars'? 'active' : ''}"><a href="/calendars">Calendars</a></li>
-		                    <li class="${currentProduct == 'Diaries'? 'active' : ''}"><a href="/diaries">Diaries</a></li>
-		                    <li class="${currentProduct == 'Boxes'? 'active' : ''}"><a href="/boxes">Boxes</a></li>
-		                    <li class="${currentProduct == 'Labels'? 'active' : ''}"><a href="/labels">Labels</a>
+		                    <li class="${currentProduct == 'Calendars'? 'active' : ''}"><a href="/products?productType=Calendars">Calendars</a></li>
+		                    <li class="${currentProduct == 'Diaries'? 'active' : ''}"><a href="/products?productType=Diaries">Diaries</a></li>
+		                    <li class="${currentProduct == 'Boxes'? 'active' : ''}"><a href="/products?productType=Boxes">Boxes</a></li>
+		                    <li class="${currentProduct == 'Labels'? 'active' : ''}"><a href="/products?productType=Labels">Labels</a>
 		                        <ul class="dropdown">
 		                            <li><a href="./product-details.html">Product Details</a></li>
 		                            <li><a href="/product">Shop Cart</a></li>
@@ -171,9 +171,9 @@
 	                                        <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
 	                                            <div class="card-body">
 	                                                <ul>
-	                                                	<li class="active"><a href="${currentProductUri}?formatName=${entry.key}">All</a></li>
+	                                                	<li class="active"><a href="/products?productType=${currentProduct}&formatName=${entry.key}">All</a></li>
 	                                                    <c:forEach items="${entry.value}" var="category">
-								                        	<li><a href="${currentProductUri}?formatName=${entry.key}&categoryName=${category}">${category}</a></li>
+								                        	<li><a href="/products?productType=${currentProduct}&formatName=${entry.key}&categoryName=${category}">${category}</a></li>
 									                    </c:forEach>
 	                                                </ul>
 	                                            </div>
@@ -267,7 +267,7 @@
                     	<c:forEach items="${products}" var="product">
                         	<div class="col-lg-3 col-md-6">
                             	<div class="product__item"> 
-                            		<a href="${currentProductUri}?productId=${product.productId}&getRelated=4" display: block height: 100%>
+                            		<a href="/products?productType=${product.productType}&productId=${product.productId}&getRelated=4" display: block height: 100%>
 		                                <div class="product__item__pic set-bg" data-setbg="data:image/jpg;base64,${product.base64Image}">
 		                            		<object type="owo/uwu">
 			                                    <div class="label new">New</div>
@@ -290,11 +290,11 @@
                             <div class="pagination__option">
                             	<c:if test="${pageNumber != 1}">
                             		<a href="#"><i class="fa fa-angle-left"></i></a>
-                            		<a href="${currentProductUri}?${existingFilter}pageNumber=${pageNumber - 1}">${pageNumber - 1}</a>
+                            		<a href="/products?productType=${product.productType}&${existingFilter}pageNumber=${pageNumber - 1}">${pageNumber - 1}</a>
                             	</c:if>
                                 <a>${pageNumber}</a>
                                 <c:if test="${pageNumber lt noOfPages}">
-                               	 	<a href="${currentProductUri}?${existingFilter}pageNumber=${pageNumber+1}">${pageNumber+1}</a>
+                               	 	<a href="/products?productType=${product.productType}&${existingFilter}pageNumber=${pageNumber+1}">${pageNumber+1}</a>
 	                                <a href="#"><i class="fa fa-angle-right"></i></a>
                                	</c:if>
                             </div>
