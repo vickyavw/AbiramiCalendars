@@ -18,8 +18,6 @@ create table product(product_id INT not null auto_increment, display_name varcha
 	CONSTRAINT product_category_fk FOREIGN KEY (category_id) REFERENCES category(category_id), 
 	CONSTRAINT product_format_fk FOREIGN KEY (format_id) REFERENCES format(format_id));
 
-insert into product (display_name, description, price, availability_count, time_to_print) values ('Calendar1','Test Calendar 1','12.5','1000','5');
-
 insert into category(display_name, description) values ('Hindus Devotional', 'All Hindu Gods and Goddesses');
 -- formats for calendars
 insert into format (display_name, description, product_type) values ('Normal Daily Calendars','Normal Daily Calendars', 'CALENDAR');
@@ -35,3 +33,5 @@ insert into format (display_name, description, product_type) values ('Pocket Dia
 insert into format (display_name, description, product_type) values ('Cake Boxes','Cake Boxes', 'BOX');
 insert into format (display_name, description, product_type) values ('Sweet Boxes','Sweet Boxes', 'BOX');
 insert into format (display_name, description, product_type) values ('Pickles Board','Pickles Board', 'BOX');
+									       
+insert into product (display_name, description, price, availability_count, time_to_print, category_id, format_id) values ('Calendar1','Test Calendar 1','12.5','1000','5', 1, 1);
