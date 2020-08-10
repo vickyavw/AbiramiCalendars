@@ -44,6 +44,7 @@ dependencies {
 	//compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.11.1'
 	
 	compile group: 'org.hibernate', name: 'hibernate-core', version: '5.4.10.Final'
+	compile group: 'org.hibernate', name: 'hibernate-ehcache', version: '5.4.10.Final'
 	compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.21'
 
 	//runtime 'com.h2database:h2:1.4.197'

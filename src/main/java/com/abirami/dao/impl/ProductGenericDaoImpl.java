@@ -12,6 +12,7 @@ import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.stat.Statistics;
 
 import com.abirami.dao.HibernateConfig;
 import com.abirami.dao.ProductGenericDao;
@@ -33,9 +34,13 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 			products = session.createQuery("from Product order by "+sortBy+" "+sortDirection)
 									.setFirstResult((pageNumber-1) * pageSize)
 									.setMaxResults(pageSize)
+									.setCacheable(true)
 									.list();
-			
-			response.setResultSize(getTotalRecords(null));
+//			Integer rowsFetched = products.size();
+//			if(products.size() < pageSize)
+//				response.setResultSize(rowsFetched);
+//			else
+				response.setResultSize(getTotalRecords(null));
 			response.setPageNumber(pageNumber);
 			response.setPageSize(pageSize);
 			response.setProducts(products.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList()));
@@ -157,6 +162,10 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 			}
 			session = HibernateConfig.getSessionFactory().openSession();
 			session.beginTransaction();
+			
+			Statistics statistics = HibernateConfig.getSessionFactory().getStatistics();
+		    statistics.setStatisticsEnabled(true);
+	
 			products = session.createCriteria(Product.class)
 								.createAlias("format", "format")
 								.createAlias("category", "category")
@@ -164,44 +173,16 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 								.addOrder("desc".equals(sortDirection)?Order.desc(sortBy):Order.asc(sortBy))
 								.setFirstResult((pageNumber-1) * pageSize)
 								.setMaxResults(pageSize)
+								.setCacheable(true)
 								.list();
 			
-			response.setResultSize(getTotalRecords(conjunction));
-			response.setPageNumber(pageNumber);
-			response.setPageSize(pageSize);
-			response.setProducts(products.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList()));
-		}
-		catch(Exception e) {
-			throw e;
-		}
-		finally {
-			if(null != session)
-				session.close();
-		}
-		return response;
-	}
-
-	@Override
-	public <T> PaginatedProductsApiResponse getAllInRange(String productType, String keyQuery, T min, T max, String sortBy, String sortDirection, Integer pageSize, Integer pageNumber) {
-		Session session = null;
-		PaginatedProductsApiResponse response = new PaginatedProductsApiResponse();
-		List<Product> products = null;
-		try {
-			Conjunction conjunction = Restrictions.conjunction();
-			conjunction.add(Restrictions.between(keyQuery, min, max));
-			if(StringUtils.isNotBlank(productType))
-				conjunction.add(Restrictions.eq("productType", productType));
-			
-			session = HibernateConfig.getSessionFactory().openSession();
-			session.beginTransaction();
-			products = session.createCriteria(Product.class)
-								.add(conjunction)
-								.addOrder("desc".equals(sortDirection)?Order.desc(sortBy):Order.asc(sortBy))
-								.setFirstResult((pageNumber-1) * pageSize)
-								.setMaxResults(pageSize)
-								.list();
-			
-			response.setResultSize(getTotalRecords(conjunction));
+//		    Integer rowsFetched = products.size();
+//		    //If the result size is less than page size, there will not be any more records to fetch.
+//		    //so only in the other case, get total records to display number of pages in pagination
+//			if(products.size() < pageSize)
+//				response.setResultSize(rowsFetched);
+//			else
+				response.setResultSize(getTotalRecords(conjunction));
 			response.setPageNumber(pageNumber);
 			response.setPageSize(pageSize);
 			response.setProducts(products.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList()));
@@ -236,6 +217,7 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 								.add(conjunction)
 								.addOrder(Order.desc("productId"))
 								.setMaxResults(expectedCount)
+								.setCacheable(true)
 								.list();
 		}
 		catch(Exception e) {
@@ -261,7 +243,7 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 				criteria.add(conjunction);
 			criteria.setProjection(Projections.rowCount());
             
-            List records = criteria.list();
+            List records = criteria.setCacheable(true).list();
             if (records!=null) {
                 rowCount = ((Long) records.get(0)).intValue();
                 System.out.println("Total Results:" + rowCount);
