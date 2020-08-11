@@ -38,7 +38,8 @@
 				<tr><td>Product Desc </td><td><input name="productDesc" type="text" maxlength="512" id="productDesc" required="required"/></td></tr>
 				<tr><td>Product Type </td>
 					<td>	
-						<select name="productType" id="productType" onChange="changeFormat(this.value);">
+						<select name="productType" id="productType" onChange="changeFormat(this.value);" required="required">
+							<option value="" disabled selected>Select</option>
 						    <c:forEach items="${productTypes}" var="productType">
 						        <option value="${productType}">${productType}</option>
 						    </c:forEach>

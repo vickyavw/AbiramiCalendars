@@ -237,33 +237,35 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="related__title">
-                        <h5>RELATED PRODUCTS</h5>
-                    </div>
-                </div>
-                
-                <c:forEach items="${relatedProducts}" var="product">
-	                <div class="col-lg-3 col-md-4 col-sm-6">
-	                    <div class="product__item">
-	                        <div class="product__item__pic set-bg" data-setbg="data:image/jpg;base64,${product.base64Image}">
-	                            <div class="label new">New</div>
-	                            <ul class="product__hover">
-	                                <li><a href="data:image/jpg;base64,${product.base64Image}" class="image-popup"><span class="arrow_expand"></span></a></li>
-	                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-	                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-	                            </ul>
-	                        </div>
-	                        <div class="product__item__text">
-	                           	<h6><a href="/products?productType=${currentProduct}&productId=${product.productId}&getRelated=4">${product.productName}</a></h6>
-	                           	<div class="product__price">Rs.${product.price}</div>
-	                       	</div>
+            <c:if test="${not empty relatedProducts}">
+	            <div class="row">
+	                <div class="col-lg-12 text-center">
+	                    <div class="related__title">
+	                        <h5>RELATED PRODUCTS</h5>
 	                    </div>
 	                </div>
-                </c:forEach>
-                
-            </div>
+	                
+	                <c:forEach items="${relatedProducts}" var="product">
+		                <div class="col-lg-3 col-md-4 col-sm-6">
+		                    <div class="product__item">
+		                        <div class="product__item__pic set-bg" data-setbg="data:image/jpg;base64,${product.base64Image}">
+		                            <div class="label new">New</div>
+		                            <ul class="product__hover">
+		                                <li><a href="data:image/jpg;base64,${product.base64Image}" class="image-popup"><span class="arrow_expand"></span></a></li>
+		                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+		                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
+		                            </ul>
+		                        </div>
+		                        <div class="product__item__text">
+		                           	<h6><a href="/products?productType=${currentProduct}&productId=${product.productId}&getRelated=4">${product.productName}</a></h6>
+		                           	<div class="product__price">Rs.${product.price}</div>
+		                       	</div>
+		                    </div>
+		                </div>
+	                </c:forEach>
+	                
+	            </div>
+            </c:if>
         </div>
     </section>
     <!-- Product Details Section End -->
