@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Order;
@@ -47,6 +48,9 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 		finally {
 			if(null != session)
 				session.close();
+			else {
+            	throw new HibernateException("Not able to establish DB connection");
+            }
 		}
 		return response;
 	}
@@ -68,6 +72,9 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 		finally {
 			if(null != session)
 				session.close();
+			else {
+            	throw new HibernateException("Not able to establish DB connection");
+            }
 		}
 		return new ProductDTO(product);
 	}
@@ -89,6 +96,9 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 		finally {
 			if(null != session)
 				session.close();
+			else {
+            	throw new HibernateException("Not able to establish DB connection");
+            }
 		}
 		return productId;
 	}
@@ -108,6 +118,9 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 		finally {
 			if(null != session)
 				session.close();
+			else {
+            	throw new HibernateException("Not able to establish DB connection");
+            }
 		}
 		return products;
 	}
@@ -180,6 +193,9 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 		finally {
 			if(null != session)
 				session.close();
+			else {
+            	throw new HibernateException("Not able to establish DB connection");
+            }
 		}
 		return response;
 	}
@@ -213,6 +229,9 @@ public class ProductGenericDaoImpl implements ProductGenericDao {
 		finally {
 			if(null != session)
 				session.close();
+			else {
+            	throw new HibernateException("Not able to establish DB connection");
+            }
 		}
 		return products.stream().map(e -> new ProductDTO(e)).collect(Collectors.toList());
 	}

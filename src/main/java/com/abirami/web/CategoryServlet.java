@@ -74,14 +74,15 @@ public class CategoryServlet extends HttpServlet {
 		    	PaginatedCategoriesApiResponse apiResponse = response.readEntity(new GenericType<PaginatedCategoriesApiResponse>() {});
 		    	req.setAttribute("categories", apiResponse.getCategories());
 		    }
+		    req.getRequestDispatcher("admin-categories-view.jsp").forward(req, res);
 		} else {
-			ApiError error = response.readEntity(ApiError.class);
+			ApiError error = response.readEntity(new GenericType<ApiError>() {});
 		    System.out.println("ERROR! " + response.getStatus());    
 		    System.out.println(response.getStatus() + " : " +response.getStatusInfo().getReasonPhrase());
 		    req.setAttribute("errorCode", error.getErrorCode());
 		    req.setAttribute("errorDesc", error.getErrorDescription());
+		    req.getRequestDispatcher("error.jsp").forward(req, res);
 		}
-		req.getRequestDispatcher("admin-categories-view.jsp").forward(req, res);
 	}
 
 	protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -108,8 +109,16 @@ public class CategoryServlet extends HttpServlet {
 	    		categories.add(category);
 	    	}
 	    	req.setAttribute("categories", categories);
+	    	req.getRequestDispatcher("admin-categories-view.jsp").forward(req, res);
 		}
-		req.getRequestDispatcher("admin-categories-view.jsp").forward(req, res);
+		else {
+			ApiError error = response.readEntity(new GenericType<ApiError>() {});
+		    System.out.println("ERROR! " + response.getStatus());    
+		    System.out.println(response.getStatus() + " : " +response.getStatusInfo().getReasonPhrase());
+		    req.setAttribute("errorCode", error.getErrorCode());
+		    req.setAttribute("errorDesc", error.getErrorDescription());
+		    req.getRequestDispatcher("error.jsp").forward(req, res);
+		}
 	}
 	
 	private void getAllProductsByCategory(HttpServletRequest req) throws IOException {

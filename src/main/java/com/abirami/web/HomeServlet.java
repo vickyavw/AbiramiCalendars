@@ -59,18 +59,20 @@ public class HomeServlet extends HttpServlet {
 		request.accept(MediaType.APPLICATION_JSON);
 		
 		Response response = request.get();
+		PaginatedProductsApiResponse apiResponse = new PaginatedProductsApiResponse();
 
 		if (response.getStatusInfo().getFamily() == Family.SUCCESSFUL) {
 		    System.out.println("Success! " + response.getStatus());
-		    PaginatedProductsApiResponse apiResponse = new PaginatedProductsApiResponse();
 		    apiResponse = response.readEntity(new GenericType<PaginatedProductsApiResponse>() {});
 		    for(ProductDTO product : apiResponse.getProducts()) {
 	    		setBase64Image(product);
 	    	}
-		    req.setAttribute("products", apiResponse.getProducts());
-		} else {
-			ProductUtils.setServletError(req, response);
-		}
+		} 
+// Not throwing error on home page
+//		else {
+//			ProductUtils.setServletError(req, response);
+//		}
+		req.setAttribute("products", apiResponse.getProducts());
 		
 	}
 	

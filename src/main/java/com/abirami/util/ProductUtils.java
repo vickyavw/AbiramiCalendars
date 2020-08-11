@@ -10,10 +10,10 @@ import com.abirami.model.ApiError;
 
 public class ProductUtils {
 
-	public static Response setApiServerError() {
+	public static Response setApiServerError(Integer errorCode, String errorMsg) {
 		ApiError apiError = new ApiError();
-		apiError.setErrorCode(2001);
-		apiError.setErrorDescription("server error" );
+		apiError.setErrorCode(errorCode);
+		apiError.setErrorDescription(errorMsg);
 		return Response.status(HttpStatus.SC_INTERNAL_SERVER_ERROR).entity(apiError).build();
 	}
 	

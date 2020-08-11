@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.lang3.StringUtils;
+import org.hibernate.HibernateException;
 
 import com.abirami.api.ProductResource;
 import com.abirami.dao.CategoryGenericDao;
@@ -59,8 +60,11 @@ public class ProductResourceImpl implements ProductResource {
 			}
 			return Response.status(HttpStatus.SC_OK).entity(response).build();
 		}
+		catch(HibernateException he) {
+			return ProductUtils.setApiServerError(1001,he.getMessage());
+		}
 		catch (Exception e) {
-			return ProductUtils.setApiServerError();
+			return ProductUtils.setApiServerError(1002,e.getMessage());
 		}
 	}
 
@@ -77,8 +81,11 @@ public class ProductResourceImpl implements ProductResource {
 			ProductDTO product = productDao.get(productId);
 			return Response.status(HttpStatus.SC_OK).entity(product).build();
 		}
+		catch(HibernateException he) {
+			return ProductUtils.setApiServerError(1001,he.getMessage());
+		}
 		catch (Exception e) {
-			return ProductUtils.setApiServerError();
+			return ProductUtils.setApiServerError(1002,e.getMessage());
 		}
 	}
 
@@ -105,8 +112,11 @@ public class ProductResourceImpl implements ProductResource {
 			product.setFormatName(product.getFormat().getFormatName());
 			return Response.status(HttpStatus.SC_OK).entity(product).build();
 		}
+		catch(HibernateException he) {
+			return ProductUtils.setApiServerError(1001,he.getMessage());
+		}
 		catch (Exception e) {
-			return ProductUtils.setApiServerError();
+			return ProductUtils.setApiServerError(1002,e.getMessage());
 		}
 	}
 
@@ -134,8 +144,11 @@ public class ProductResourceImpl implements ProductResource {
 			
 			return Response.status(HttpStatus.SC_OK).entity(response).build();
 		}
+		catch(HibernateException he) {
+			return ProductUtils.setApiServerError(1001,he.getMessage());
+		}
 		catch (Exception e) {
-			return ProductUtils.setApiServerError();
+			return ProductUtils.setApiServerError(1002,e.getMessage());
 		}
 	}
 
@@ -156,8 +169,11 @@ public class ProductResourceImpl implements ProductResource {
 			responseProducts.addAll(products);
 			return Response.status(HttpStatus.SC_OK).entity(responseProducts).build();
 		}
+		catch(HibernateException he) {
+			return ProductUtils.setApiServerError(1001,he.getMessage());
+		}
 		catch (Exception e) {
-			return ProductUtils.setApiServerError();
+			return ProductUtils.setApiServerError(1002,e.getMessage());
 		}
 	}
 

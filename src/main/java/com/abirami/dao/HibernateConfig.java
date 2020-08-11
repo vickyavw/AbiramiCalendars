@@ -28,9 +28,13 @@ public class HibernateConfig {
         configuration.setProperty("hibernate.cache.use_second_level_cache", "true");
         configuration.setProperty("hibernate.cache.use_query_cache", "true");
         configuration.setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory");
-
-        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
-        sessionFactory = configuration.buildSessionFactory(builder.build());
+//      try {
+        	StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties());
+        	sessionFactory = configuration.buildSessionFactory(builder.build());
+//        }
+//        catch (Exception e) {
+//			throw new ExceptionInInitializerError(e);
+//		}
     }
     public static SessionFactory getSessionFactory() {
         return sessionFactory;

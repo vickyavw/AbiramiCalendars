@@ -38,6 +38,8 @@ import com.google.common.io.ByteStreams;
 @MultipartConfig(location="/tmp", fileSizeThreshold=1024*1024, 
 maxFileSize=1024*1024*5, maxRequestSize=1024*1024*5*5)
 public class ProductServlet extends HttpServlet {
+	private static final String ERROR_VIEW_NAME = "error.jsp";
+
 	private static final long serialVersionUID = 1L;
 	
 	private static final Map<String, String> URL_PRODUCT_TYPE_MAP = new HashMap<String, String>();
@@ -59,22 +61,22 @@ public class ProductServlet extends HttpServlet {
 		populateFormatCategoryMapInSession(req, productType);
 		//view all products
 		if(null == req.getQueryString()) {
-			getAllProducts(req, productType);
-			req.getRequestDispatcher("products.jsp").forward(req, res);
+			String view = getAllProducts(req, productType);
+			req.getRequestDispatcher(view).forward(req, res);
 			return;
 		
 		}
 		//to view individual product. 
 		else if(null != req.getParameter("productId")) {
-			getProductById(req, productType);
-			req.getRequestDispatcher("product-details.jsp").forward(req, res);
+			String view = getProductById(req, productType);
+			req.getRequestDispatcher(view).forward(req, res);
     		return;
 		}
 		//if any queryParam is passed. Ideally productId shouldn't be called with any other criteria
 		else {
-			getProductsByCriteria(req, productType);
+			String view = getProductsByCriteria(req, productType);
 			//getCalendarsByCategory(req);
-			req.getRequestDispatcher("products.jsp").forward(req, res);
+			req.getRequestDispatcher(view).forward(req, res);
 			return;
 		}
 	}
@@ -93,7 +95,7 @@ public class ProductServlet extends HttpServlet {
 		}
 	}
 	
-	private void getProductsByCriteria(HttpServletRequest req, String productType) throws IOException {
+	private String getProductsByCriteria(HttpServletRequest req, String productType) throws IOException {
 
 		String pageNumber = req.getParameter(ApiConstants.PAGE_NUMBER_QUERY_PARAM);
 		if(StringUtils.isBlank(pageNumber) || !StringUtils.isNumeric(pageNumber))
@@ -126,13 +128,14 @@ public class ProductServlet extends HttpServlet {
 	    		setBase64Image(product);
 	    	}
 	    	setReqAttrFromApiResponse(req, apiResponse);
+	    	return "products.jsp";
 		} else {
 			ProductUtils.setServletError(req, response);
+			return ERROR_VIEW_NAME;
 		}
-		
 	}
 	
-	private void getProductById(HttpServletRequest req, String productType) throws IOException {
+	private String getProductById(HttpServletRequest req, String productType) throws IOException {
 		String productId = req.getParameter("productId");
 		String relatedProducts = req.getParameter("getRelated");
 		int relatedProductsCount = 4;
@@ -158,19 +161,21 @@ public class ProductServlet extends HttpServlet {
 		    		setBase64Image(product);
 		    		req.setAttribute("product", product);
 		    	}
+		    	return "product-details.jsp";
 			} else {
 				ProductUtils.setServletError(req, response);
+				return ERROR_VIEW_NAME;
 			}
 		}
 		else {
 			if(StringUtils.isNumeric(relatedProducts)) {
 				relatedProductsCount = Integer.valueOf(relatedProducts);
 			}
-			getRelatedProducts(req, productId, productType, relatedProductsCount);
+			return getRelatedProducts(req, productId, productType, relatedProductsCount);
 		}
 	}
 	
-	private void getRelatedProducts(HttpServletRequest req, String productId, String productType, int relatedProductsCount) throws IOException {
+	private String getRelatedProducts(HttpServletRequest req, String productId, String productType, int relatedProductsCount) throws IOException {
 		Client client = ClientBuilder.newClient();
 		WebTarget resource = client.target(ApiConstants.GET_RELATED_PRODUCTS_OF_ID_URL.replace(ApiConstants.PRODUCT_ID_REPLACE, productId))
 										.queryParam(ApiConstants.PRODUCT_TYPE_QUERY_PARAM, URL_PRODUCT_TYPE_MAP.get(productType))
@@ -194,13 +199,15 @@ public class ProductServlet extends HttpServlet {
 	    		setBase64Image(relatedProduct);
 	    	}
 		    req.setAttribute("relatedProducts", responseMap);
+		    return "product-details.jsp";
 		} else {
 			ProductUtils.setServletError(req, response);
+			return ERROR_VIEW_NAME;
 		}
 		
 	}
 
-	private void getAllProducts(HttpServletRequest req, String productType) throws IOException{
+	private String getAllProducts(HttpServletRequest req, String productType) throws IOException{
 
 		String pageNumber = req.getParameter(ApiConstants.PAGE_NUMBER_QUERY_PARAM);
 		if(StringUtils.isBlank(pageNumber) || !StringUtils.isNumeric(pageNumber))
@@ -227,8 +234,10 @@ public class ProductServlet extends HttpServlet {
 	    		setBase64Image(product);
 	    	}
 	    	setReqAttrFromApiResponse(req, apiResponse);
+	    	return "products.jsp";
 		} else {
 			ProductUtils.setServletError(req, response);
+			return ERROR_VIEW_NAME;
 		}
 	}
 
@@ -242,6 +251,8 @@ public class ProductServlet extends HttpServlet {
 		if(req.getSession().getAttribute(currentProductMap) == null) {
 			getAllProducts(req, productType);
 			List<ProductDTO> list = (List<ProductDTO>) req.getAttribute("products");
+			if(null == list)
+				return;
 			Map<String, List<String>> formatCategoryMap = new HashMap<String, List<String>>();
 			for(ProductDTO product : list) {
 				List<String> categories;

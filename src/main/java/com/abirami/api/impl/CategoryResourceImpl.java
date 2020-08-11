@@ -6,6 +6,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.HttpStatus;
+import org.hibernate.HibernateException;
 
 import com.abirami.api.CategoryResource;
 import com.abirami.dao.CategoryGenericDao;
@@ -13,6 +14,7 @@ import com.abirami.dao.impl.CategoryGenericDaoImpl;
 import com.abirami.model.ApiError;
 import com.abirami.model.Category;
 import com.abirami.model.CategoryDTO;
+import com.abirami.model.PaginatedCategoriesApiResponse;
 import com.abirami.util.ProductUtils;
 
 @Path("categories")
@@ -24,10 +26,14 @@ public class CategoryResourceImpl implements CategoryResource {
 	public Response getCategories() {
 		CategoryGenericDao categoryDao = new CategoryGenericDaoImpl();
 		try {
-			return Response.status(HttpStatus.SC_OK).entity(categoryDao.getAll()).build();
+			PaginatedCategoriesApiResponse response = categoryDao.getAll();
+			return Response.status(HttpStatus.SC_OK).entity(response).build();
+		}
+		catch(HibernateException he) {
+			return ProductUtils.setApiServerError(2001,he.getMessage());
 		}
 		catch (Exception e) {
-			return ProductUtils.setApiServerError();
+			return ProductUtils.setApiServerError(2002,e.getMessage());
 		}
 	}
 
@@ -41,10 +47,14 @@ public class CategoryResourceImpl implements CategoryResource {
 		}
 		CategoryGenericDao categoryDao = new CategoryGenericDaoImpl();
 		try {
-			return Response.status(HttpStatus.SC_OK).entity(new CategoryDTO(categoryDao.get(categoryId))).build();
+			CategoryDTO category = new CategoryDTO(categoryDao.get(categoryId));
+			return Response.status(HttpStatus.SC_OK).entity(category).build();
+		}
+		catch(HibernateException he) {
+			return ProductUtils.setApiServerError(2001,he.getMessage());
 		}
 		catch (Exception e) {
-			return ProductUtils.setApiServerError();
+			return ProductUtils.setApiServerError(2002,e.getMessage());
 		}
 	}
 
@@ -62,8 +72,11 @@ public class CategoryResourceImpl implements CategoryResource {
 			category.setCategoryId(id);
 			return Response.status(HttpStatus.SC_OK).entity(category).build();
 		}
+		catch(HibernateException he) {
+			return ProductUtils.setApiServerError(2001,he.getMessage());
+		}
 		catch (Exception e) {
-			return ProductUtils.setApiServerError();
+			return ProductUtils.setApiServerError(2002,e.getMessage());
 		}
 	}
 

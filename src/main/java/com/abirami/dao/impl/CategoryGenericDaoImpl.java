@@ -3,6 +3,7 @@ package com.abirami.dao.impl;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
 import com.abirami.dao.CategoryGenericDao;
@@ -23,14 +24,15 @@ public class CategoryGenericDaoImpl implements CategoryGenericDao {
 			session.beginTransaction();
 			categories = session.createQuery("from Category").list();
 			resp.setCategories(categories.stream().map(e -> new CategoryDTO(e)).collect(Collectors.toList()));
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			throw e;
-		}
-		finally {
-			if(null != session)
-				session.close();
-		}
+	    } finally {
+            if (session != null)
+            	session.close();
+            else {
+            	throw new HibernateException("Not able to establish DB connection");
+            }
+	    }
 		return resp;
 	}
 
@@ -49,6 +51,9 @@ public class CategoryGenericDaoImpl implements CategoryGenericDao {
 		finally {
 			if(null != session)
 				session.close();
+			else {
+            	throw new HibernateException("Not able to establish DB connection");
+            }
 		}
 		return category;
 	}
@@ -70,6 +75,9 @@ public class CategoryGenericDaoImpl implements CategoryGenericDao {
 		finally {
 			if(null != session)
 				session.close();
+			else {
+            	throw new HibernateException("Not able to establish DB connection");
+            }
 		}
 		return categoryId;
 	}
@@ -89,6 +97,9 @@ public class CategoryGenericDaoImpl implements CategoryGenericDao {
 		finally {
 			if(null != session)
 				session.close();
+			else {
+            	throw new HibernateException("Not able to establish DB connection");
+            }
 		}
 		return category;
 	}
