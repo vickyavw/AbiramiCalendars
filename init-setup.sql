@@ -14,11 +14,9 @@ create table format(format_id INT not null auto_increment, display_name varchar(
 
 create table product(product_id INT not null auto_increment, display_name varchar(100) not null, description varchar(100), 
 	product_type ENUM('CALENDAR','DIARY','BOX','LABEL') not null,image MEDIUMBLOB, price decimal(5,2), availability_count int, 
-	time_to_print int, category_id INT, format_id INT, primary key (product_id),
-	CONSTRAINT product_category_fk FOREIGN KEY (category_id) REFERENCES category(category_id))
-        CONSTRAINT product_format_fk FOREIGN KEY (format_id) REFERENCES format(format_id));
-
-insert into product (display_name, description, price, availability_count, time_to_print) values ('Calendar1','Test Calendar 1','12.5','1000','5');
+	time_to_print int, category_id INT, format_id INT, primary key (product_id), 
+	CONSTRAINT product_category_fk FOREIGN KEY (category_id) REFERENCES category(category_id), 
+	CONSTRAINT product_format_fk FOREIGN KEY (format_id) REFERENCES format(format_id));
 
 insert into category(display_name, description) values ('Hindus Devotional', 'All Hindu Gods and Goddesses');
 -- formats for calendars
@@ -35,3 +33,5 @@ insert into format (display_name, description, product_type) values ('Pocket Dia
 insert into format (display_name, description, product_type) values ('Cake Boxes','Cake Boxes', 'BOX');
 insert into format (display_name, description, product_type) values ('Sweet Boxes','Sweet Boxes', 'BOX');
 insert into format (display_name, description, product_type) values ('Pickles Board','Pickles Board', 'BOX');
+									       
+insert into product (display_name, description, price, availability_count, time_to_print, category_id, format_id) values ('Calendar1','Test Calendar 1','12.5','1000','5', 1, 1);
