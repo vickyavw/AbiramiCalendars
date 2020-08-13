@@ -70,13 +70,13 @@
 		        <div class="col-xl-6 col-lg-7">
 		            <nav class="header__menu">
 		                <ul>
-		                    <li class="${currentProduct == 'Calendars'? 'active' : ''}"><a href="/calendars">Calendars</a></li>
-		                    <li class="${currentProduct == 'Diaries'? 'active' : ''}"><a href="/diaries">Diaries</a></li>
-		                    <li class="${currentProduct == 'Boxes'? 'active' : ''}"><a href="/boxes">Boxes</a></li>
-		                    <li class="${currentProduct == 'Labels'? 'active' : ''}"><a href="/labels">Labels</a>
+		                    <li class="${currentProduct == 'Calendars'? 'active' : ''}"><a href="/products?productType=Calendars">Calendars</a></li>
+		                    <li class="${currentProduct == 'Diaries'? 'active' : ''}"><a href="/products?productType=Diaries">Diaries</a></li>
+		                    <li class="${currentProduct == 'Boxes'? 'active' : ''}"><a href="/products?productType=Boxes">Boxes</a></li>
+		                    <li class="${currentProduct == 'Labels'? 'active' : ''}"><a href="/products?productType=Labels">Labels</a>
 		                        <ul class="dropdown">
 		                            <li><a href="./product-details.html">Product Details</a></li>
-		                            <li><a href="/product">Shop Cart</a></li>
+		                            <li><a href="/products">Shop Cart</a></li>
 		                            <li><a href="./checkout.html">Checkout</a></li>
 		                            <li><a href="./blog-details.html">Blog Details</a></li>
 		                            <li><a href="./admin-category.html">Admin Categories</a></li>
@@ -120,7 +120,7 @@
                 <div class="col-lg-12">
                     <div class="breadcrumb__links">
                         <a href="/"><i class="fa fa-home"></i> Home</a>
-                        <a href="${currentProductUri}">${currentProduct} </a>
+                        <a href="/products?productType=${currentProduct}">${currentProduct} </a>
                         <span>${product.productName}</span>
                     </div>
                 </div>
@@ -237,33 +237,35 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-12 text-center">
-                    <div class="related__title">
-                        <h5>RELATED PRODUCTS</h5>
-                    </div>
-                </div>
-                
-                <c:forEach items="${relatedProducts}" var="product">
-	                <div class="col-lg-3 col-md-4 col-sm-6">
-	                    <div class="product__item">
-	                        <div class="product__item__pic set-bg" data-setbg="data:image/jpg;base64,${product.base64Image}">
-	                            <div class="label new">New</div>
-	                            <ul class="product__hover">
-	                                <li><a href="data:image/jpg;base64,${product.base64Image}" class="image-popup"><span class="arrow_expand"></span></a></li>
-	                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
-	                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
-	                            </ul>
-	                        </div>
-	                        <div class="product__item__text">
-	                           	<h6><a href="${currentProductUri}?productId=${product.productId}&getRelated=4">${product.productName}</a></h6>
-	                           	<div class="product__price">Rs.${product.price}</div>
-	                       	</div>
+            <c:if test="${not empty relatedProducts}">
+	            <div class="row">
+	                <div class="col-lg-12 text-center">
+	                    <div class="related__title">
+	                        <h5>RELATED PRODUCTS</h5>
 	                    </div>
 	                </div>
-                </c:forEach>
-                
-            </div>
+	                
+	                <c:forEach items="${relatedProducts}" var="product">
+		                <div class="col-lg-3 col-md-4 col-sm-6">
+		                    <div class="product__item">
+		                        <div class="product__item__pic set-bg" data-setbg="data:image/jpg;base64,${product.base64Image}">
+		                            <div class="label new">New</div>
+		                            <ul class="product__hover">
+		                                <li><a href="data:image/jpg;base64,${product.base64Image}" class="image-popup"><span class="arrow_expand"></span></a></li>
+		                                <li><a href="#"><span class="icon_heart_alt"></span></a></li>
+		                                <li><a href="#"><span class="icon_bag_alt"></span></a></li>
+		                            </ul>
+		                        </div>
+		                        <div class="product__item__text">
+		                           	<h6><a href="/products?productType=${currentProduct}&productId=${product.productId}&getRelated=4">${product.productName}</a></h6>
+		                           	<div class="product__price">Rs.${product.price}</div>
+		                       	</div>
+		                    </div>
+		                </div>
+	                </c:forEach>
+	                
+	            </div>
+            </c:if>
         </div>
     </section>
     <!-- Product Details Section End -->

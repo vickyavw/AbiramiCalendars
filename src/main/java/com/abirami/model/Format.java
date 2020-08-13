@@ -13,6 +13,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -26,6 +28,7 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 @Entity
 @Table(name="format")
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "formatId", scope = Format.class)
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 public class Format {
 
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,7 +41,7 @@ public class Format {
 	@Column
 	private String description;
 	
-	@Column
+	@Column(name="product_type")
 	private String productType;
 	
 	@OneToMany(mappedBy = "format", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

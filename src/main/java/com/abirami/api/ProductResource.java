@@ -53,6 +53,6 @@ public interface ProductResource {
 	
 	@GET
 	@Path("/related/{productId}")
-	public Response getProductWithRelatedProductsInfo(@PathParam("productId") int productId, @QueryParam("expectedCount") int expectedCount);
+	public Response getProductWithRelatedProductsInfo(@PathParam("productId") int productId, @QueryParam("expectedCount") @DefaultValue("4") int expectedCount);
 	
 }

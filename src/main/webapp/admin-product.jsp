@@ -8,6 +8,20 @@
 			function getProduct(){
 				document.getElementById('submit').href = "admin-product?productId="+document.getElementById('productId').value;
 			}
+			
+			function changeFormat(value){
+		        var children = document.getElementById("formatContainer").children;
+		        for (var i = 1, len = children.length ; i < len; i++) {
+		        	if(children[i].id === value){
+		            	children[i].style.display = "block";
+		            	children[i].children[0].required = true;
+		        	}
+		        	else {
+		        		children[i].style.display = "none";
+		        		children[i].children[0].required = false;
+		        	}
+		        }
+			}
 	</script>
 	<body>
 	
@@ -24,18 +38,53 @@
 				<tr><td>Product Desc </td><td><input name="productDesc" type="text" maxlength="512" id="productDesc" required="required"/></td></tr>
 				<tr><td>Product Type </td>
 					<td>	
-						<select name="productType" id="productType">
+						<select name="productType" id="productType" onChange="changeFormat(this.value);" required="required">
+							<option value="" disabled selected>Select</option>
 						    <c:forEach items="${productTypes}" var="productType">
 						        <option value="${productType}">${productType}</option>
 						    </c:forEach>
 						</select>
 					</td>
 				</tr>	
-				<tr><td>Format </td>
-					<td>	
-						<select name="formatId" id="formatId">
+				<tr id ="formatContainer"><td>Format </td>
+					<td id="DEFAULT" style="display:block;">	
+						<select name="formatId" id="formatId" required="required">
+							<option value="" disabled selected>Select</option>
+						</select>
+					</td>
+					<td id="CALENDAR" style="display:none;">	
+						<select name="CALENDARFormatId" id="CALENDARFormatId" required="required">
 						    <c:forEach items="${formats}" var="format">
-						        <option value="${format.formatId}">${format.formatName}</option>
+						    	<c:if test="${format.productType eq 'CALENDAR'}">	
+						        	<option value="${format.formatId}">${format.formatName}</option>
+						        </c:if>
+						    </c:forEach>
+						</select>
+					</td>
+					<td id="DIARY" style="display:none;">	
+						<select name="DIARYFormatId" id="DIARYFormatId" required="required">
+						    <c:forEach items="${formats}" var="format">
+						    	<c:if test="${format.productType eq 'DIARY'}">	
+						        	<option value="${format.formatId}">${format.formatName}</option>
+						        </c:if>
+						    </c:forEach>
+						</select>
+					</td>
+					<td id="BOX" style="display:none;">	
+						<select name="BOXFormatId" id="BOXFormatId" required="required">
+						    <c:forEach items="${formats}" var="format">
+						    	<c:if test="${format.productType eq 'BOX'}">	
+						        	<option value="${format.formatId}">${format.formatName}</option>
+						        </c:if>
+						    </c:forEach>
+						</select>
+					</td>
+					<td id="LABEL" style="display:none;">	
+						<select name="LABELFormatId" id="LABELFormatId" required="required">
+						    <c:forEach items="${formats}" var="format">
+						    	<c:if test="${format.productType eq 'LABEL'}">	
+						        	<option value="${format.formatId}">${format.formatName}</option>
+						        </c:if>
 						    </c:forEach>
 						</select>
 					</td>

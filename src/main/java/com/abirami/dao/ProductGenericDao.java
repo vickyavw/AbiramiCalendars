@@ -27,16 +27,6 @@ public interface ProductGenericDao {
 			final Integer pageSize,
 			final Integer pageNumber);
 	
-	//Making it generic to support any value in range
-	<T> PaginatedProductsApiResponse getAllInRange(final String productType, 
-			final String keyQuery, 
-			final T min, 
-			final T max,
-			final String sortBy, 
-			final String sortDirection, 
-			final Integer pageSize,
-			final Integer pageNumber);
-	
 	List<ProductDTO> getRelatedProducts(final ProductDTO product, 
 			final int expectedCount);
 	

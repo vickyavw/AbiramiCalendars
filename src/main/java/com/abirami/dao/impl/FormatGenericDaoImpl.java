@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
 import com.abirami.dao.FormatGenericDao;
@@ -30,6 +31,9 @@ public class FormatGenericDaoImpl implements FormatGenericDao {
 		finally {
 			if(null != session)
 				session.close();
+			else {
+            	throw new HibernateException("Not able to establish DB connection");
+            }
 		}
 		return response.stream().map(e -> new FormatDTO(e)).collect(Collectors.toList());
 	}
@@ -51,6 +55,9 @@ public class FormatGenericDaoImpl implements FormatGenericDao {
 		finally {
 			if(null != session)
 				session.close();
+			else {
+            	throw new HibernateException("Not able to establish DB connection");
+            }
 		}
 		return response;
 	}

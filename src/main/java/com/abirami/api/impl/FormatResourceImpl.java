@@ -6,6 +6,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import org.apache.commons.httpclient.HttpStatus;
+import org.hibernate.HibernateException;
 
 import com.abirami.api.FormatResource;
 import com.abirami.dao.FormatGenericDao;
@@ -24,8 +25,11 @@ public class FormatResourceImpl implements FormatResource {
 		try {
 			return Response.status(HttpStatus.SC_OK).entity(formatCategoryDao.getAll()).build();
 		}
+		catch(HibernateException he) {
+			return ProductUtils.setApiServerError(3001,he.getMessage());
+		}
 		catch (Exception e) {
-			return ProductUtils.setApiServerError();
+			return ProductUtils.setApiServerError(3002,e.getMessage());
 		}
 	}
 
@@ -41,8 +45,11 @@ public class FormatResourceImpl implements FormatResource {
 		try {
 			return Response.status(HttpStatus.SC_OK).entity(formatCategoryDao.get(formatId)).build();
 		}
+		catch(HibernateException he) {
+			return ProductUtils.setApiServerError(3001,he.getMessage());
+		}
 		catch (Exception e) {
-			return ProductUtils.setApiServerError();
+			return ProductUtils.setApiServerError(3002,e.getMessage());
 		}
 	}
 
